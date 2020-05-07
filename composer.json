@@ -14,7 +14,6 @@
         "contao/core-bundle": "^4",
         "codefog/contao-haste": ">=4",
         "schachbulle/contao-helper-bundle": ">=0",
-        "gnat/simple-php-form": "dev-master",
         "pfbc/pfbc": ">=3"
     },
     "conflict": {
