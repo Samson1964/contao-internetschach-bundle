@@ -1,0 +1,15 @@
+<?php
+	$GLOBALS['TL_CSS'][] = 'bundles/contaointernetschach/chosen/chosen.min.css';
+	$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/contaointernetschach/chosen/chosen.jquery.min.js';
+	$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/contaointernetschach/chosen/jquery-ui.min.js';
+?>
+
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="<?= $this->class ?>">
+<?= $this->content ?>
+</div>
+
+<?php $this->endblock(); ?>

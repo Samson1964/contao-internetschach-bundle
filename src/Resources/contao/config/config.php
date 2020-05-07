@@ -23,12 +23,12 @@
  * file to see how back end modules are configured.
  */
 
-//$GLOBALS['BE_MOD']['content']['berolina-grandprix'] = array
-//(
-//   'tables'         => array('tl_berolina_grandprix', 'tl_berolina_grandprix_tournaments'),
-//   'icon'           => 'bundles/contaoberolinagrandprix/icons/icon.png',
-//   'dwzlist'        => array('Schachbulle\ContaoBerolinaGrandPrixBundle\Classes\Import', 'ImportListe')
-//);
+$GLOBALS['BE_MOD']['content']['internetschach'] = array
+(
+	'tables'         => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen'),
+	'importCSV'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importCSV'),
+	'exportXLS'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'getExcel')
+);
 
 
 /**
@@ -36,4 +36,4 @@
  * CONTENT ELEMENTS
  * -------------------------------------------------------------------------
  */
-//$GLOBALS['TL_CTE']['schach']['berolina-grandprix'] = 'Schachbulle\ContaoBerolinaGrandPrixBundle\ContentElements\GrandPrix';
+$GLOBALS['TL_CTE']['includes']['internetschach'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Formular';

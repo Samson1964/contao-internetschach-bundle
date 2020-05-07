@@ -11,7 +11,11 @@
     ],
     "require": {
         "php": "^5.6 || ^7.0",
-        "contao/core-bundle": "^4"
+        "contao/core-bundle": "^4",
+        "codefog/contao-haste": ">=4",
+        "schachbulle/contao-helper-bundle": ">=0",
+        "gnat/simple-php-form": "dev-master",
+        "pfbc/pfbc": ">=3"
     },
     "conflict": {
         "contao/core": "*",
