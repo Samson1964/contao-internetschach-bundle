@@ -36,4 +36,5 @@ $GLOBALS['BE_MOD']['content']['internetschach'] = array
  * CONTENT ELEMENTS
  * -------------------------------------------------------------------------
  */
-$GLOBALS['TL_CTE']['includes']['internetschach'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Formular';
+$GLOBALS['TL_CTE']['includes']['internetschach_formular'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Formular';
+$GLOBALS['TL_CTE']['includes']['internetschach_anmeldungen'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Anmeldungen';

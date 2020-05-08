@@ -34,11 +34,15 @@ $GLOBALS['TL_LANG']['tl_internetschach']['titel'] = array('Titel', 'Titel der Tu
 $GLOBALS['TL_LANG']['tl_internetschach']['jahr'] = array('Jahr', 'Jahr der Turnierserie');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['config_legend'] = 'Administration';
-$GLOBALS['TL_LANG']['tl_internetschach']['email'] = array('E-Mail Admin', 'E-Mail-Adressen von Administratoren. Je Zeile eine Adresse. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
+$GLOBALS['TL_LANG']['tl_internetschach']['email_sender'] = array('E-Mail-Adresse Absender (From)', 'E-Mail-Adresse für From-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
+$GLOBALS['TL_LANG']['tl_internetschach']['email_replyto'] = array('E-Mail-Adresse Antwort an (Reply-to)', 'E-Mail-Adresse für Reply-to-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
+$GLOBALS['TL_LANG']['tl_internetschach']['email_to'] = array('E-Mail-Adresse Empfänger (To)', 'E-Mail-Adresse für To-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
+$GLOBALS['TL_LANG']['tl_internetschach']['email_export'] = array('E-Mail-Adressen für Exporte', 'E-Mail-Adressen für Exporte der Anmeldungen. Je Zeile eine Adresse. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_legend'] = 'DWZ-Gruppen';
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen'] = array('Gruppen', 'Liste der Gruppen');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_name'] = array('Name', 'Kurzzeichen der Gruppe, z.B. A');
+$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'] = array('Feldname', 'Interner Name der Gruppe, z.B. a');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_von'] = array('von DWZ', '');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_bis'] = array('bis DWZ', '');
 

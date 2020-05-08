@@ -33,6 +33,9 @@ $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['chessbase'] = array('Benut
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein_legend'] = 'Verein';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein'] = array('Vereinsname', 'Vereinsname');
 
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere_legend'] = 'Angemeldete Turniere';
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'] = array('Turniere', 'Turniere');
+
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fide_legend'] = 'FIDE';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideID'] = array('FIDE-Identifikationsnummer', 'FIDE-Identifikationsnummer');
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideElo'] = array('FIDE-Elo', 'FIDE-Elo');
@@ -45,6 +48,7 @@ $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['dwz'] = array('DWZ', 'DWZ'
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['info_legend'] = 'Informationen';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['bemerkungen'] = array('Bemerkungen des Spielers', 'Bemerkungen des Spielers');
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['intern'] = array('Interne Vermerke', 'Interne Vermerke');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['checked'] = array('Geprüft', 'Anmeldung geprüft');
 
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['published'] = array('Veröffentlichen', 'Anmeldung veröffentlichen');

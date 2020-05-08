@@ -29,81 +29,7 @@ class Formular extends \ContentElement
 	protected function compile()
 	{
 
-		// Der 1. Parameter ist die Formular-ID (hier "linkform")
-		// Der 2. Parameter ist GET oder POST
-		// Der 3. Parameter ist eine Funktion, die entscheidet wann das Formular gesendet wird (Third is a callable that decides when your form is submitted)
-		// Der optionale 4. Parameter legt fest, ob das ausgegebene Formular auf Tabellen basiert (true)
-		// oder nicht (false) (You can pass an optional fourth parameter (true by default) to turn the form into a table based one)
-		$objForm = new \Haste\Form\Form('internetschachform', 'POST', function($objHaste)
-		{
-			return \Input::post('FORM_SUBMIT') === $objHaste->getFormId();
-		});
-		
-		// URL für action festlegen. Standard ist die Seite auf der das Formular eingebunden ist.
-		// $objForm->setFormActionFromUri();
-	
-		$elemente = array
-		(
-			'1' => 'eins',
-			'2' => 'zwei',
-			'3' => 'drei',
-			'4' => 'vier',
-		);
-			
-		$objForm->addFormField('pid', array(
-			'inputType'     => 'hidden',
-			'default'       => $this->internetschach
-		));
-		$objForm->addFormField('name', array(
-			'label'         => 'Spieler suchen und wählen',
-			'inputType'     => 'select',
-			//'selected'      => array('1'),
-			//'options'       => array_keys($elemente),
-			//'reference'     => $elemente,
-			'eval'          => array('mandatory'=>true, 'class'=>'form-control select-box')
-		));
-		$objForm->addFormField('email', array(
-			'label'         => 'E-Mail',
-			'inputType'     => 'text',
-			'eval'          => array('mandatory'=>true, 'rgxp'=>'email', 'class'=>'form-control')
-		));
-		$objForm->addFormField('chessbase', array(
-			'label'         => 'ChessBase-Benutzername',
-			'inputType'     => 'text',
-			'eval'          => array('mandatory'=>true, 'class'=>'form-control')
-		));
-		$objForm->addFormField('description', array(
-			'label'         => 'Bemerkungen',
-			'inputType'     => 'textarea',
-			'eval'          => array('mandatory'=>false, 'rte'=>'tinyMCE', 'class'=>'form-control')
-		));
-		// Submit-Button hinzufügen
-		$objForm->addFormField('submit', array(
-			'label'         => 'Anmeldung abschicken',
-			'inputType'     => 'submit',
-			'eval'          => array('class'=>'btn btn-primary')
-		));
-		$objForm->addCaptchaFormField('captcha');
-
-		// Ausgeblendete Felder FORM_SUBMIT und REQUEST_TOKEN automatisch hinzufügen.
-		// Nicht verwenden wenn generate() anschließend verwendet, da diese Felder dort standardmäßig bereitgestellt werden.
-		$objForm->addContaoHiddenFields();
-		
-		$objForm->setNoValidate('name');
-		
-		// validate() prüft auch, ob das Formular gesendet wurde
-		//if($objForm->isSubmitted())
-		if($objForm->validate())
-		{
-			// Alle gesendeten und analysierten Daten holen (funktioniert nur mit POST)
-			$arrData = $objForm->fetchAll();
-			self::saveAnmeldung($arrData); // Daten sichern
-			// Seite neu laden
-			\Controller::addToUrl('send=1'); // Hat keine Auswirkung, verhindert aber das das Formular erneut ausgefüllt ist
-			//\Controller::reload(); 
-		}
-
-		// Javascript ergänzen
+		// Javascript generieren
 		$javascript ='
 <script type="text/javascript">
   $("select.select-box").chosen();
@@ -122,7 +48,7 @@ class Formular extends \ContentElement
             $(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
           }));
           $("select.select-box").trigger("chosen:updated");
-          //$(".chosen-search input").val(request.term);
+          $(".chosen-search input").val(request.term);
         }
       });
     }
@@ -130,10 +56,101 @@ class Formular extends \ContentElement
 </script>
 ';
 
+		$content = '';
+		$form = new \Schachbulle\ContaoHelperBundle\Classes\Form();
+		$form->addField(array
+		(
+			'typ'       => 'hidden',
+			'name'      => 'FORM_SUBMIT',
+			'value'     => 'form_internetschach'
+		));
+		$form->addField(array
+		(
+			'typ'       => 'hidden',
+			'name'      => 'REQUEST_TOKEN',
+			'value'     => REQUEST_TOKEN
+		));
+		$form->addField(array
+		(
+			'typ'       => 'hidden',
+			'name'      => 'pid',
+			'value'     => $this->internetschach
+		));
+		$form->addField(array
+		(
+			'typ'       => 'select',
+			'name'      => 'name',
+			'label'     => 'Spieler suchen und wählen',
+			'class'     => 'select-box',
+			'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen ...'),
+			'mandatory' => true
+		));
+		$form->addField(array
+		(
+			'typ'       => 'text',
+			'name'      => 'email',
+			'label'     => 'E-Mail-Adresse',
+			'mandatory' => true
+		));
+		$form->addField(array
+		(
+			'typ'       => 'text',
+			'name'      => 'chessbase',
+			'label'     => 'ChessBase-Benutzername',
+			'mandatory' => true
+		));
+		$form->addField(array
+		(
+			'typ'       => 'explanation',
+			'label'     => 'Se können mehrere Benutzernamen mit Komma trennen.'
+		));
+		$turniere = array();
+		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+			                               ->execute($this->internetschach);
+		if($objMain->numRows)
+		{
+			$temp = unserialize($objMain->turniere);
+			foreach($temp as $item)
+			{
+				if(!$item['finale']) $turniere[$item['feldname']] = $item['name'];
+			}
+		}
+		$form->addField(array
+		(
+			'typ'      => 'checkbox',
+			'name'     => 'turniere',
+			'label'    => 'Turniere',
+			'options'  => $turniere
+		));
+		$form->addField(array
+		(
+			'typ'      => 'textarea',
+			'name'     => 'bemerkungen',
+			'label'    => 'Bemerkungen',
+			'rows'     => 10,
+			'cols'     => 40
+		));
+		$form->addField(array
+		(
+			'typ'      => 'submit',
+			'label'    => 'Anmeldung abschicken'
+		));
+		$content = $form->generate();
+
 		// Template ausgeben
 		$this->Template = new \FrontendTemplate($this->strTemplate);
 		$this->Template->class = "ce_internetschach";
-		$this->Template->content = $objForm->generate().$javascript;
+
+		if($form->validate())
+		{
+			$arrData = $form->fetchAll();
+			self::saveAnmeldung($arrData); // Daten sichern
+			$this->Template->content = 'Vielen Dank für Ihre Anmeldung!';
+		}
+		else
+		{
+			$this->Template->content = $content.$javascript;
+		}
 
 		return;
 
@@ -141,7 +158,10 @@ class Formular extends \ContentElement
 
 	function saveAnmeldung($arrData)
 	{
-		print_r($arrData);
+		//echo "Turniere:";
+		//echo \Input::post('turniere')."<br>";
+		//echo "Formulrdaten:";
+		//print_r($arrData);
 		// Spielerdaten laden
 		if($arrData['name'])
 		{
@@ -182,7 +202,7 @@ class Formular extends \ContentElement
 			'tstamp'      => time(),
 			'email'       => $arrData['email'],
 			'chessbase'   => $arrData['chessbase'],
-			'bemerkungen' => $arrData['description'],
+			'bemerkungen' => $arrData['bemerkungen'],
 			'playerId'    => $arrData['name'],
 			'verein'      => $spieler['verein'],
 			'name'        => $spieler['name'],
@@ -191,22 +211,79 @@ class Formular extends \ContentElement
 			'dwz'         => $spieler['dwz'],
 			'fideElo'     => $spieler['fideElo'],
 			'fideTitel'   => $spieler['fideTitel'],
+			'turniere'    => serialize($arrData['turniere']),
 			'published'   => 1
 		);
+		//print_r($set);
 		$objLink = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
 		                                   ->set($set)
 		                                   ->execute();
 
 		\System::log('[Internetschach] Neue Anmeldung: '.$set['name'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
 
-		// Email an Spieler verschicken
-		$objEmail = new \Email();
-		$objEmail->from = $GLOBALS['TL_ADMIN_EMAIL'];
-		$objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
-		$objEmail->subject = 'Internetschach - neue Anmeldung';
+		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+		                                   ->execute($arrData['pid']);
 
-		// Kommentar zusammenbauen
+		if($objMain->numRows)
+		{
+			// Email an Spieler verschicken
+			$objEmail = new \Email();
+			// E-Mail-Adressen umwandeln
+			$from = html_entity_decode($objMain->email_sender);
+			$replyto = html_entity_decode($objMain->email_replyto);
+			$to = html_entity_decode($objMain->email_to);
 
-		$objEmail->sendTo(array($GLOBALS['TL_ADMIN_NAME'].' <'.$GLOBALS['TL_ADMIN_EMAIL'].'>'));
+			// Absender "Name <email>" in ein Array $arrFrom aufteilen
+			preg_match('~(?:([^<]*?)\s*)?<(.*)>~', $from, $arrFrom);
+			
+			$objEmail->from = $arrFrom[2];
+			$objEmail->fromName = $arrFrom[1];
+			$objEmail->subject = $objMain->titel.' - Anmeldung '.$set['name'];
+
+			// Text zusammenbauen
+			$text = 'Sie haben sich für '.$objMain->titel." angemeldet. Folgende Daten wurden an uns übertragen:\n\n";
+			foreach($set as $key => $value)
+			{
+				switch($key)
+				{
+					case 'tstamp':
+						$text .= 'Anmeldezeit: '.date('d.m.Y H:i', $value)."\n";
+						break;
+					case 'email':
+						$text .= 'E-Mail: '.$value."\n";
+						break;
+					case 'chessbase':
+						$text .= 'ChessBase-Benutzername(n): '.$value."\n";
+						break;
+					case 'bemerkungen':
+						$text .= 'Bemerkungen: '.$value."\n";
+						break;
+					case 'verein':
+						$text .= 'Verein: '.$value."\n";
+						break;
+					case 'name':
+						$text .= 'Name: '.$value."\n";
+						break;
+					case 'dwz':
+						$text .= 'DWZ: '.$value."\n";
+						break;
+					case 'fideElo':
+						$text .= 'FIDE-Elo: '.$value."\n";
+						break;
+					case 'fideTitel':
+						$text .= 'FIDE-Titel: '.$value."\n";
+						break;
+					case 'turniere':
+						$temp = unserialize($value);
+						$text .= 'Gemeldete Turniere: '.implode(',', $temp)."\n";
+					default:
+				}
+			}
+			$text .= "\nVielen Dank für Ihre Anmeldung!\nSie stehen unter Vorbehalt der Prüfung bereits auf der Meldeliste.\n\nIhr Deutscher Schachbund";
+			$objEmail->text = $text;
+
+			$objEmail->sendBcc($to);
+			$objEmail->sendTo($set['email']);
+		}
 	}
 }

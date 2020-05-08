@@ -121,7 +121,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array(),
-		'default'                     => '{internetschach_legend},titel,jahr;{config_legend},email;{gruppen_legend},gruppen;{turniere_legend},turniere;{publish_legend},published'
+		'default'                     => '{internetschach_legend},titel,jahr;{config_legend},email_sender,email_replyto,email_to,email_export;{gruppen_legend},gruppen;{turniere_legend},turniere;{publish_legend},published'
 	),
 
 	// Subpalettes
@@ -176,9 +176,54 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
 		),
-		'email' => array
+		'email_sender' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['email'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['email_sender'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'eval'                    => array
+			(
+				'tl_class'            => 'long',
+				'maxlength'           => 80,
+			),
+			'sql'                     => "varchar(80) NOT NULL default ''",
+		),
+		'email_replyto' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['email_replyto'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'eval'                    => array
+			(
+				'tl_class'            => 'long',
+				'maxlength'           => 80,
+			),
+			'sql'                     => "varchar(80) NOT NULL default ''",
+		),
+		'email_to' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['email_to'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'eval'                    => array
+			(
+				'tl_class'            => 'long',
+				'maxlength'           => 80,
+			),
+			'sql'                     => "varchar(80) NOT NULL default ''",
+		),
+		'email_export' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['email_export'],
 			'inputType'               => 'textarea',
 			'exclude'                 => true,
 			'search'                  => true,
@@ -209,6 +254,17 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'eval'        => array
 						(
 							'style'   => 'width:250px',
+						),
+					),
+					'feldname'        => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'   => 'width:50px',
+							'maxlength' => 5
 						),
 					),
 					'dwz_von'         => array
@@ -263,7 +319,8 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'inputType'   => 'text',
 						'eval'        => array
 						(
-							'style'   => 'width:180px'
+							'style'   => 'width:50px',
+							'maxlength' => 5
 						),
 					),
 					'finale'          => array

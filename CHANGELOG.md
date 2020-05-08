@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.0.4 (2020-05-08)
+
+Ausbau zur Betaversion
+
 ## Version 0.0.3 (2020-05-07)
 
 Entfernung gnat/simple-php-form

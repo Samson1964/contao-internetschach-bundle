@@ -41,8 +41,7 @@ class Spielerliste
 			{
 				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ?")
 				                                  ->execute(1, $turnierserie, 'A', "%$search%");
-
-				// Suchstring zu kurz
+				// Suchbegriff als Erstes zurückgeben
 				$ausgabeArr[] = array
 				(
 					'id'   => 0,
