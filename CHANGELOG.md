@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.0.5 (2020-05-08)
+
+Fix: Fehler bei Ausgabe Anmeldeliste
+
 ## Version 0.0.4 (2020-05-08)
 
 Ausbau zur Betaversion

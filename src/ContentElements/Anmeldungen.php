@@ -40,7 +40,7 @@ class Anmeldungen extends \ContentElement
 		                                        ->execute($this->internetschach, 1);
 		if($objMeldungen->numRows)
 		{
-			$content = '<table>';
+			$content = '<table width="100%">';
 			$content .= '<tr>';
 			$content .= '<th>Nr.</th>';
 			$content .= '<th>Name</th>';
@@ -55,12 +55,12 @@ class Anmeldungen extends \ContentElement
 				{
 					$nr++;
 					if($objMeldungen->checked) $content .= '<tr>';
-					else $content .= '<tr style="background-color:#FFD7D7">';
+					else $content .= '<tr style="background-color:#FFE1E1">';
 					$content .= '<td>'.$nr.'</td>';
 					$content .= '<td>'.$objMeldungen->name.'</td>';
 					$content .= '<td>'.$objMeldungen->fideTitel.'</td>';
 					$content .= '<td>'.$objMeldungen->dwz.'</td>';
-					$content .= '<td>'.$objMeldungen->turniere.'</td>';
+					$content .= '<td>'.$objMeldungen->verein.'</td>';
 					$content .= '</tr>';
 				}
 			}
