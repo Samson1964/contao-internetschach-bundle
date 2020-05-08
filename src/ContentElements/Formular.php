@@ -28,6 +28,7 @@ class Formular extends \ContentElement
 	 */
 	protected function compile()
 	{
+		global $objPage;
 
 		// Javascript generieren
 		$javascript ='
@@ -145,11 +146,21 @@ class Formular extends \ContentElement
 		{
 			$arrData = $form->fetchAll();
 			self::saveAnmeldung($arrData); // Daten sichern
-			$this->Template->content = 'Vielen Dank für Ihre Anmeldung!';
+			// Seite neu laden
+			\Controller::addToUrl('send=1'); // Hat keine Auswirkung, verhindert aber das das Formular ausgefüllt ist
+			//\Controller::reload();
+			header('Location:'.$objPage->alias.'.html?send=1'); 
 		}
 		else
 		{
-			$this->Template->content = $content.$javascript;
+			if(\Input::get('send'))
+			{
+				$this->Template->content = 'Vielen Dank für Ihre Anmeldung!';
+			}
+			else
+			{
+				$this->Template->content = $content.$javascript;
+			}
 		}
 
 		return;
@@ -274,7 +285,7 @@ class Formular extends \ContentElement
 						$text .= 'FIDE-Titel: '.$value."\n";
 						break;
 					case 'turniere':
-						$temp = unserialize($value);
+						$temp = (array)unserialize($value);
 						$text .= 'Gemeldete Turniere: '.implode(',', $temp)."\n";
 					default:
 				}

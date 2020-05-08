@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.0.6 (2020-05-08)
+
+Reload der Seite nach Formularversand
+
 ## Version 0.0.5 (2020-05-08)
 
 Fix: Fehler bei Ausgabe Anmeldeliste
