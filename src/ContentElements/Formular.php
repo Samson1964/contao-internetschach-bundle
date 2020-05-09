@@ -147,9 +147,10 @@ class Formular extends \ContentElement
 			$arrData = $form->fetchAll();
 			self::saveAnmeldung($arrData); // Daten sichern
 			// Seite neu laden
-			\Controller::addToUrl('send=1'); // Hat keine Auswirkung, verhindert aber das das Formular ausgefüllt ist
-			//\Controller::reload();
+			//$url = \Controller::addToUrl('send=1'); // Hat keine Auswirkung, verhindert aber das das Formular ausgefüllt ist
+			//\Controller::reload(\Controller::addToUrl('send=1'));
 			header('Location:'.$objPage->alias.'.html?send=1'); 
+			//header('Location:'.$url); 
 		}
 		else
 		{
@@ -209,21 +210,23 @@ class Formular extends \ContentElement
 		// Formulardaten übertragen
 		$set = array
 		(
-			'pid'         => $arrData['pid'],
-			'tstamp'      => time(),
-			'email'       => $arrData['email'],
-			'chessbase'   => $arrData['chessbase'],
-			'bemerkungen' => $arrData['bemerkungen'],
-			'playerId'    => $arrData['name'],
-			'verein'      => $spieler['verein'],
-			'name'        => $spieler['name'],
-			'geschlecht'  => $spieler['geschlecht'],
-			'geburtsjahr' => $spieler['geburtsjahr'],
-			'dwz'         => $spieler['dwz'],
-			'fideElo'     => $spieler['fideElo'],
-			'fideTitel'   => $spieler['fideTitel'],
-			'turniere'    => serialize($arrData['turniere']),
-			'published'   => 1
+			'pid'          => $arrData['pid'],
+			'tstamp'       => time(),
+			'registerDate' => time(),
+			'email'        => $arrData['email'],
+			'chessbase'    => $arrData['chessbase'],
+			'bemerkungen'  => $arrData['bemerkungen'],
+			'playerId'     => $arrData['name'],
+			'verein'       => $spieler['verein'],
+			'name'         => $spieler['name'],
+			'geschlecht'   => $spieler['geschlecht'],
+			'geburtsjahr'  => $spieler['geburtsjahr'],
+			'dwz'          => $spieler['dwz'],
+			'fideElo'      => $spieler['fideElo'],
+			'fideTitel'    => $spieler['fideTitel'],
+			'turniere'     => serialize($arrData['turniere']),
+			'gruppe'       => serialize(\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true)),
+			'published'    => 1
 		);
 		//print_r($set);
 		$objLink = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
@@ -252,7 +255,7 @@ class Formular extends \ContentElement
 			$objEmail->subject = $objMain->titel.' - Anmeldung '.$set['name'];
 
 			// Text zusammenbauen
-			$text = 'Sie haben sich für '.$objMain->titel." angemeldet. Folgende Daten wurden an uns übertragen:\n\n";
+			$text = 'Sie haben sich angemeldet für: '.$objMain->titel."\n\nFolgende Daten wurden an uns übertragen:\n\n";
 			foreach($set as $key => $value)
 			{
 				switch($key)
@@ -276,17 +279,22 @@ class Formular extends \ContentElement
 						$text .= 'Name: '.$value."\n";
 						break;
 					case 'dwz':
-						$text .= 'DWZ: '.$value."\n";
+						$text .= 'DWZ: '.($value ? $value : '-')."\n";
 						break;
 					case 'fideElo':
-						$text .= 'FIDE-Elo: '.$value."\n";
+						$text .= 'FIDE-Elo: '.($value ? $value : '-')."\n";
 						break;
 					case 'fideTitel':
 						$text .= 'FIDE-Titel: '.$value."\n";
 						break;
 					case 'turniere':
 						$temp = (array)unserialize($value);
-						$text .= 'Gemeldete Turniere: '.implode(',', $temp)."\n";
+						$turniere = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::ArrayToTurniernamen($arrData['pid'], $temp);
+						$text .= 'Gemeldete Turniere: '.implode(', ', $turniere)."\n";
+						break;
+					case 'gruppe':
+						$text .= 'Sie sind spielberechtigt für: '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'])."\n";
+						break;
 					default:
 				}
 			}

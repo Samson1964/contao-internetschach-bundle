@@ -1,5 +1,16 @@
 # Internetschach Changelog
 
+## Version 0.1.0 (2020-05-09)
+
+Add: Helper-Klasse erstellt
+Add: Helper-Funktion Gruppenzuordnung
+Add: Anzeige von Gruppe + Gruppenberechtigung in Ausgabe Spielerliste.php
+Add: Spalte gruppe in tl_internetschach_anmeldungen
+Fix: Nach Name sortierte Ausgabe von Spielerliste.php
+Fix: Farbliche Hervorhebung der ungeprüften Anmeldungen im Frontend durch CSS ersetzt
+Fix: Backend-Ansicht tl_spieler_anmeldungen
+Add: Registrierungsdatum in tl_spieler_anmeldungen
+
 ## Version 0.0.6 (2020-05-08)
 
 Reload der Seite nach Formularversand

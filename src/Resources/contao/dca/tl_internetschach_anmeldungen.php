@@ -39,16 +39,17 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => 4,
 			'fields'                  => array('name'),
 			'flag'                    => 3,
-			'panelLayout'             => 'filter;sort;search,limit'
+			'headerFields'            => array('titel'),
+			'panelLayout'             => 'filter;sort;search,limit',
+			'child_record_callback'   => array('tl_internetschach_anmeldungen', 'listSpieler')
 		),
 		'label' => array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			'label_callback'          => array('tl_internetschach_anmeldungen', 'listSpieler')
 		),
 		'global_operations' => array
 		(
@@ -102,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{name_legend},name,geschlecht,geburtsjahr;{contact_legend:hide},email;{turniere_legend:hide},turniere;{chessbase_legend:hide},chessbase;{verein_legend:hide},verein;{dwz_legend:hide},dwz;{fide_legend:hide},fideElo,fideTitel,fideID,fideNation;{info_legend:hide},bemerkungen,intern,checked;{publish_legend},published'
+		'default'                     => '{name_legend},name,geschlecht,geburtsjahr;{contact_legend:hide},email;{turniere_legend:hide},turniere,gruppe;{chessbase_legend:hide},chessbase;{verein_legend:hide},verein;{dwz_legend:hide},dwz;{fide_legend:hide},fideElo,fideTitel,fideID,fideNation;{info_legend:hide},bemerkungen,intern,checked;{publish_legend},published'
 	),
 
 	// Fields
@@ -123,6 +124,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'sorting'                 => true,
 			'flag'                    => 1,
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		// Registrierungsdatum
+		'registerDate' => array
+		(
+			'flag'                    => 8,
+			'sorting'                 => true,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		// Verknüpfung zu tl_internetschach_spieler
@@ -202,12 +210,45 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'turniere' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_content']['newslinklist'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'],
 			'exclude'                 => true,
 			'options_callback'        => array('tl_internetschach_anmeldungen', 'getTurniere'),
 			'inputType'               => 'checkboxWizard',
-			'eval'                    => array('mandatory'=>false, 'multiple'=>true, 'tl_class'=>'clr long'),
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'multiple'            => true,
+				'tl_class'            => 'clr long'
+			),
 			'sql'                     => "blob NULL", 
+		),
+		'turniere' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'],
+			'exclude'                 => true,
+			'options_callback'        => array('tl_internetschach_anmeldungen', 'getTurniere'),
+			'inputType'               => 'checkboxWizard',
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'multiple'            => true,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "blob NULL"
+		),
+		'gruppe' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['gruppe'],
+			'exclude'                 => true,
+			'options_callback'        => array('tl_internetschach_anmeldungen', 'getGruppen'),
+			'inputType'               => 'radio',
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'multiple'            => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "blob NULL"
 		),
 		'chessbase' => array
 		(
@@ -416,8 +457,8 @@ class tl_internetschach_anmeldungen extends Backend
 	 */
 	public function listSpieler($arrRow)
 	{
-		if($arrRow['checked']) $container = '<span style="display:inline-block; background-color:#DDFFDD; width:100%">';
-		else $container = '<span style="display:inline-block; background-color:#FFD7D7; width:100%">';
+		if($arrRow['checked']) $container = '<span style="color:#00791F">';
+		else $container = '<span style="color:#970000">';
 
 		$temp = $container;
 		$temp .= $arrRow['name'] ? $arrRow['name'] : '- ohne Name -';
@@ -439,6 +480,24 @@ class tl_internetschach_anmeldungen extends Backend
 				foreach($temp as $item)
 				{
 					$array[$item['feldname']] = $item['name'];
+				}
+			}
+		}
+		return $array;
+	}
+
+	public function getGruppen(DataContainer $dc)
+	{
+		$array = array();
+		$objGruppen = $this->Database->prepare("SELECT gruppen FROM tl_internetschach WHERE id = ?")->execute($dc->activeRecord->pid);
+		if($objGruppen->numRows)
+		{
+			$temp = unserialize($objGruppen->gruppen);
+			if($temp)
+			{
+				foreach($temp as $item)
+				{
+					$array[$item['feldname']] = $item['name'].' (DWZ '.$item['dwz_von'].' - '.$item['dwz_bis'].')';
 				}
 			}
 		}

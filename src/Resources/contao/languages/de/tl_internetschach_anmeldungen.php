@@ -18,6 +18,9 @@ $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['delete'] = array('Anmeldun
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['toggle'] = array('Anmeldung %s aktivieren/deaktivieren', 'Anmeldung %s aktivieren/deaktivieren');
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['show'] = array('Details zur Anmeldung %s anzeigen', 'Details zur Anmeldung %s anzeigen');
 
+// Versteckte Felder
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['registerDate'] = array('Registrierungsdatum', 'Registrierungsdatum');
+
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['name_legend'] = 'Name';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['name'] = array('Name', 'Name,Vorname,Titel');
@@ -33,8 +36,9 @@ $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['chessbase'] = array('Benut
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein_legend'] = 'Verein';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein'] = array('Vereinsname', 'Vereinsname');
 
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere_legend'] = 'Angemeldete Turniere';
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'] = array('Turniere', 'Turniere');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere_legend'] = 'Turniere und Gruppe';
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'] = array('Turniere', 'Turniere wählen');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['gruppe'] = array('Gruppe', 'Spielberechtigung für eine Gruppe wählen');
 
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fide_legend'] = 'FIDE';
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideID'] = array('FIDE-Identifikationsnummer', 'FIDE-Identifikationsnummer');

@@ -39,7 +39,7 @@ class Spielerliste
 		{
 			if(strlen($search) > 1)
 			{
-				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ?")
+				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? ORDER BY name ASC")
 				                                  ->execute(1, $turnierserie, 'A', "%$search%");
 				// Suchbegriff als Erstes zurückgeben
 				$ausgabeArr[] = array
@@ -54,7 +54,7 @@ class Spielerliste
 						$ausgabeArr[] = array
 						(
 							'id'   => $player->id,
-							'name' => $player->name.' ('.$player->verein.')'
+							'name' => $player->name.' ('.($player->dwz ? 'DWZ '.$player->dwz : 'ohne DWZ').', '.$player->verein.') - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($turnierserie, $player->dwz)
 						);
 					}
 				}
