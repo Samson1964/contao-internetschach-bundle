@@ -15,7 +15,7 @@
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_formular'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschachdetails_legend},internetschach_turniere,internetschach_gruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschachdetails_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
  * Fields
@@ -65,6 +65,24 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_gruppen'] = array
 		'tl_class'         => 'w50'
 	),
 	'sql'                  => "blob NULL"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_viewturniere'] = array
+(
+	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewturniere'],
+	'inputType'               => 'checkbox',
+	'filter'                  => true,
+	'eval'                    => array('tl_class' => 'w50 clr','isBoolean' => true),
+	'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_viewgruppen'] = array
+(
+	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewgruppen'],
+	'inputType'               => 'checkbox',
+	'filter'                  => true,
+	'eval'                    => array('tl_class' => 'w50','isBoolean' => true),
+	'sql'                     => "char(1) NOT NULL default ''"
 );
 
 /*****************************************

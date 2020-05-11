@@ -76,4 +76,56 @@ class Helper
 		}
 		return $namen;
 	}
+
+	static function getGruppe($turnierserie, $feldname)
+	{
+		static $gruppen;
+		if(!isset($gruppen))
+		{
+			// Keine Gruppen vorhanden, darum DB abfragen
+			$objSerie = \Database::getInstance()->prepare("SELECT gruppen FROM tl_internetschach WHERE id = ?")
+			                                    ->execute($turnierserie);
+			if($objSerie->numRows)
+			{
+				$arrGruppen = unserialize($objSerie->gruppen);
+				foreach($arrGruppen as $item)
+				{
+					$gruppen[$item['feldname']] = $item['name'];
+				}
+			}
+			else $gruppen = array();
+		}
+
+		return $gruppen[$feldname];
+	}
+
+	static function getTurniere($turnierserie, $turnierdaten)
+	{
+		static $turniere;
+		if(!isset($turniere))
+		{
+			// Keine Turniere vorhanden, darum DB abfragen
+			$objSerie = \Database::getInstance()->prepare("SELECT turniere FROM tl_internetschach WHERE id = ?")
+			                                    ->execute($turnierserie);
+			if($objSerie->numRows)
+			{
+				$arrTurniere = unserialize($objSerie->turniere);
+				foreach($arrTurniere as $item)
+				{
+					$turniere[$item['feldname']] = $item['name'];
+				}
+			}
+			else $turniere = array();
+		}
+
+		// Gewünschte Turniernamen laden
+		$array = array();
+		$temp = unserialize($turnierdaten);
+		foreach($temp as $item)
+		{
+			$array[] = $turniere[$item]; 
+		}
+		return implode(', ', $array);
+	}
+
 }

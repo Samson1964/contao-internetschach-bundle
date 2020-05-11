@@ -47,8 +47,8 @@ class Anmeldungen extends \ContentElement
 			$content .= '<th>Titel</th>';
 			$content .= '<th>DWZ</th>';
 			$content .= '<th>Verein</th>';
-			$content .= '<th>Turniere</th>';
-			$content .= '<th>Gruppe</th>';
+			if($this->internetschach_viewturniere) $content .= '<th>Turniere</th>';
+			if($this->internetschach_viewgruppen)$content .= '<th>Gruppe</th>';
 			$content .= '</tr>';
 			$nr = 0;
 			while($objMeldungen->next())
@@ -63,8 +63,8 @@ class Anmeldungen extends \ContentElement
 					$content .= '<td>'.$objMeldungen->fideTitel.'</td>';
 					$content .= '<td>'.$objMeldungen->dwz.'</td>';
 					$content .= '<td>'.$objMeldungen->verein.'</td>';
-					$content .= '<td>'.$objMeldungen->turniere.'</td>';
-					$content .= '<td>'.$objMeldungen->gruppe.'</td>';
+					if($this->internetschach_viewturniere) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getTurniere($this->internetschach, $objMeldungen->turniere).'</td>';
+					if($this->internetschach_viewgruppen) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getGruppe($this->internetschach, $objMeldungen->gruppe).'</td>';
 					$content .= '</tr>';
 				}
 			}

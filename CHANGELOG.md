@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.2.0 (2020-05-11)
+
+Add: Turniere/Gruppen in Anmeldelisten optional ausgeben
+
 ## Version 0.1.0 (2020-05-09)
 
 Add: Helper-Klasse erstellt
