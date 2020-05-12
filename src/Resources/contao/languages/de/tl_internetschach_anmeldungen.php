@@ -12,14 +12,15 @@
 
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['new'] = array('Neue Anmeldung', 'Neue Anmeldung anlegen');
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['edit'] = array('Anmeldung %s bearbeiten', 'Anmeldung %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['copy'] = array('Anmeldung %s kopieren', 'Anmeldung %s kopieren');
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['delete'] = array('Anmeldung %s löschen', 'Anmeldung %s löschen');
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['toggle'] = array('Anmeldung %s aktivieren/deaktivieren', 'Anmeldung %s aktivieren/deaktivieren');
-$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['show'] = array('Details zur Anmeldung %s anzeigen', 'Details zur Anmeldung %s anzeigen');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['edit'] = array("Anmeldung %s bearbeiten", "Anmeldung %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['copy'] = array("Anmeldung %s kopieren", "Anmeldung %s kopieren");
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['delete'] = array("Anmeldung %s löschen", "Anmeldung %s löschen");
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['toggle'] = array("Anmeldung %s aktivieren/deaktivieren", "Anmeldung %s aktivieren/deaktivieren");
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['show'] = array("Details zur Anmeldung %s anzeigen", "Details zur Anmeldung %s anzeigen");
 
 // Versteckte Felder
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['registerDate'] = array('Registrierungsdatum', 'Registrierungsdatum');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['playerId'] = array('ID tl_internetschach_spieler', 'ID tl_internetschach_spieler');
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['name_legend'] = 'Name';

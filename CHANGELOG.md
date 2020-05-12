@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 0.3.0 (2020-05-12)
+
+Fix: Export der Anmeldungen an das Bundle angepaﬂt
+Add: Erkennung von Mehrfachanmeldungen
+Fix: %s wurde nicht ersetzt in den Sprachdateien
+Fix: Infoseite Anmeldungen korrigiert
+
 ## Version 0.2.0 (2020-05-11)
 
 Add: Turniere/Gruppen in Anmeldelisten optional ausgeben

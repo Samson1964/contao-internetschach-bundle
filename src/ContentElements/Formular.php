@@ -147,10 +147,7 @@ class Formular extends \ContentElement
 			$arrData = $form->fetchAll();
 			self::saveAnmeldung($arrData); // Daten sichern
 			// Seite neu laden
-			//$url = \Controller::addToUrl('send=1'); // Hat keine Auswirkung, verhindert aber das das Formular ausgefüllt ist
-			//\Controller::reload(\Controller::addToUrl('send=1'));
-			header('Location:'.$objPage->alias.'.html?send=1'); 
-			//header('Location:'.$url); 
+			header('Location:'.$objPage->alias.'.html?send=1');
 		}
 		else
 		{
@@ -174,9 +171,16 @@ class Formular extends \ContentElement
 		//echo \Input::post('turniere')."<br>";
 		//echo "Formulrdaten:";
 		//print_r($arrData);
-		// Spielerdaten laden
+
+		// Spielerdaten laden, wenn ID im Feld name größer 0
 		if($arrData['name'])
 		{
+			// Anmeldung laden, wenn playerId = name (für Prüfung Mehrfachanmeldung)
+			$objAnmeldung = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_anmeldungen WHERE playerId = ?')
+			                                        ->limit(1)
+			                                        ->execute($arrData['name']);
+
+			// Spielerdaten suchen
 			$objPlayer = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_spieler WHERE id = ?')
 			                                     ->execute($arrData['name']);
 			if($objPlayer->numRows)
@@ -193,6 +197,8 @@ class Formular extends \ContentElement
 				);
 			}
 		}
+
+		// Anmeldung ohne Datensatz in Spielerdaten
 		if(!$spieler)
 		{
 			$spieler = array
@@ -207,7 +213,7 @@ class Formular extends \ContentElement
 			);
 		}
 
-		// Formulardaten übertragen
+		// Alle Daten übertragen
 		$set = array
 		(
 			'pid'          => $arrData['pid'],
@@ -228,12 +234,44 @@ class Formular extends \ContentElement
 			'gruppe'       => serialize(\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true)),
 			'published'    => 1
 		);
-		//print_r($set);
-		$objLink = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
-		                                   ->set($set)
-		                                   ->execute();
 
-		\System::log('[Internetschach] Neue Anmeldung: '.$set['name'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
+		$bemerkungen = $set['bemerkungen']; // Wegen der hinzugefügten Uhrzeit Bemerkungen separat sichern für E-Mail
+		
+		// Anmeldung speichern
+		if($objAnmeldung->numRows)
+		{
+			// Ältere Anmeldung liegt bereits vor
+			// Versionierung aktivieren
+			$objVersion = new \Versions('tl_internetschach_anmeldungen', $objAnmeldung->id);
+			$objVersion->initialize();
+			// set-Array aktualisieren
+			$updateSet = array
+			(
+				'tstamp'       => time(),
+				'email'        => $set['email'], // Neu aus Formular übernehmen
+				'chessbase'    => $set['chessbase'], // Neu aus Formular übernehmen
+				'bemerkungen'  => $objAnmeldung->bemerkungen.($set['bemerkungen'] ? "\n".date('d.m.Y H:i').' Uhr: '.$set['bemerkungen']: ''), // Neue Bemerkungen hinzufügen
+				'turniere'     => $set['turniere'], // Neu aus Formular übernehmen
+				'gruppe'       => $set['gruppe'], // Neu aus Formular übernehmen
+			);
+			// Datensatz updaten
+			//print_r($updateSet);
+			$objRecord = \Database::getInstance()->prepare('UPDATE tl_internetschach_anmeldungen %s WHERE id = ?')
+			                                     ->set($updateSet)
+			                                     ->execute($objAnmeldung->id);
+			$objVersion->create();
+			\System::log('A new version of record "tl_internetschach_anmeldungen.id='.$objAnmeldung->id.'" has been created'.$this->getParentEntries('tl_internetschach_anmeldungen', $objAnmeldung->id), __METHOD__, TL_GENERAL);
+			\System::log('[Internetschach] Geänderte Anmeldung: '.$set['name'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
+		}
+		else
+		{
+			// Absolut neue Anmeldung
+			$set['bemerkungen'] =  date('d.m.Y H:i').' Uhr: '.$set['bemerkungen']; // Uhrzeit bei Bemerkung ergänzen
+			$objRecord = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
+			                                     ->set($set)
+			                                     ->execute();
+			\System::log('[Internetschach] Neue Anmeldung: '.$set['name'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
+		}
 
 		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
 		                                   ->execute($arrData['pid']);
@@ -249,10 +287,10 @@ class Formular extends \ContentElement
 
 			// Absender "Name <email>" in ein Array $arrFrom aufteilen
 			preg_match('~(?:([^<]*?)\s*)?<(.*)>~', $from, $arrFrom);
-			
+
 			$objEmail->from = $arrFrom[2];
 			$objEmail->fromName = $arrFrom[1];
-			$objEmail->subject = $objMain->titel.' - Anmeldung '.$set['name'];
+			$objEmail->subject = $objMain->titel.' - '.($objAnmeldung->numRows ? 'Update ' : '').'Anmeldung '.$set['name'];
 
 			// Text zusammenbauen
 			$text = 'Sie haben sich angemeldet für: '.$objMain->titel."\n\nFolgende Daten wurden an uns übertragen:\n\n";
@@ -270,7 +308,7 @@ class Formular extends \ContentElement
 						$text .= 'ChessBase-Benutzername(n): '.$value."\n";
 						break;
 					case 'bemerkungen':
-						$text .= 'Bemerkungen: '.$value."\n";
+						$text .= 'Bemerkungen: '.$bemerkungen."\n";
 						break;
 					case 'verein':
 						$text .= 'Verein: '.$value."\n";

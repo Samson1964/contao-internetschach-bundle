@@ -18,17 +18,21 @@ class Export extends \Backend
 			return '';
 		}
 
+		// Turnierserie einlesen
+		$objSerie = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+		                                    ->execute(\Input::get('id'));
+
 		// Neues Excel-Objekt erstellen
 		$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 		
 		// Dokument-Eigenschaften setzen
-		$spreadsheet->getProperties()->setCreator('Frank Hoppe')
-		            ->setLastModifiedBy('Frank Hoppe')
-		            ->setTitle('Anmeldungen DISAM')
-		            ->setSubject('Anmeldungen DISAM')
-		            ->setDescription('Liste der Anmeldungen zur DISAM')
-		            ->setKeywords('disam schach anmeldungen internet')
-		            ->setCategory('Export DISAM-Anmeldungen');
+		$spreadsheet->getProperties()->setCreator('ContaoInternetschachBundle')
+		            ->setLastModifiedBy('ContaoInternetschachBundle')
+		            ->setTitle('Anmeldungen '.$objSerie->titel)
+		            ->setSubject('Anmeldungen '.$objSerie->titel)
+		            ->setDescription('Liste der Anmeldungen '.$objSerie->titel)
+		            ->setKeywords('schach anmeldungen internet')
+		            ->setCategory('Export Anmeldungen '.$objSerie->titel);
 
 		// Bereits vorhandene Tabellenblätter löschen (funktioniert nicht)
 		$anzahl = $spreadsheet->getSheetCount();
@@ -38,58 +42,54 @@ class Export extends \Backend
 		}
 
 		// Daten laden
-		$records = \Database::getInstance()->prepare('SELECT * FROM ctlg_disam_anmeldungen WHERE jahr=? AND mitglied=? AND invisible=?')
-		                                   ->execute(2020, 1, '');
+		$records = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_anmeldungen WHERE pid = ? AND published = ?')
+		                                   ->execute(\Input::get('id'), 1);
 
 		$daten = array();
+		$sheets = array('alle');
 		if($records->numRows)
 		{
 			while($records->next())
 			{
-				$turniere = explode(',', $records->turniere); // Turniere sind so getrennt: 1,2,3,F
-				$accounts = explode('|', $records->account); // Accounts ChessBase sind so getrennt: Nick1|Nick2
-				foreach($turniere as $turnier)
+				$turniere = unserialize($records->turniere); // Turniere sind als serialisiertes Array gespeichert
+				$accounts = explode(',', $records->chessbase); // Accounts ChessBase sind so getrennt: Nick1,Nick2
+				if($turniere)
 				{
-					foreach($accounts as $account)
+					foreach($turniere as $turnier)
 					{
-						// Tabellenname festlegen und Anmeldung in Array speichern
-						switch($turnier)
+						foreach($accounts as $account)
 						{
-							case '1': $name = 'Vor1_'.$records->gruppe; break;
-							case '2': $name = 'Vor2_'.$records->gruppe; break;
-							case '3': $name = 'Vor3_'.$records->gruppe; break;
-							case 'F': $name = 'Fin_'.$records->gruppe; break;
-							default: $name = '';
+							// Tabellenname festlegen und Anmeldung in Array speichern
+							$tabellenname = $turnier.'_'.$records->gruppe;
+							$sheets[] = $tabellenname; // Tabelle hinzufügen für Exceldatei
+							$daten[$tabellenname][] = array
+							(
+								'gruppe'   => $records->gruppe,
+								'turniere' => '',
+								'name'     => $records->name,
+								'verein'   => $records->verein,
+								'account'  => $account,
+								'dwz'      => $records->dwz,
+								'titel'    => $records->fideTitel
+							);
 						}
-						$daten[$name][] = array
-						(
-							'gruppe'   => $records->gruppe,
-							'turniere' => '',
-							'name'     => $records->nachname.','.$records->vorname,
-							'verein'   => $records->verein,
-							'account'  => $account,
-							'dwz'      => $records->dwz,
-							'titel'    => $records->titel,
-							'finale'   => in_array('F', $turniere) ? 'X' : ''
-						);
 					}
+					$daten['alle'][] = array
+					(
+						'gruppe'   => $records->gruppe,
+						'turniere' => implode(',', $turniere),
+						'name'     => $records->name,
+						'verein'   => $records->verein,
+						'account'  => $account,
+						'dwz'      => $records->dwz,
+						'titel'    => $records->fideTitel
+					);
 				}
-				$daten['alle'][] = array
-				(
-					'gruppe'   => $records->gruppe,
-					'turniere' => $records->turniere,
-					'name'     => $records->nachname.','.$records->vorname,
-					'verein'   => $records->verein,
-					'account'  => $records->account,
-					'dwz'      => $records->dwz,
-					'titel'    => $records->titel,
-					'finale'   => in_array('F', $turniere) ? 'X' : ''
-				);
 			}
 		}
 
-		// Tabellenblätter anlegen
-		$sheets = array('Vor1_A', 'Vor1_B', 'Vor1_C', 'Vor2_A', 'Vor2_B', 'Vor2_C', 'Vor3_A', 'Vor3_B', 'Vor3_C', 'Fin_A', 'Fin_B', 'Fin_C', 'alle');
+		// Tabellenblätter anlegen, zuvor doppelte Einträge aus sheets-Array entfernen
+		$sheets = array_unique($sheets);
 		$styleArray = [
 		    'font' => [
 		        'bold' => true,
@@ -128,8 +128,8 @@ class Export extends \Backend
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
-			$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
-			$spreadsheet->getActiveSheet()->getStyle('A2:H1000')->applyFromArray($styleArray2);
+			$spreadsheet->getActiveSheet()->getStyle('A1:G1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:G1000')->applyFromArray($styleArray2);
 			$spreadsheet->getActiveSheet()->setTitle($sheet)
 			            ->setCellValue('A1', 'Gruppe')
 			            ->setCellValue('B1', 'Turniere')
@@ -137,8 +137,7 @@ class Export extends \Backend
 			            ->setCellValue('D1', 'Verein')
 			            ->setCellValue('E1', 'DWZ')
 			            ->setCellValue('F1', 'Titel')
-			            ->setCellValue('G1', 'ChessBase')
-			            ->setCellValue('H1', 'Finale');
+			            ->setCellValue('G1', 'ChessBase');
 			$zeile = 2;
 			if($daten[$sheet])
 			{
@@ -151,8 +150,7 @@ class Export extends \Backend
 					            ->setCellValue('D'.$zeile, $item['verein'])
 					            ->setCellValue('E'.$zeile, $item['dwz'])
 					            ->setCellValue('F'.$zeile, $item['titel'])
-					            ->setCellValue('G'.$zeile, $item['account'])
-					            ->setCellValue('H'.$zeile, $item['finale']);
+					            ->setCellValue('G'.$zeile, $item['account']);
 					$zeile++;
 				}
 			}
@@ -165,22 +163,26 @@ class Export extends \Backend
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$spreadsheet->setActiveSheetIndex(0);
 		
-		$downloadname = 'DISAM-Anmeldungen_'.date('Ymd-Hi').'.xls';
-		$dateiname = 'DISAM-Anmeldungen.xls';
+		$downloadname = str_replace(array('.', ' '), array('', '_'), $objSerie->titel).'-Anmeldungen_'.date('Ymd-Hi').'.xls';
+		$dateiname = str_replace(array('.', ' '), array('', '_'), $objSerie->titel).'-Anmeldungen.xls';
 
 		$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
 		$writer->save('bundles/contaointernetschach/'.$dateiname);
 
 		$objMail = new \Email();
-		$objMail->subject = 'Anmeldungen DISAM'; // ergibt $this->strSubject
-		$objMail->text = 'Die aktuelle Liste der Anmeldungen für die DISAM findest Du im Anhang!'; // ergibt $this->strHtml
-		$objMail->from = 'webmaster@schachbund.de'; // ergibt $this->strSender
-		$objMail->fromName = 'Frank Hoppe'; // ergibt $this->strSenderName
+		$objMail->subject = 'Anmeldungen '.$objSerie->titel; // ergibt $this->strSubject
+		$objMail->text = 'Die aktuelle Liste der Anmeldungen für '.$objSerie->titel.' findest Du im Anhang!'; // ergibt $this->strHtml
+
+		// Absender "Name <email>" in ein Array $arrFrom aufteilen
+		preg_match('~(?:([^<]*?)\s*)?<(.*)>~', html_entity_decode($objSerie->email_sender), $arrFrom);
+		$objMail->from = $arrFrom[2];
+		$objMail->fromName = $arrFrom[1];
+
 		// fügt eine Datei als Anhang hinzu
-		$objMail->attachFile('bundles/contaodisam/'.$dateiname);
-		$objMail->sendBcc('Frank Hoppe <webmaster@schachbund.de>'); 
-		$objMail->sendCc('Reinhold Goldau <goldaureinhold@gmail.com>'); 
-		$objMail->sendTo('DISAM-Turnierleitung <disam@schachbund.de>');
+		$objMail->attachFile('bundles/contaointernetschach/'.$dateiname);
+
+		$to = explode("\n", html_entity_decode($objSerie->email_export));
+		$objMail->sendTo($to);
 
 		// Redirect output to a client’s web browser (Xls)
 		header('Content-Type: application/vnd.ms-excel');

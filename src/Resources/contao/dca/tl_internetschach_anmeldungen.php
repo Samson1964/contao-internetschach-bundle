@@ -129,6 +129,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		// Registrierungsdatum
 		'registerDate' => array
 		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['registerDate'],
 			'flag'                    => 8,
 			'sorting'                 => true,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -136,6 +137,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		// Verknüpfung zu tl_internetschach_spieler
 		'playerId' => array
 		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['playerId'],
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'verein' => array
@@ -198,7 +200,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -207,20 +209,6 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 				'rgxp'                => 'alnum'
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
-		),
-		'turniere' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'],
-			'exclude'                 => true,
-			'options_callback'        => array('tl_internetschach_anmeldungen', 'getTurniere'),
-			'inputType'               => 'checkboxWizard',
-			'eval'                    => array
-			(
-				'mandatory'           => false,
-				'multiple'            => true,
-				'tl_class'            => 'clr long'
-			),
-			'sql'                     => "blob NULL", 
 		),
 		'turniere' => array
 		(
@@ -288,7 +276,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -304,7 +292,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(

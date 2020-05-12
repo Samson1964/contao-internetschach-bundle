@@ -19,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_internetschach_spieler'),
+		'ctable'                      => array('tl_internetschach_spieler', 'tl_internetschach_anmeldungen'),
 		'enableVersioning'            => true,
 		'sql' => array
 		(
