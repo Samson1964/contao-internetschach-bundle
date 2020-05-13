@@ -25,7 +25,7 @@
 
 $GLOBALS['BE_MOD']['content']['internetschach'] = array
 (
-	'tables'         => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen'),
+	'tables'         => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen', 'tl_internetschach_tabellen'),
 	'importCSV'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importCSV'),
 	'exportXLS'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'getExcel')
 );

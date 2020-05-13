@@ -12,9 +12,9 @@
 
 
 /**
- * Table tl_internetschach_anmeldungen
+ * Table tl_internetschach_tabellen
  */
-$GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
+$GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 (
 
 	// Config
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'flag'                    => 3,
 			'headerFields'            => array('titel'),
 			'panelLayout'             => 'filter;sort;search,limit',
-			'child_record_callback'   => array('tl_internetschach_anmeldungen', 'listSpieler')
+			'child_record_callback'   => array('tl_internetschach_tabellen', 'listSpieler')
 		),
 		'label' => array
 		(
@@ -65,35 +65,35 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'edit' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['edit'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['edit'],
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif',
 			),
 			'copy' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['copy'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['copy'],
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif',
-				//'button_callback'     => array('tl_internetschach_anmeldungen', 'copyArchive')
+				//'button_callback'     => array('tl_internetschach_tabellen', 'copyArchive')
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['delete'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
-				//'button_callback'     => array('tl_internetschach_anmeldungen', 'deleteArchive')
+				//'button_callback'     => array('tl_internetschach_tabellen', 'deleteArchive')
 			),
 			'toggle' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['toggle'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('tl_internetschach_anmeldungen', 'toggleIcon')
+				'button_callback'     => array('tl_internetschach_tabellen', 'toggleIcon')
 			),
 			'show' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['show'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			)
@@ -129,7 +129,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		// Registrierungsdatum
 		'registerDate' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['registerDate'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['registerDate'],
 			'flag'                    => 8,
 			'sorting'                 => true,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -137,12 +137,12 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		// Verknüpfung zu tl_internetschach_spieler
 		'playerId' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['playerId'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['playerId'],
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'verein' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['verein'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -158,7 +158,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'name' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['name'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['name'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -174,7 +174,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'geschlecht' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['geschlecht'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['geschlecht'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -196,7 +196,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'geburtsjahr' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['geburtsjahr'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['geburtsjahr'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -212,9 +212,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'turniere' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['turniere'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['turniere'],
 			'exclude'                 => true,
-			'options_callback'        => array('tl_internetschach_anmeldungen', 'getTurniere'),
+			'options_callback'        => array('tl_internetschach_tabellen', 'getTurniere'),
 			'inputType'               => 'checkboxWizard',
 			'eval'                    => array
 			(
@@ -226,9 +226,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'gruppe' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['gruppe'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['gruppe'],
 			'exclude'                 => true,
-			'options_callback'        => array('tl_internetschach_anmeldungen', 'getGruppen'),
+			'options_callback'        => array('tl_internetschach_tabellen', 'getGruppen'),
 			'inputType'               => 'radio',
 			'eval'                    => array
 			(
@@ -236,19 +236,11 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 				'multiple'            => false,
 				'tl_class'            => 'w50'
 			),
-			//'load_callback'           => array
-			//(
-			//	array('tl_interschach_anmeldungen', 'getGruppe')
-			//),
-			//'save_callback'           => array
-			//(
-			//	array('tl_interschach_anmeldungen', 'setGruppe')
-			//),
 			'sql'                     => "blob NULL"
 		),
 		'chessbase' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['chessbase'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['chessbase'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -264,7 +256,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'email' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['email'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['email'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -280,7 +272,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'dwz' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['dwz'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['dwz'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -296,7 +288,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'fideElo' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideElo'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['fideElo'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
@@ -312,7 +304,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'fideTitel' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideTitel'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['fideTitel'],
 			'exclude'                 => true,
 			'search'                  => false,
 			'sorting'                 => true,
@@ -328,7 +320,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'bemerkungen' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['bemerkungen'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['bemerkungen'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
@@ -337,7 +329,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'intern' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['intern'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['intern'],
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
@@ -346,7 +338,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'checked' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['checked'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['checked'],
 			'inputType'               => 'checkbox',
 			'filter'                  => true,
 			'eval'                    => array('tl_class' => 'w50','isBoolean' => true),
@@ -354,7 +346,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		),
 		'published' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['published'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['published'],
 			'inputType'               => 'checkbox',
 			'filter'                  => true,
 			'eval'                    => array('tl_class' => 'w50','isBoolean' => true),
@@ -365,14 +357,14 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 
 
 /**
- * Class tl_internetschach_anmeldungen
+ * Class tl_internetschach_tabellen
  *
  * Provide miscellaneous methods that are used by the data configuration array.
  * @copyright  Leo Feyer 2005-2014
  * @author     Leo Feyer <https://contao.org>
  * @package    News
  */
-class tl_internetschach_anmeldungen extends \Backend
+class tl_internetschach_tabellen extends Backend
 {
 
 	/**
@@ -395,7 +387,7 @@ class tl_internetschach_anmeldungen extends \Backend
 		}
 
 		// Check permissions AFTER checking the tid, so hacking attempts are logged
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_internetschach_anmeldungen::published', 'alexf'))
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_internetschach_tabellen::published', 'alexf'))
 		{
 			return '';
 		}
@@ -413,9 +405,9 @@ class tl_internetschach_anmeldungen extends \Backend
 	public function toggleVisibility($intId, $blnPublished)
 	{
 		// Check permissions to publish
-		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_internetschach_anmeldungen::published', 'alexf'))
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_internetschach_tabellen::published', 'alexf'))
 		{
-			$this->log('Kein Zugriffsrecht für Aktivierung Datensatz ID "'.$intId.'"', 'tl_internetschach_anmeldungen toggleVisibility', TL_ERROR);
+			$this->log('Kein Zugriffsrecht für Aktivierung Datensatz ID "'.$intId.'"', 'tl_internetschach_tabellen toggleVisibility', TL_ERROR);
 			// Zurücklink generieren, ab C4 ist das ein symbolischer Link zu "contao"
 			if (version_compare(VERSION, '4.0', '>='))
 			{
@@ -428,12 +420,12 @@ class tl_internetschach_anmeldungen extends \Backend
 			$this->redirect($backlink.'?act=error');
 		}
 		
-		$this->createInitialVersion('tl_internetschach_anmeldungen', $intId);
+		$this->createInitialVersion('tl_internetschach_tabellen', $intId);
 		
 		// Trigger the save_callback
-		if (is_array($GLOBALS['TL_DCA']['tl_internetschach_anmeldungen']['fields']['published']['save_callback']))
+		if (is_array($GLOBALS['TL_DCA']['tl_internetschach_tabellen']['fields']['published']['save_callback']))
 		{
-			foreach ($GLOBALS['TL_DCA']['tl_internetschach_anmeldungen']['fields']['published']['save_callback'] as $callback)
+			foreach ($GLOBALS['TL_DCA']['tl_internetschach_tabellen']['fields']['published']['save_callback'] as $callback)
 			{
 				$this->import($callback[0]);
 				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
@@ -441,9 +433,9 @@ class tl_internetschach_anmeldungen extends \Backend
 		}
 		
 		// Update the database
-		$this->Database->prepare("UPDATE tl_internetschach_anmeldungen SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
+		$this->Database->prepare("UPDATE tl_internetschach_tabellen SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);
-		$this->createNewVersion('tl_internetschach_anmeldungen', $intId);
+		$this->createNewVersion('tl_internetschach_tabellen', $intId);
 	}
 
 	/**
@@ -499,20 +491,4 @@ class tl_internetschach_anmeldungen extends \Backend
 		}
 		return $array;
 	}
-
-	// Wandelt einen String, z.B. "bd" in ein serialisiertes Array um
-	public function getGruppe($varValue, \DataContainer $dc)
-	{
-		//$array = unserialize($varValue);
-		//return $array[0];
-		return $varValue;
-	}
-
-	// Wandelt einen String, z.B. "bd" in ein serialisiertes Array um
-	public function setGruppe($varValue, DataContainer $dc)
-	{
-		//return serialize(array($varValue));
-		return $varValue;
-	}
-
 }

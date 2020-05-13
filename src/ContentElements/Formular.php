@@ -56,6 +56,9 @@ class Formular extends \ContentElement
   });
 </script>
 ';
+		// Turnierserie einlesen
+		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+			                               ->execute($this->internetschach);
 
 		$content = '';
 		$form = new \Schachbulle\ContaoHelperBundle\Classes\Form();
@@ -76,6 +79,11 @@ class Formular extends \ContentElement
 			'typ'       => 'hidden',
 			'name'      => 'pid',
 			'value'     => $this->internetschach
+		));
+		$form->addField(array
+		(
+			'typ'       => 'explanation',
+			'label'     => '<span style="color:red; font-weight:bold;">* Pflichtfeld!</span>'
 		));
 		$form->addField(array
 		(
@@ -103,17 +111,19 @@ class Formular extends \ContentElement
 		$form->addField(array
 		(
 			'typ'       => 'explanation',
-			'label'     => 'Se können mehrere Benutzernamen mit Komma trennen.'
+			'label'     => 'Sie können mehrere Benutzernamen mit Komma trennen.'
 		));
 		$turniere = array();
-		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
-			                               ->execute($this->internetschach);
 		if($objMain->numRows)
 		{
 			$temp = unserialize($objMain->turniere);
 			foreach($temp as $item)
 			{
-				if(!$item['finale']) $turniere[$item['feldname']] = $item['name'];
+				// Prüfen ob Anmeldeschluß eingehalten wird
+				if(!$item['meldeschluss'] || $item['meldeschluss'] > time())
+				{
+					if(!$item['finale']) $turniere[$item['feldname']] = $item['name'];
+				}
 			}
 		}
 		$form->addField(array
@@ -145,9 +155,17 @@ class Formular extends \ContentElement
 		if($form->validate())
 		{
 			$arrData = $form->fetchAll();
-			self::saveAnmeldung($arrData); // Daten sichern
-			// Seite neu laden
-			header('Location:'.$objPage->alias.'.html?send=1');
+			if($arrData['name'])
+			{
+				self::saveAnmeldung($arrData); // Daten sichern
+				// Seite neu laden
+				//header('Location:'.$objPage->alias.'.html?send=1');
+			}
+			else
+			{
+				// Kein Spieler ausgesucht, Formular mit Fehlermeldung anzeigen
+				$this->Template->content = $content.$javascript;
+			}
 		}
 		else
 		{
@@ -157,7 +175,8 @@ class Formular extends \ContentElement
 			}
 			else
 			{
-				$this->Template->content = $content.$javascript;
+				if($turniere) $this->Template->content = $content.$javascript;
+				else $this->Template->content = 'Es sind keine Anmeldungen mehr möglich!';
 			}
 		}
 
@@ -231,7 +250,7 @@ class Formular extends \ContentElement
 			'fideElo'      => $spieler['fideElo'],
 			'fideTitel'    => $spieler['fideTitel'],
 			'turniere'     => serialize($arrData['turniere']),
-			'gruppe'       => serialize(\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true)),
+			'gruppe'       => \Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true),
 			'published'    => 1
 		);
 
@@ -251,8 +270,8 @@ class Formular extends \ContentElement
 				'email'        => $set['email'], // Neu aus Formular übernehmen
 				'chessbase'    => $set['chessbase'], // Neu aus Formular übernehmen
 				'bemerkungen'  => $objAnmeldung->bemerkungen.($set['bemerkungen'] ? "\n".date('d.m.Y H:i').' Uhr: '.$set['bemerkungen']: ''), // Neue Bemerkungen hinzufügen
-				'turniere'     => $set['turniere'], // Neu aus Formular übernehmen
-				'gruppe'       => $set['gruppe'], // Neu aus Formular übernehmen
+				'turniere'     => serialize($arrData['turniere']), // Neu aus Formular übernehmen
+				'gruppe'       => \Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true), // Neu aus Formular übernehmen
 			);
 			// Datensatz updaten
 			//print_r($updateSet);
@@ -265,8 +284,9 @@ class Formular extends \ContentElement
 		}
 		else
 		{
+			//print_r($set);
 			// Absolut neue Anmeldung
-			$set['bemerkungen'] =  date('d.m.Y H:i').' Uhr: '.$set['bemerkungen']; // Uhrzeit bei Bemerkung ergänzen
+			$set['bemerkungen'] =  $set['bemerkungen'] ? date('d.m.Y H:i').' Uhr: '.$set['bemerkungen'] : $set['bemerkungen']; // Uhrzeit bei Bemerkung ergänzen
 			$objRecord = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
 			                                     ->set($set)
 			                                     ->execute();
@@ -340,6 +360,7 @@ class Formular extends \ContentElement
 			$objEmail->text = $text;
 
 			$objEmail->sendBcc($to);
+			$objEmail->replyTo($replyto);
 			$objEmail->sendTo($set['email']);
 		}
 	}

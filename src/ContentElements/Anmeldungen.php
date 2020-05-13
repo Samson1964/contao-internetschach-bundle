@@ -53,6 +53,7 @@ class Anmeldungen extends \ContentElement
 			$nr = 0;
 			while($objMeldungen->next())
 			{
+				echo $objMeldungen->name;
 				if(self::Verifizierung($objMeldungen->turniere, $objMeldungen->gruppe))
 				{
 					$nr++;
@@ -80,13 +81,14 @@ class Anmeldungen extends \ContentElement
 
 	function Verifizierung($gemeldete_turniere, $gemeldete_gruppe)
 	{
-		$gemeldete_turniere = unserialize($gemeldete_turniere); // Array mit vom Spieler gemeldeten Turnieren
+		$arr_gemeldete_turniere = unserialize($gemeldete_turniere); // Array mit vom Spieler gemeldeten Turnieren
+		//$arr_gemeldete_gruppe = unserialize($gemeldete_gruppe); // Array mit vom Spieler gemeldeter Gruppe
 
 		// Gemeldete Turniere in anzuzeigenden Turnieren suchen
 		$foundTurnier = false;
 		foreach($this->view_turniere as $turnier)
 		{
-			if(in_array($turnier, (array)$gemeldete_turniere))
+			if(in_array($turnier, (array)$arr_gemeldete_turniere))
 			{
 				$foundTurnier = true;
 				break;

@@ -1,5 +1,14 @@
 # Internetschach Changelog
 
+## Version 0.4.0 (2020-05-13)
+
+Add: tl_internetschach_tabellen (Grundstruktur)
+Fix: Zeitstempel wurde auch bei leerem Bemerkungsfeld hinzugefügt
+Add: Antwortadresse (reply-to) bei Anmelde-Email eingefügt
+Add: Felder für Termin/Meldeschluß der Turniere in tl_internetschach
+Add: Anmeldeformular berücksichtigt Meldeschlüsse der Turniere
+Fix: Anmeldeformular schreibt Gruppe als serialisiertes Array in die DB, statt als String
+
 ## Version 0.3.0 (2020-05-12)
 
 Fix: Export der Anmeldungen an das Bundle angepaßt

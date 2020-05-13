@@ -94,6 +94,12 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				'href'                => 'table=tl_internetschach_anmeldungen',
 				'icon'                => 'bundles/contaointernetschach/images/anmeldungen.png'
 			),
+			'tables' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['tables'],
+				'href'                => 'table=tl_internetschach_tabellen',
+				'icon'                => 'bundles/contaointernetschach/images/tabelle.png'
+			),
 			'players' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['players'],
@@ -322,6 +328,30 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 							'style'   => 'width:50px',
 							'maxlength' => 5
 						),
+					),
+					'termin'          => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_termin'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'rgxp'    => 'datim',
+							'datepicker' => true,
+							'style'   => 'width:130px',
+						)
+					),
+					'meldeschluss'          => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_meldeschluss'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'rgxp'    => 'datim',
+							'datepicker' => true,
+							'style'   => 'width:130px',
+						)
 					),
 					'finale'          => array
 					(

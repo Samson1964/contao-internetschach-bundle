@@ -34,12 +34,14 @@ class Helper
 			if($dwz >= $gruppe['dwz_von'] && $dwz <= $gruppe['dwz_bis'])
 			{
 				// Gruppe gefunden
-				if($feldname) return (array)$gruppe['feldname'];
-				return $gruppe['name'];
+				if($feldname) $return = $gruppe['feldname'];
+				else $return =  $gruppe['name'];
+				return $return;
 			}
 		}
-		if($feldname) return array();
-		return 'nicht spielberechtigt';
+		if($feldname) $return =  '';
+		else $return =  'nicht spielberechtigt';
+		return $return;
 	}
 
 	/**

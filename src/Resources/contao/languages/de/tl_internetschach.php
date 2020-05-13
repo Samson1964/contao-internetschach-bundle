@@ -50,6 +50,8 @@ $GLOBALS['TL_LANG']['tl_internetschach']['turniere_legend'] = 'Turniere';
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere'] = array('Turniere', 'Liste der Turniere');
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_name'] = array('Name', 'Name des Turniers im Frontend, z.B. 1. Turnier');
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_feldname'] = array('Feldname', 'Interner Name des Turniers, z.B. 1');
+$GLOBALS['TL_LANG']['tl_internetschach']['turniere_termin'] = array('Spieltermin', 'Spieltermin des Turniers im Format TT.MM.JJJJ HH:MM');
+$GLOBALS['TL_LANG']['tl_internetschach']['turniere_meldeschluss'] = array('Meldeschluß', 'Anmeldeschluß des Turniers im Format TT.MM.JJJJ HH:MM');
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_finale'] = array('Finale', 'Das ist das Finalturnier');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['publish_legend'] = 'Veröffentlichung';
