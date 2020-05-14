@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.5.1 (2020-05-14)
+
+* Fix: tl_version benötigt userid != NULL
+
 ## Version 0.5.0 (2020-05-14)
 
 * Fix: Spielerliste.php findet bei Leerzeichen nach Komma keinen Namen

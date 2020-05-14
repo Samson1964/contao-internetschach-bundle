@@ -262,6 +262,8 @@ class Formular extends \ContentElement
 			// Ältere Anmeldung liegt bereits vor
 			// Versionierung aktivieren
 			$objVersion = new \Versions('tl_internetschach_anmeldungen', $objAnmeldung->id);
+			//$objVersions->setUsername($objMember->username);
+			$objVersion->setUserId(0);
 			$objVersion->initialize();
 			// set-Array aktualisieren
 			$updateSet = array
