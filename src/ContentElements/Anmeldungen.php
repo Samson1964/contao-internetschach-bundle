@@ -53,7 +53,6 @@ class Anmeldungen extends \ContentElement
 			$nr = 0;
 			while($objMeldungen->next())
 			{
-				echo $objMeldungen->name;
 				if(self::Verifizierung($objMeldungen->turniere, $objMeldungen->gruppe))
 				{
 					$nr++;

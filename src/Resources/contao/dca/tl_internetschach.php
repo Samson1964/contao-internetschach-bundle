@@ -19,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_internetschach_spieler', 'tl_internetschach_anmeldungen'),
+		'ctable'                      => array('tl_internetschach_spieler', 'tl_internetschach_anmeldungen', 'tl_internetschach_tabellen', 'tl_internetschach_preise'),
 		'enableVersioning'            => true,
 		'sql' => array
 		(
@@ -94,17 +94,23 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				'href'                => 'table=tl_internetschach_anmeldungen',
 				'icon'                => 'bundles/contaointernetschach/images/anmeldungen.png'
 			),
-			'tables' => array
+			'prices' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['tables'],
-				'href'                => 'table=tl_internetschach_tabellen',
-				'icon'                => 'bundles/contaointernetschach/images/tabelle.png'
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['prices'],
+				'href'                => 'table=tl_internetschach_preise',
+				'icon'                => 'bundles/contaointernetschach/images/preise.png'
 			),
 			'players' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['players'],
 				'href'                => 'table=tl_internetschach_spieler',
 				'icon'                => 'bundles/contaointernetschach/images/players.png'
+			),
+			'tables' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['tables'],
+				'href'                => 'table=tl_internetschach_tabellen',
+				'icon'                => 'bundles/contaointernetschach/images/tabelle.png'
 			),
 			'import' => array
 			(

@@ -32,15 +32,27 @@ class Spielerliste
 	public function run()
 	{
 		$turnierserie = \Input::get('pid');
-		$search = \Input::get('q');
+		$search = str_replace(', ', ',', \Input::get('q')); // Leerzeichen nach Komma entfernen
+
+		// Turnierserie laden
+		$objSerie = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach WHERE id = ?")
+		                                    ->execute($turnierserie);
+
+		// Höchste zulässige DWZ suchen
+		$daten = unserialize($objSerie->turniere);
+		$dwz = 0;
+		foreach($daten as $item)
+		{
+			if($item['dwz_bis'] > $dwz) $dwz = $item['dwz_bis'];
+		}
 
 		$ausgabeArr = array();
 		if($turnierserie && $search)
 		{
 			if(strlen($search) > 1)
 			{
-				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? ORDER BY name ASC")
-				                                  ->execute(1, $turnierserie, 'A', "%$search%");
+				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? AND dwz <= ? ORDER BY name ASC")
+				                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz);
 				// Suchbegriff als Erstes zurückgeben
 				$ausgabeArr[] = array
 				(
