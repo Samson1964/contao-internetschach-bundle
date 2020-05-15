@@ -51,23 +51,40 @@ class Spielerliste
 		{
 			if(strlen($search) > 1)
 			{
-				$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? AND dwz <= ? ORDER BY name ASC")
-				                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz);
-				// Suchbegriff als Erstes zurückgeben
-				$ausgabeArr[] = array
-				(
-					'id'   => 0,
-					'name' => $search
-				);
-				if($player->numRows)
+
+				// Cache initialisieren
+				$cache = new \Schachbulle\ContaoHelperBundle\Classes\Cache('Internetschach');
+				$cache->eraseExpired(); // Cache aufräumen, abgelaufene Schlüssel löschen
+				$cachekey = strtolower($search);
+
+				if($cache->isCached($cachekey))
 				{
-					while($player->next())
+					// Daten aus dem Cache laden
+					$ausgabeArr = $cache->retrieve($cachekey);
+				}
+				else
+				{
+					$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? AND dwz <= ? ORDER BY name ASC")
+					                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz);
+					// Suchbegriff als Erstes zurückgeben
+					$ausgabeArr[] = array
+					(
+						'id'   => 0,
+						'name' => $search
+					);
+					if($player->numRows)
 					{
-						$ausgabeArr[] = array
-						(
-							'id'   => $player->id,
-							'name' => $player->name.' ('.($player->dwz ? 'DWZ '.$player->dwz : 'ohne DWZ').', '.$player->verein.') - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($turnierserie, $player->dwz)
-						);
+						while($player->next())
+						{
+							$ausgabeArr[] = array
+							(
+								'id'   => $player->id,
+								'name' => $player->name.' ('.($player->dwz ? 'DWZ '.$player->dwz : 'ohne DWZ').', '.$player->verein.') - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($turnierserie, $player->dwz)
+							);
+						}
+						// Daten im Cache speichern
+						$cachetime = 3600 * 48; // 48 Stunden
+						$cache->store($cachekey, $ausgabeArr, $cachetime);
 					}
 				}
 			}

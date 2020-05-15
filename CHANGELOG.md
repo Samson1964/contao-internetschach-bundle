@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 0.6.0 (2020-05-15)
+
+* Add: Spielerliste.php: Caching der Suchanfragen eingebaut
+* Formularhinweise hinzugefügt
+
 ## Version 0.5.3 (2020-05-15)
 
 * Fix: Anmeldebestätigung wird nicht angezeigt (header-Zeile war noch auskommentiert)

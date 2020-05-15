@@ -91,8 +91,13 @@ class Formular extends \ContentElement
 			'name'      => 'name',
 			'label'     => 'Spieler suchen und wählen',
 			'class'     => 'select-box',
-			'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen ...'),
+			'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen bis die Autovervollständigung aktiv wird'),
 			'mandatory' => true
+		));
+		$form->addField(array
+		(
+			'typ'       => 'explanation',
+			'label'     => 'Es werden nur teilnahmeberechtigte Spieler angezeigt.'
 		));
 		$form->addField(array
 		(
