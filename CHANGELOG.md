@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.5.2 (2020-05-15)
+
+* Spielerliste.php listet Spieler nicht auf -> $objSerie->turniere statt $objSerie->gruppen verwendet bei DWZ-Grenze
+
 ## Version 0.5.1 (2020-05-14)
 
 * Fix: tl_version benötigt userid != NULL

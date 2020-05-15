@@ -39,7 +39,7 @@ class Spielerliste
 		                                    ->execute($turnierserie);
 
 		// Höchste zulässige DWZ suchen
-		$daten = unserialize($objSerie->turniere);
+		$daten = unserialize($objSerie->gruppen);
 		$dwz = 0;
 		foreach($daten as $item)
 		{
