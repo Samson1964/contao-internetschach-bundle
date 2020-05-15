@@ -159,7 +159,7 @@ class Formular extends \ContentElement
 			{
 				self::saveAnmeldung($arrData); // Daten sichern
 				// Seite neu laden
-				//header('Location:'.$objPage->alias.'.html?send=1');
+				header('Location:'.$objPage->alias.'.html?send=1');
 			}
 			else
 			{

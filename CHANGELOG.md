@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.5.3 (2020-05-15)
+
+* Fix: Anmeldebestätigung wird nicht angezeigt (header-Zeile war noch auskommentiert)
+
 ## Version 0.5.2 (2020-05-15)
 
 * Spielerliste.php listet Spieler nicht auf -> $objSerie->turniere statt $objSerie->gruppen verwendet bei DWZ-Grenze
