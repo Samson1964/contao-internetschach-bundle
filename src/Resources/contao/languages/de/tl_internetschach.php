@@ -16,17 +16,19 @@ $GLOBALS['TL_LANG']['tl_internetschach']['exportXLS'] = array('Excel-Export', 'E
 
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach']['new'] = array('Neue Turnierserie', 'Neue Turnierserie erstellen');
-$GLOBALS['TL_LANG']['tl_internetschach']['edit'] = array('Turnierserie %s bearbeiten', 'Turnierserie %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_internetschach']['copy'] = array('Turnierserie %s kopieren', 'Turnierserie %s kopieren');
-$GLOBALS['TL_LANG']['tl_internetschach']['delete'] = array('Turnierserie %s löschen', 'Turnierserie %s löschen');
-$GLOBALS['TL_LANG']['tl_internetschach']['toggle'] = array('Turnierserie %s aktivieren/deaktivieren', 'Turnierserie %s aktivieren/deaktivieren');
-$GLOBALS['TL_LANG']['tl_internetschach']['show'] = array('Details zur Turnierserie %s anzeigen', 'Details zur Turnierserie %s anzeigen');
-$GLOBALS['TL_LANG']['tl_internetschach']['reservation'] = array('Anmeldungen der Turnierserie %s bearbeiten', 'Anmeldungen der Turnierserie %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_internetschach']['players'] = array('Spielerdaten der Turnierserie %s bearbeiten', 'Spielerdaten der Turnierserie %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_internetschach']['import'] = array('Spielerdaten in die Turnierserie %s importieren', 'Spielerdaten in die Turnierserie %s importieren');
-$GLOBALS['TL_LANG']['tl_internetschach']['importConfirm'] = 'Spielerdaten in die Turnierserie %s importieren? Bereits vorhandene Spielerdaten werden gelöscht!';
-$GLOBALS['TL_LANG']['tl_internetschach']['export'] = array('Anmeldungen der Turnierserie %s exportieren', 'Anmeldungen der Turnierserie %s exportieren');
-$GLOBALS['TL_LANG']['tl_internetschach']['exportConfirm'] = 'Anmeldungen der Turnierserie %s an die konfigurierten E-Mail-Adressen versenden?';
+$GLOBALS['TL_LANG']['tl_internetschach']['edit'] = array("Turnierserie %s bearbeiten", "Turnierserie %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach']['copy'] = array("Turnierserie %s kopieren", "Turnierserie %s kopieren");
+$GLOBALS['TL_LANG']['tl_internetschach']['delete'] = array("Turnierserie %s löschen", "Turnierserie %s löschen");
+$GLOBALS['TL_LANG']['tl_internetschach']['toggle'] = array("Turnierserie %s aktivieren/deaktivieren", "Turnierserie %s aktivieren/deaktivieren");
+$GLOBALS['TL_LANG']['tl_internetschach']['show'] = array("Details zur Turnierserie %s anzeigen", "Details zur Turnierserie %s anzeigen");
+$GLOBALS['TL_LANG']['tl_internetschach']['reservation'] = array("Anmeldungen der Turnierserie %s bearbeiten", "Anmeldungen der Turnierserie %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach']['prices'] = array("Preise der Turnierserie %s bearbeiten", "Preise der Turnierserie %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach']['tables'] = array("Tabellen der Turnierserie %s bearbeiten", "Tabellen der Turnierserie %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach']['players'] = array("Spielerdaten der Turnierserie %s bearbeiten", "Spielerdaten der Turnierserie %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach']['import'] = array("Spielerdaten in die Turnierserie %s importieren", "Spielerdaten in die Turnierserie %s importieren");
+$GLOBALS['TL_LANG']['tl_internetschach']['importConfirm'] = "Spielerdaten in die Turnierserie %s importieren? Bereits vorhandene Spielerdaten werden gelöscht!";
+$GLOBALS['TL_LANG']['tl_internetschach']['export'] = array("Anmeldungen der Turnierserie %s exportieren", "Anmeldungen der Turnierserie %s exportieren");
+$GLOBALS['TL_LANG']['tl_internetschach']['exportConfirm'] = "Anmeldungen der Turnierserie %s an die konfigurierten E-Mail-Adressen versenden?";
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach']['internetschach_legend'] = 'Titel und Jahr';
@@ -45,6 +47,8 @@ $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_name'] = array('Name', 'Kurzze
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'] = array('Feldname', 'Interner Name der Gruppe, z.B. a');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_von'] = array('von DWZ', '');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_bis'] = array('bis DWZ', '');
+$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_kategoriegrenze'] = array('DWZ-Kategorie', 'Separate DWZ-Kategorie festlegen');
+$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_qualifikationen'] = array('Qualifikationsplätze', 'Qualifikationsplätze für das Finale');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_legend'] = 'Turniere';
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere'] = array('Turniere', 'Liste der Turniere');

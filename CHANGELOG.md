@@ -1,5 +1,18 @@
 # Internetschach Changelog
 
+## Version 0.7.0 (2020-05-16)
+
+* Übersetzungen Tabellen/Preise ergänzt
+* Anmeldeliste: DWZ 0 durch - ersetzt
+* Add: Import von Tabellen
+* HTML-Parser integriert für Tabellenimport (paquettg/php-html-parser)
+* Add: Benutzername "Internetschach-Bundle" in Versionierung
+* Turnierserie Gruppen: DWZ-Kategoriegrenze und Qualifikationsplätze hinzugefügt
+* Add Backend-CSS (z.B. Style von Links mit class button)
+* Aktualisieren-Funktion für Tabellen angefangen
+* Add Helper-Funktion getRealname
+* Add Helper-Funktion TabelleToCSV begonnen
+
 ## Version 0.6.0 (2020-05-15)
 
 * Add: Spielerliste.php: Caching der Suchanfragen eingebaut

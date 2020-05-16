@@ -61,7 +61,7 @@ class Anmeldungen extends \ContentElement
 					$content .= '<td>'.$nr.'</td>';
 					$content .= '<td>'.$objMeldungen->name.'</td>';
 					$content .= '<td>'.$objMeldungen->fideTitel.'</td>';
-					$content .= '<td>'.$objMeldungen->dwz.'</td>';
+					$content .= '<td>'.($objMeldungen->dwz ? $objMeldungen->dwz : '-').'</td>';
 					$content .= '<td>'.$objMeldungen->verein.'</td>';
 					if($this->internetschach_viewturniere) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getTurniere($this->internetschach, $objMeldungen->turniere).'</td>';
 					if($this->internetschach_viewgruppen) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getGruppe($this->internetschach, $objMeldungen->gruppe).'</td>';

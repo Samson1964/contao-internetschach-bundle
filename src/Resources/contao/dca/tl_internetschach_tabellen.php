@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		(
 			'fields'                  => array('turnier'),
 			'format'                  => '%s',
-			'group_callback'          => array('tl_internetschach_preise', 'getGroup')
+			//'group_callback'          => array('tl_internetschach_preise', 'getGroup')
 		),
 		'global_operations' => array
 		(
@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{turniere_legend},turnier,gruppe;{daten_legend},csv,disqualifikation,ungewertet;{leitung_legend:hide},turnierleiter;{info_legend:hide},intern;{publish_legend},published'
+		'default'                     => '{turniere_legend},turnier,gruppe;{daten_legend},importLink,csv,aktualisieren,disqualifikation,ungewertet;{leitung_legend:hide},turnierleiter;{info_legend:hide},intern;{publish_legend},published'
 	),
 
 	// Fields
@@ -160,6 +160,23 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 			),
 			'sql'                     => "blob NULL"
 		),
+		// Link zum Import einer Tabelle (HTML, JSON)
+		'importLink' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'],
+			'exclude'                 => true,
+			'input_field_callback'    => array('tl_internetschach_tabellen', 'getImportlink')
+		), 
+		'importRaw' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importRaw'],
+			'sql'                     => "blob NULL",
+		),
+		'importArray' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importArray'],
+			'sql'                     => "blob NULL",
+		),
 		'csv' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['csv'],
@@ -172,10 +189,29 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 				'class'               => 'monospace',
 				'rows'                => 30,
 				'rte'                 => 'ace',
+				'tl_class'            => 'clr',
+				'readonly'            => true,
+				'disabled'            => true,
 				'helpwizard'          => true
 			),
 			'explanation'             => 'csv',
-			'sql'                     => "mediumtext NULL",
+			'sql'                     => "blob NULL",
+		),
+		'aktualisieren' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['aktualisieren'],
+			'exclude'                 => true,
+			'inputType'               => 'checkboxWizard',
+			'load_callback'           => array(array('tl_internetschach_tabellen', 'loadCSV')),
+			'options'                 => array('real', 'prices', 'qual'),
+			'eval'                    => array
+			(
+				'multiple'            => true,
+				'helpwizard'          => true,
+				'submitOnChange'      => true
+			),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['aktualisieren_optionen'],
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'disqualifikation' => array
 		(
@@ -245,6 +281,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
  */
 class tl_internetschach_tabellen extends Backend
 {
+
+	var $turniere = array();
+	var $gruppen = array();
 
 	/**
 	 * Import the back end user object
@@ -324,15 +363,9 @@ class tl_internetschach_tabellen extends Backend
 	 */
 	public function listTabellen($arrRow)
 	{
-		if($arrRow['checked']) $container = '<span style="color:#00791F">';
-		else $container = '<span style="color:#970000">';
-
-		$temp = $container;
-		$temp .= $arrRow['name'] ? $arrRow['name'] : '- ohne Name -';
-		if($arrRow['geburtsjahr']) $temp .= ' (*'.$arrRow['geburtsjahr'].')';
-		if($arrRow['dwz']) $temp .= ' DWZ '.$arrRow['dwz'];
-		if($arrRow['verein']) $temp .= ' | '.$arrRow['verein'];
-		return $temp.'</span>';
+		$temp = $this->turniere[$arrRow['turnier']];
+		$temp .= ', '.$this->gruppen[$arrRow['gruppe']];
+		return $temp;
 	}
 
 	public function getTurniere(DataContainer $dc)
@@ -404,5 +437,80 @@ class tl_internetschach_tabellen extends Backend
 		//$newLabel = $this->turniere[$row['turnier']];
 		//echo "Feld: $field / ";
 		return $group;
+	}
+
+	/**
+	 * @param DataContainer $dc
+	 *
+	 * @return string HTML-Code
+	 */
+	public function getImportlink(DataContainer $dc)
+	{
+
+		// Zurücklink generieren, ab C4 ist das ein symbolischer Link zu "contao"
+		if (version_compare(VERSION, '4.0', '>='))
+		{
+			$link = \System::getContainer()->get('router')->generate('contao_backend');
+		}
+		else
+		{
+			$link = 'contao/main.php';
+		}
+		$link .= '?do=internetschach&amp;table=tl_internetschach_tabellen&amp;key=importTable&amp;id=' . $dc->activeRecord->id . '&amp;rt=' . REQUEST_TOKEN;
+		
+		return '
+<div class="w50 widget">
+	<a href="'.$link.'" class="button">'.$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'][0].'</a>
+	<p class="tl_help tl_tip" title="" style="margin-top:3px;">'.$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'][1].'</p>
+</div>'; 
+
+	}
+
+	public function loadCSV($varValue, DataContainer $dc)
+	{
+		$optionen = unserialize($varValue); // Mögliche Einträge im Array: real, prices, qual
+		
+		if($optionen)
+		{
+			// Prüfen ob Tabelle als Array vorhanden ist
+			if($dc->activeRecord->importArray)
+			{
+				$tabelle = unserialize($dc->activeRecord->importArray);
+				if($tabelle)
+				{
+					// Tabelle von oben nach unten prüfen und Daten ergänzen bzw. löschen
+					for($i = 0; $i < count($tabelle); $i++)
+					{
+						if(in_array('real', $optionen))
+						{
+							// Richtigen Namen einfügen
+							if($i == 0) $tabelle[$i]['realname'] = '';
+							else $tabelle[$i]['realname'] = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getRealname($dc->activeRecord->pid, $tabelle[$i]['benutzer']);
+						}
+						else
+						{
+							// Richtigen Namen entfernen
+							unset($tabelle[$i]['realname']);
+						}
+					}
+				}
+			}
+        	
+			// Tabelle neu schreiben
+			$csv = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::TabelleToCSV($tabelle);
+			$set = array
+			(
+				'csv'         => $csv,
+				'importArray' => serialize($tabelle)
+			);
+			$objDaten = \Database::getInstance()->prepare("UPDATE tl_internetschach_tabellen %s WHERE id = ?")
+			                                    ->set($set)
+			                                    ->execute($dc->activeRecord->id);
+		}
+
+		//echo "<pre>";
+		//print_r($csv);
+		//echo "</pre>";
+		return $varValue;
 	}
 }

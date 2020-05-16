@@ -5,6 +5,8 @@ namespace Schachbulle\ContaoInternetschachBundle\Classes;
 class Helper
 {
 
+	var $anmeldungenArray = array();
+
 	/**
 	 * Funktion Gruppenzuordnung
 	 * Liefert den Namen oder den Feldnamen der zugordneten Gruppe zurück
@@ -130,4 +132,91 @@ class Helper
 		return implode(', ', $array);
 	}
 
+	/**
+	 * Funktion getRealname
+	 * Liefert zu einem ChessBase-Benutzernamen für eine Turnierserie den richtigen Namen 
+	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $nick             string  Benutzername bei ChessBase
+	 * @return string                   Richtiger Name
+	 */
+	static function getRealname($turnierserie, $nick)
+	{
+		static $anmeldungen;
+
+		if(!$turnierserie) return '';
+
+		if(!$anmeldungen)
+		{
+			// Spielerdaten noch nicht eingelesen, deshalb aus DB abgfragen
+			$objSpieler = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_anmeldungen WHERE pid = ?")
+			                                      ->execute($turnierserie);
+			if($objSpieler->numRows)
+			{
+				while($objSpieler->next())
+				{
+					$chessbase = explode(',', $objSpieler->chessbase); // ChessBase-Namen trennen
+					if($chessbase)
+					{
+						for($x = 0; $x < count($chessbase); $x++)
+						{
+							$anmeldungen[] = array
+							(
+								'chessbase' => trim($chessbase[$x]),
+								'name'      => $objSpieler->name,
+								'verein'    => $objSpieler->verein,
+								'dwz'       => $objSpieler->dwz,
+								'fideTitel' => $objSpieler->fideTitel
+							);
+						}
+					}
+				}
+			}
+		}
+
+		// Benutzernamen suchen und Realnamen zurückgeben
+		foreach($anmeldungen as $item)
+		{
+			if($item['chessbase'] == $nick) return $item['name'];
+		}
+		return '';
+	}
+
+	/**
+	 * Funktion TabelleToCSV
+	 * Erstellt aus einem Tabellen-Array einen CSV-String 
+	 * @param $tabelle          array   Array mit der Tabelle, Beispiel:
+	 * [1] => Array
+	 *     (
+	 *         [platz] => 1
+	 *         [benutzer] => Weltszmerc
+	 *         [land] => POL
+	 *         [rating] => 2171
+	 *         [runde] => Array
+	 *             (
+	 *                 [0] => s 0/7
+	 *                 [1] => w 1/8
+	 *                 [2] => w 1/2
+	 *                 [3] => s 1/23
+	 *                 [4] => s 1/3
+	 *                 [5] => w 1/10
+	 *                 [6] => s ½/4
+	 *                 [7] => s 1/6
+	 *                 [8] => w 1/11
+	 *             )
+	 * 
+	 *         [punkte] => 7.5 / 9
+	 *         [wertung1] => 
+	 *         [wertung2] => 
+	 *         [realname] => Aab,Manfred
+	 *     )
+	 * @return string                   CSV-Ausgabe der Tabelle
+	 */
+	static function TabelleToCSV($tabelle)
+	{
+		// Schlüssel der Tabelle feststellen
+		if($tabelle) $keys = array_keys($tabelle);
+		else $keys = array();
+		
+		return print_r($keys, true);
+	}
 }

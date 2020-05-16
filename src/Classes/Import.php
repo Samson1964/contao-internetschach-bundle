@@ -16,7 +16,6 @@ class Import extends \Backend
 	 * @param object
 	 * @return string
 	 */
-
 	public function importCSV(\DataContainer $dc)
 	{
 		if (\Input::get('key') != 'importCSV')
@@ -120,7 +119,7 @@ class Import extends \Backend
 					}
 					fclose($fp);
 
-					// Alte Datensätze löschen
+					// Alte DatensÃ¤tze lÃ¶schen
 					$this->Database->prepare('DELETE FROM tl_internetschach_spieler WHERE pid = ?')
 					               ->execute(\Input::get('id'));
 
@@ -152,7 +151,7 @@ class Import extends \Backend
 
 					}
 
-					// Restliche Daten eintragen, wenn SQL-String gefüllt
+					// Restliche Daten eintragen, wenn SQL-String gefÃ¼llt
 					if($sql)
 					{
 						$sql = substr($sql, 0, -1).';';
@@ -197,5 +196,249 @@ class Import extends \Backend
 
 </div>
 </form>';
+	}
+
+	/**
+	 * Return a form to choose a CSV file and import it
+	 * @param object
+	 * @return string
+	 */
+	public function importTable(\DataContainer $dc)
+	{
+		if (\Input::get('key') != 'importTable')
+		{
+			return '';
+		}
+
+		$this->import('BackendUser', 'User');
+		$class = $this->User->uploader;
+
+		// See #4086
+		if (!class_exists($class))
+		{
+			$class = 'FileUpload';
+		}
+
+		$objUploader = new $class();
+
+		// Importiere die Daten, wenn das Formular abgeschickt wurde
+		if (\Input::post('FORM_SUBMIT') == 'tl_internetschach_importTable')
+		{
+			$arrUploaded = $objUploader->uploadTo('system/tmp');
+
+			if(empty($arrUploaded))
+			{
+				\Message::addError($GLOBALS['TL_LANG']['ERR']['all_fields']);
+				$this->reload();
+			}
+
+			$this->import('Database');
+
+			foreach($arrUploaded as $strFile)
+			{
+				$objFile = new \File($strFile, true);
+
+				// Datei einlesen
+				$daten = file_get_contents($objFile->dirname.'/'.$objFile->basename);
+
+				if($objFile->extension == 'html' || $objFile->extension == 'htm')
+				{
+					// HTML-Import
+					$tabelle = self::ImportHTML($daten);
+					$csv = self::ConvertToCSV($tabelle);
+				}
+				elseif($objFile->extension == 'json')
+				{
+					// JSON-Import
+				}
+				else
+				{
+					// Falsches Format
+					\Message::addError(sprintf($GLOBALS['TL_LANG']['ERR']['filetype'], $objFile->extension));
+					continue;
+					$tabelle = '';
+				}
+
+				$set = array
+				(
+					'csv'         => $csv,
+					'importRaw'   => $daten,
+					'importArray' => serialize($tabelle)
+				);
+				$this->Database->prepare('UPDATE tl_internetschach_tabellen %s WHERE id = ?')
+				               ->set($set)
+				               ->execute(\Input::get('id'));
+
+			}
+
+			\System::setCookie('BE_PAGE_OFFSET', 0, 0);
+			$this->redirect(str_replace('&key=importTable', '&act=edit', \Environment::get('request')));
+
+		}
+
+		// Return form
+		return '
+<div id="tl_buttons">
+<a href="'.ampersand(str_replace('&key=importTable', '', \Environment::get('request'))).'" class="header_back" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']).'" accesskey="b">'.$GLOBALS['TL_LANG']['MSC']['backBT'].'</a>
+</div>
+
+<h2 class="sub_headline">'.$GLOBALS['TL_LANG']['MOD']['internetschach_importTable_headline'][1].'</h2>
+'.\Message::generate().'
+<form action="'.ampersand(\Environment::get('request'), true).'" id="tl_internetschach_importTable" class="tl_form" method="post" enctype="multipart/form-data">
+<div class="tl_formbody_edit">
+<input type="hidden" name="FORM_SUBMIT" value="tl_internetschach_importTable">
+<input type="hidden" name="REQUEST_TOKEN" value="'.REQUEST_TOKEN.'">
+
+<fieldset class="tl_tbox nolegend">
+  <div class="widget w50">
+    <h3>'.$GLOBALS['TL_LANG']['MOD']['internetschach_importTable_file'][0].'</h3>'.$objUploader->generateMarkup().(isset($GLOBALS['TL_LANG']['MOD']['internetschach_importTable'][1]) ? '
+    <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['MOD']['internetschach_importTable_file'][1].'</p>' : '').'
+  </div>
+</fieldset>
+</div>
+
+<div class="tl_formbody_submit">
+
+<div class="tl_submit_container">
+  <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['MOD']['internetschach_importTable_submit'][0]).'">
+</div>
+
+</div>
+</form>';
+	}
+
+	private function ImportHTML($string)
+	{
+		$string = str_replace(array('<th', '</th>'), array('<td', '</td>'), $string);
+		
+		$dom = new \PHPHtmlParser\Dom;
+		$dom->load($string);
+		$table = $dom->find('table')[0];
+		$rows = $table->find('tr');
+		$tabelle = array();
+		$daten = array();
+		$rowNr = 0;
+		foreach($rows as $row)
+		{
+			$cols = $row->find('td');
+			$colNr = 0;
+			$i = 0;
+			foreach($cols as $col)
+			{
+				$colspan =  $col->getAttribute('colspan');
+				if(!$colspan) $colspan = 1;
+				$value = $col->innerHtml;
+		
+				// Rundenanzahl feststellen
+				if($rowNr == 0 && $colNr == 0) $runden = count($cols) - 4;
+		
+				for($x = 0; $x < $colspan; $x++)
+				{
+					if($i == 0)	$name = 'platz';
+					elseif($i == 1)	$name = 'benutzer';
+					elseif($i == 2)	$name = 'land';
+					elseif($i == 3)	$name = 'rating';
+					elseif($i == $runden + 4) $name = 'punkte';
+					elseif($i == $runden + 5) $name = 'wertung1';
+					elseif($i == $runden + 6) $name = 'wertung2';
+					else
+					{
+						$name = 'runde';
+						$rundeIndex = $i - 4;
+					}
+		
+					$array = array();
+					preg_match('/src="([^"]*)"/i', $value, $array);
+					$land = $array[1];
+		
+					$value = str_replace('&nbsp;', '', $value);
+					$value = strip_tags($value);
+					// Tabellenzelle schreiben
+					if($name == 'runde') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&loz;'), array('s', 'w'), $value);
+					elseif($name == 'land') $tabelle[$rowNr][$name] = str_replace(array('flags/nat16_', '.gif'), array('', ''), $land);
+					else $tabelle[$rowNr][$name] = $value;
+					$i++;
+				}
+				$colNr++;
+			}
+			$rowNr++;
+		}
+		return $tabelle;
+	}
+
+	private function ConvertToCSV($tabelle)
+	{
+
+		// Spaltenbreiten ermitteln
+		$breite = $tabelle[0];
+		for($x = 0; $x < count($tabelle); $x++)
+		{
+			if($x == 0)
+			{
+				$breite['platz'] = 3;
+				$breite['benutzer'] = 8;
+				$breite['land'] = 4;
+				$breite['rating'] = 3;
+				$breite['punkte'] = 4;
+				$breite['wertung1'] = 4;
+				$breite['wertung2'] = 4;
+				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				{
+					$breite['runde'][$y] = strlen($tabelle[$x]['runde'][$y]);
+				}
+			}
+			else
+			{
+				$breite['platz'] = strlen($tabelle[$x]['platz']) > $breite['platz'] ? strlen($tabelle[$x]['platz']) : $breite['platz'];
+				$breite['benutzer'] = strlen($tabelle[$x]['benutzer']) > $breite['benutzer'] ? strlen($tabelle[$x]['benutzer']) : $breite['benutzer'];
+				$breite['land'] = strlen($tabelle[$x]['land']) > $breite['land'] ? strlen($tabelle[$x]['land']) : $breite['land'];
+				$breite['rating'] = strlen($tabelle[$x]['rating']) > $breite['rating'] ? strlen($tabelle[$x]['rating']) : $breite['rating'];
+				$breite['punkte'] = strlen($tabelle[$x]['punkte']) > $breite['punkte'] ? strlen($tabelle[$x]['punkte']) : $breite['punkte'];
+				$breite['wertung1'] = strlen($tabelle[$x]['wertung1']) > $breite['wertung1'] ? strlen($tabelle[$x]['wertung1']) : $breite['wertung1'];
+				$breite['wertung2'] = strlen($tabelle[$x]['wertung2']) > $breite['wertung2'] ? strlen($tabelle[$x]['wertung2']) : $breite['wertung2'];
+				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				{
+					$breite['runde'][$y] = strlen($tabelle[$x]['runde'][$y]) > $breite['runde'][$y] ? strlen($tabelle[$x]['runde'][$y]) : $breite['runde'][$y];
+				}
+			}
+		}
+
+		$csv = '';
+		for($x = 0; $x < count($tabelle); $x++)
+		{
+			if($x == 0)
+			{
+				$csv = 'Pl.;Benutzer;Land;CBR;Pkt.;SoBe;Wtg2;';
+				$csv = substr('Pl.'.str_repeat(' ', 100), 0, $breite['platz']).';';
+				$csv .= substr('Benutzer'.str_repeat(' ', 100), 0, $breite['benutzer']).';';
+				$csv .= substr('Land'.str_repeat(' ', 100), 0, $breite['land']).';';
+				$csv .= substr('CBR'.str_repeat(' ', 100), 0, $breite['rating']).';';
+				$csv .= substr('Pkt.'.str_repeat(' ', 100), 0, $breite['punkte']).';';
+				$csv .= substr('SoBe'.str_repeat(' ', 100), 0, $breite['wertung1']).';';
+				$csv .= substr('Wtg2'.str_repeat(' ', 100), 0, $breite['wertung2']).';';
+
+				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				{
+					$csv .= substr($tabelle[$x]['runde'][$y].str_repeat(' ', 100), 0, $breite['runde'][$y]).';';
+				}
+				$csv = substr($csv, 0, -1)."\n";
+			}
+			else
+			{
+				$csv .= mb_substr($tabelle[$x]['platz'].str_repeat(' ', 100), 0, $breite['platz']).';';
+				$csv .= mb_substr($tabelle[$x]['benutzer'].str_repeat(' ', 100), 0, $breite['benutzer']).';';
+				$csv .= mb_substr($tabelle[$x]['land'].str_repeat(' ', 100), 0, $breite['land']).';';
+				$csv .= mb_substr($tabelle[$x]['rating'].str_repeat(' ', 100), 0, $breite['rating']).';';
+				$csv .= mb_substr($tabelle[$x]['punkte'].str_repeat(' ', 100), 0, $breite['punkte']).';';
+				$csv .= mb_substr($tabelle[$x]['wertung1'].str_repeat(' ', 100), 0, $breite['wertung1']).';';
+				$csv .= mb_substr($tabelle[$x]['wertung2'].str_repeat(' ', 100), 0, $breite['wertung2']).';';
+				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				{
+					$csv .= mb_substr($tabelle[$x]['runde'][$y].str_repeat(' ', 100), 0, $breite['runde'][$y]).';';
+				}
+				$csv = substr($csv, 0, -1)."\n";
+			}
+		}
+		return $csv;
 	}
 }

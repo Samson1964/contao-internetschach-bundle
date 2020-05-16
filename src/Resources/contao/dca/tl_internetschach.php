@@ -94,6 +94,12 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				'href'                => 'table=tl_internetschach_anmeldungen',
 				'icon'                => 'bundles/contaointernetschach/images/anmeldungen.png'
 			),
+			'tables' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['tables'],
+				'href'                => 'table=tl_internetschach_tabellen',
+				'icon'                => 'bundles/contaointernetschach/images/tabelle.png'
+			),
 			'prices' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['prices'],
@@ -105,12 +111,6 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['players'],
 				'href'                => 'table=tl_internetschach_spieler',
 				'icon'                => 'bundles/contaointernetschach/images/players.png'
-			),
-			'tables' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach']['tables'],
-				'href'                => 'table=tl_internetschach_tabellen',
-				'icon'                => 'bundles/contaointernetschach/images/tabelle.png'
 			),
 			'import' => array
 			(
@@ -286,7 +286,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'inputType'   => 'text',
 						'eval'        => array
 						(
-							'style'     => 'width:180px',
+							'style'     => 'width:120px',
 							'maxlength' => 4
 						),
 					),
@@ -297,7 +297,29 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'inputType'   => 'text',
 						'eval'        => array
 						(
-							'style'     => 'width:180px',
+							'style'     => 'width:120px',
+							'maxlength' => 4
+						),
+					),
+					'dwz_kategoriegrenze'         => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_kategoriegrenze'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'     => 'width:120px',
+							'maxlength' => 4
+						),
+					),
+					'qualifikationen'         => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_qualifikationen'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'     => 'width:60px',
 							'maxlength' => 4
 						),
 					),

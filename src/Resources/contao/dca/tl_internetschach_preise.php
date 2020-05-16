@@ -330,7 +330,6 @@ class tl_internetschach_preise extends Backend
 	 */
 	public function listPreise($arrRow)
 	{
-
 		$temp = $this->turniere[$arrRow['turnier']];
 		$temp .= ', '.$this->gruppen[$arrRow['gruppe']];
 		$temp .= ', '.($arrRow['dwz_grenze'] ? ' DWZ < '.$arrRow['dwz_grenze'] : 'alle Spieler');
