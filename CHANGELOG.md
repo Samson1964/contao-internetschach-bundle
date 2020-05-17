@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 0.8.2 (2020-05-17)
+
+* Export.php: Feld Name aufgeteilt in zwei Felder Nachname und Vorname (Wunsch ChessBase)
+
 ## Version 0.8.1 (2020-05-17)
 
 * Fix Import.php Zeichensatzproblem beim Verarbeiten des importierten HTML (Bug in paquettg/php-html-parser)

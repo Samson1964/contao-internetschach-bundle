@@ -124,33 +124,36 @@ class Export extends \Backend
 			$spreadsheet->createSheet();
 			// Blatt aktivieren und Kopfzeile setzen
 			$spreadsheet->setActiveSheetIndex($i);
-			foreach(range('A','G') as $columnID)
+			foreach(range('A','H') as $columnID)
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
-			$spreadsheet->getActiveSheet()->getStyle('A1:G1')->applyFromArray($styleArray);
-			$spreadsheet->getActiveSheet()->getStyle('A2:G1000')->applyFromArray($styleArray2);
+			$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:H1000')->applyFromArray($styleArray2);
 			$spreadsheet->getActiveSheet()->setTitle($sheet)
 			            ->setCellValue('A1', 'Gruppe')
 			            ->setCellValue('B1', 'Turniere')
-			            ->setCellValue('C1', 'Name,Vorname')
-			            ->setCellValue('D1', 'Verein')
-			            ->setCellValue('E1', 'DWZ')
-			            ->setCellValue('F1', 'Titel')
-			            ->setCellValue('G1', 'ChessBase');
+			            ->setCellValue('C1', 'Nachname')
+			            ->setCellValue('D1', 'Vorname')
+			            ->setCellValue('E1', 'Verein')
+			            ->setCellValue('F1', 'DWZ')
+			            ->setCellValue('G1', 'Titel')
+			            ->setCellValue('H1', 'ChessBase');
 			$zeile = 2;
 			if($daten[$sheet])
 			{
 				foreach($daten[$sheet] as $item)
 				{
+					$name = explode(',', $item['name']); // Name aufteilen
 					$spreadsheet->getActiveSheet()
 					            ->setCellValue('A'.$zeile, $item['gruppe'])
 					            ->setCellValue('B'.$zeile, $item['turniere'])
-					            ->setCellValue('C'.$zeile, $item['name'])
-					            ->setCellValue('D'.$zeile, $item['verein'])
-					            ->setCellValue('E'.$zeile, $item['dwz'])
-					            ->setCellValue('F'.$zeile, $item['titel'])
-					            ->setCellValue('G'.$zeile, $item['account']);
+					            ->setCellValue('C'.$zeile, $name[0])
+					            ->setCellValue('D'.$zeile, $name[1])
+					            ->setCellValue('E'.$zeile, $item['verein'])
+					            ->setCellValue('F'.$zeile, $item['dwz'])
+					            ->setCellValue('G'.$zeile, $item['titel'])
+					            ->setCellValue('H'.$zeile, $item['account']);
 					$zeile++;
 				}
 			}
