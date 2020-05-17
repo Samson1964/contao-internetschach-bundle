@@ -263,6 +263,7 @@ class Helper
 	 * Funktion TabelleToCSV
 	 * Erstellt aus einem Tabellen-Array eine HTML-Tabelle mit den gewünschten Spalten 
 	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $tabelleID        int     ID der Tabelle
 	 * @param $tabelle          array   Array mit der Tabelle, Beispiel:
 	 * [1] => Array
 	 *     (
@@ -291,7 +292,7 @@ class Helper
 	 * @param $spalten          array   Array mit den gewünschten Spalten
 	 * @return string                   HTML-Ausgabe der Tabelle
 	 */
-	static function TabelleToHTML($turnierserie, $tabelle, $spalten)
+	static function TabelleToHTML($turnierserie, $tabelleID, $tabelle, $spalten)
 	{
 		$spaltendefinition = $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'];
 		
@@ -312,6 +313,20 @@ class Helper
 					$html .= '</th>';
 				}
 			}
+			elseif($spalte == 'titel+name')
+			{
+				// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
+				$html .= '<th>';
+				$html .= $spaltendefinition['name'];
+				$html .= '</th>';
+			}
+			elseif($spalte == 'qualification')
+			{
+				// Besondere Spalte für die Ausgabe der Qualifikation für das Finale
+				$html .= '<th>';
+				$html .= 'Qual.';
+				$html .= '</th>';
+			}
 			else 
 			{
 				// Normale Spalte
@@ -323,6 +338,12 @@ class Helper
 		$html .= '</tr>';
 		$html .= '</thead>';
 		$html .= '<tbody>';
+
+		if(in_array('qualification', $spalten))
+		{
+			// Qualifikationen als Spalte in die Tabelle eintragen
+			$tabelle = self::getQualifikationen($turnierserie, $tabelleID, $tabelle);
+		}
 
 		// Tabellenkörper schreiben
 		for($zeile = 1; $zeile < count($tabelle); $zeile++)
@@ -340,6 +361,13 @@ class Helper
 						$html .= $tabelle[$zeile][$spalte][$i];
 						$html .= '</td>';
 					}
+				}
+				elseif($spalte == 'titel+name')
+				{
+					// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
+					$html .= '<td>';
+					$html .= ($anmeldung['fide-titel'] ? $anmeldung['fide-titel'].' ' : '').\Schachbulle\ContaoHelperBundle\Classes\Helper::NameDrehen($anmeldung['name']);
+					$html .= '</td>';
 				}
 				else 
 				{
@@ -364,6 +392,78 @@ class Helper
 		$html .= '</tbody>';
 		$html .= '</table>';
 		return $html;
+	}
+
+	/**
+	 * Funktion getQualifikationen
+	 * Trägt in eine Tabelle (Array) die Qualifikationen als Feld ein
+	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $tabelleID        int     ID der aktuellen Tabelle
+	 * @param $tabelle          array   Array mit den Tabellendaten
+	 * @param $gruppe           string  Feldname der aktuellen Gruppe der Tabelle
+	 * @return array                    Modifiziertes Array mit den Tabellendaten
+	 */
+	static function getQualifikationen($turnierserie, $tabelleID, $tabelle)
+	{
+		if(!$turnierserie || !$tabelleID) return $tabelle; // Tabelle unmodifiziert zurückgeben
+
+		// Turnierserie einlesen
+		$objSerie = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach WHERE id = ?")
+		                                    ->execute($turnierserie);
+		if($objSerie->numRows)
+		{
+			// Turniere und Gruppen laden
+			$turnierplan = unserialize($objSerie->turniere);
+			$gruppenplan = unserialize($objSerie->gruppen);
+		}
+		//print_r($turnierplan);
+
+		// Alle restlichen Tabellen einlesen
+		$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
+		                                       ->execute($turnierserie);
+		$tabellenplan = array(); // Nimmt die Tabellendaten auf
+		$aktuelleGruppe = '';
+		if($objTabellen->numRows)
+		{
+			while($objTabellen->next())
+			{
+				if($objTabellen->id == $tabelleID) $aktuelleGruppe = $objTabellen->gruppe; // Gruppe der aktuellen Tabelle sichern
+				// Spieltermin und Finalstatus suchen
+				$spieltermin = 0;
+				$finale = false;
+				foreach($turnierplan as $item)
+				{
+					if($item['feldname'] == $objTabellen->turnier)
+					{
+						$spieltermin = $item['termin'];
+						$finale = $item['finale'];
+						break;
+					}
+				}
+				$tabellenplan[] = array
+				(
+					'id'               => $objTabellen->id,
+					'daten'            => $objTabellen->importArray,
+					'turnier'          => $objTabellen->turnier,
+					'gruppe'           => $objTabellen->gruppe,
+					'finale'           => $finale,
+					'ungewertet'       => $objTabellen->ungewertet,
+					'disqualifikation' => $objTabellen->disqualifikation,
+					'spieltermin'      => $spieltermin,
+				);
+			}
+		}
+
+		$benutzer = array(); // Array mit dem Benutzernamen als Index und dem Turnier, wo die Qualifikation erreicht wurde, als Wert
+		//print_r($tabellenplan);
+		
+		// Tabelle modifizieren
+		for($i = 0; $i < count($tabelle); $i++)
+		{
+			$tabelle[$i]['qualification'] = '';
+		}
+
+		return $tabelle;
 	}
 
 }

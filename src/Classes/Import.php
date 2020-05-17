@@ -310,6 +310,7 @@ class Import extends \Backend
 	private function ImportHTML($string)
 	{
 		$string = str_replace(array('<th', '</th>'), array('<td', '</td>'), $string);
+		$string = iconv('windows-1251', 'utf-8', $string); // Bug in paquettg/php-html-parser umgehen, https://github.com/paquettg/php-html-parser/issues/209#event-3327333893
 		
 		$dom = new \PHPHtmlParser\Dom;
 		$dom->load($string);

@@ -15,18 +15,20 @@ $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten'] = array('Anzuzeigend
 
 $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'] = array
 (
-	'platz'      => 'Pl.',
-	'cb-name'    => 'Benutzer',
-	'cb-land'    => 'Land',
-	'cb-rating'  => 'CBR',
-	'punkte'     => 'Pkt.',
-	'wertung1'   => 'Wtg1',
-	'wertung2'   => 'Wtg2',
-	'runden'     => '(Ergebnisse)',
-	'name'       => 'Name',
-	'dwz'        => 'DWZ',
-	'verein'     => 'Verein',
-	'fide-titel' => 'Titel',
-	'fide-elo'   => 'Elo',
-	'email'      => 'E-Mail'
+	'platz'         => 'Pl.',
+	'cb-name'       => 'Benutzer',
+	'cb-land'       => 'Land',
+	'cb-rating'     => 'CBR',
+	'punkte'        => 'Pkt.',
+	'wertung1'      => 'Wtg1',
+	'wertung2'      => 'Wtg2',
+	'runden'        => '(Ergebnisse)',
+	'name'          => 'Name',
+	'dwz'           => 'DWZ',
+	'verein'        => 'Verein',
+	'fide-titel'    => 'Titel',
+	'fide-elo'      => 'Elo',
+	'email'         => 'E-Mail',
+	'titel+name'    => '(FIDE-Titel und Name)',
+	'qualification' => '(Qualifikation Finale)'
 );

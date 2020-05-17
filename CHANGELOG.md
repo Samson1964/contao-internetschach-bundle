@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 0.8.1 (2020-05-17)
+
+* Fix Import.php Zeichensatzproblem beim Verarbeiten des importierten HTML (Bug in paquettg/php-html-parser)
+* Tabelle.php: Spalte für FIDE-Titel + Name hinzugefügt
+* Tabelle.php: Spalte für Qualifikationen hinzugefügt
+* Add Helper-Funktion getQualifikationen begonnen
+
 ## Version 0.8.0 (2020-05-17)
 
 * Add Tabelle.php - Klasse zur FE-Ausgabe von Tabellen
