@@ -335,15 +335,15 @@ class Import extends \Backend
 				for($x = 0; $x < $colspan; $x++)
 				{
 					if($i == 0)	$name = 'platz';
-					elseif($i == 1)	$name = 'benutzer';
-					elseif($i == 2)	$name = 'land';
-					elseif($i == 3)	$name = 'rating';
+					elseif($i == 1)	$name = 'cb-name';
+					elseif($i == 2)	$name = 'cb-land';
+					elseif($i == 3)	$name = 'cb-rating';
 					elseif($i == $runden + 4) $name = 'punkte';
 					elseif($i == $runden + 5) $name = 'wertung1';
 					elseif($i == $runden + 6) $name = 'wertung2';
 					else
 					{
-						$name = 'runde';
+						$name = 'runden';
 						$rundeIndex = $i - 4;
 					}
 		
@@ -354,8 +354,8 @@ class Import extends \Backend
 					$value = str_replace('&nbsp;', '', $value);
 					$value = strip_tags($value);
 					// Tabellenzelle schreiben
-					if($name == 'runde') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&loz;'), array('s', 'w'), $value);
-					elseif($name == 'land') $tabelle[$rowNr][$name] = str_replace(array('flags/nat16_', '.gif'), array('', ''), $land);
+					if($name == 'runden') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&loz;'), array('s', 'w'), $value);
+					elseif($name == 'cb-land') $tabelle[$rowNr][$name] = str_replace(array('flags/nat16_', '.gif'), array('', ''), $land);
 					else $tabelle[$rowNr][$name] = $value;
 					$i++;
 				}
@@ -376,29 +376,29 @@ class Import extends \Backend
 			if($x == 0)
 			{
 				$breite['platz'] = 3;
-				$breite['benutzer'] = 8;
-				$breite['land'] = 4;
-				$breite['rating'] = 3;
+				$breite['cb-name'] = 8;
+				$breite['cb-land'] = 4;
+				$breite['cb-rating'] = 3;
 				$breite['punkte'] = 4;
 				$breite['wertung1'] = 4;
 				$breite['wertung2'] = 4;
-				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				for($y = 0; $y < count($tabelle[$x]['runden']); $y++)
 				{
-					$breite['runde'][$y] = strlen($tabelle[$x]['runde'][$y]);
+					$breite['runden'][$y] = strlen($tabelle[$x]['runden'][$y]);
 				}
 			}
 			else
 			{
 				$breite['platz'] = strlen($tabelle[$x]['platz']) > $breite['platz'] ? strlen($tabelle[$x]['platz']) : $breite['platz'];
-				$breite['benutzer'] = strlen($tabelle[$x]['benutzer']) > $breite['benutzer'] ? strlen($tabelle[$x]['benutzer']) : $breite['benutzer'];
-				$breite['land'] = strlen($tabelle[$x]['land']) > $breite['land'] ? strlen($tabelle[$x]['land']) : $breite['land'];
-				$breite['rating'] = strlen($tabelle[$x]['rating']) > $breite['rating'] ? strlen($tabelle[$x]['rating']) : $breite['rating'];
+				$breite['cb-name'] = strlen($tabelle[$x]['cb-name']) > $breite['cb-name'] ? strlen($tabelle[$x]['cb-name']) : $breite['cb-name'];
+				$breite['cb-land'] = strlen($tabelle[$x]['cb-land']) > $breite['cb-land'] ? strlen($tabelle[$x]['cb-land']) : $breite['cb-land'];
+				$breite['cb-rating'] = strlen($tabelle[$x]['cb-rating']) > $breite['cb-rating'] ? strlen($tabelle[$x]['cb-rating']) : $breite['cb-rating'];
 				$breite['punkte'] = strlen($tabelle[$x]['punkte']) > $breite['punkte'] ? strlen($tabelle[$x]['punkte']) : $breite['punkte'];
 				$breite['wertung1'] = strlen($tabelle[$x]['wertung1']) > $breite['wertung1'] ? strlen($tabelle[$x]['wertung1']) : $breite['wertung1'];
 				$breite['wertung2'] = strlen($tabelle[$x]['wertung2']) > $breite['wertung2'] ? strlen($tabelle[$x]['wertung2']) : $breite['wertung2'];
-				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				for($y = 0; $y < count($tabelle[$x]['runden']); $y++)
 				{
-					$breite['runde'][$y] = strlen($tabelle[$x]['runde'][$y]) > $breite['runde'][$y] ? strlen($tabelle[$x]['runde'][$y]) : $breite['runde'][$y];
+					$breite['runden'][$y] = strlen($tabelle[$x]['runden'][$y]) > $breite['runden'][$y] ? strlen($tabelle[$x]['runden'][$y]) : $breite['runden'][$y];
 				}
 			}
 		}
@@ -410,31 +410,31 @@ class Import extends \Backend
 			{
 				$csv = 'Pl.;Benutzer;Land;CBR;Pkt.;SoBe;Wtg2;';
 				$csv = substr('Pl.'.str_repeat(' ', 100), 0, $breite['platz']).';';
-				$csv .= substr('Benutzer'.str_repeat(' ', 100), 0, $breite['benutzer']).';';
-				$csv .= substr('Land'.str_repeat(' ', 100), 0, $breite['land']).';';
-				$csv .= substr('CBR'.str_repeat(' ', 100), 0, $breite['rating']).';';
+				$csv .= substr('Benutzer'.str_repeat(' ', 100), 0, $breite['cb-name']).';';
+				$csv .= substr('Land'.str_repeat(' ', 100), 0, $breite['cb-land']).';';
+				$csv .= substr('CBR'.str_repeat(' ', 100), 0, $breite['cb-rating']).';';
 				$csv .= substr('Pkt.'.str_repeat(' ', 100), 0, $breite['punkte']).';';
 				$csv .= substr('SoBe'.str_repeat(' ', 100), 0, $breite['wertung1']).';';
 				$csv .= substr('Wtg2'.str_repeat(' ', 100), 0, $breite['wertung2']).';';
 
-				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				for($y = 0; $y < count($tabelle[$x]['runden']); $y++)
 				{
-					$csv .= substr($tabelle[$x]['runde'][$y].str_repeat(' ', 100), 0, $breite['runde'][$y]).';';
+					$csv .= substr($tabelle[$x]['runden'][$y].str_repeat(' ', 100), 0, $breite['runden'][$y]).';';
 				}
 				$csv = substr($csv, 0, -1)."\n";
 			}
 			else
 			{
 				$csv .= mb_substr($tabelle[$x]['platz'].str_repeat(' ', 100), 0, $breite['platz']).';';
-				$csv .= mb_substr($tabelle[$x]['benutzer'].str_repeat(' ', 100), 0, $breite['benutzer']).';';
-				$csv .= mb_substr($tabelle[$x]['land'].str_repeat(' ', 100), 0, $breite['land']).';';
-				$csv .= mb_substr($tabelle[$x]['rating'].str_repeat(' ', 100), 0, $breite['rating']).';';
+				$csv .= mb_substr($tabelle[$x]['cb-name'].str_repeat(' ', 100), 0, $breite['cb-name']).';';
+				$csv .= mb_substr($tabelle[$x]['cb-land'].str_repeat(' ', 100), 0, $breite['cb-land']).';';
+				$csv .= mb_substr($tabelle[$x]['cb-rating'].str_repeat(' ', 100), 0, $breite['cb-rating']).';';
 				$csv .= mb_substr($tabelle[$x]['punkte'].str_repeat(' ', 100), 0, $breite['punkte']).';';
 				$csv .= mb_substr($tabelle[$x]['wertung1'].str_repeat(' ', 100), 0, $breite['wertung1']).';';
 				$csv .= mb_substr($tabelle[$x]['wertung2'].str_repeat(' ', 100), 0, $breite['wertung2']).';';
-				for($y = 0; $y < count($tabelle[$x]['runde']); $y++)
+				for($y = 0; $y < count($tabelle[$x]['runden']); $y++)
 				{
-					$csv .= mb_substr($tabelle[$x]['runde'][$y].str_repeat(' ', 100), 0, $breite['runde'][$y]).';';
+					$csv .= mb_substr($tabelle[$x]['runden'][$y].str_repeat(' ', 100), 0, $breite['runden'][$y]).';';
 				}
 				$csv = substr($csv, 0, -1)."\n";
 			}

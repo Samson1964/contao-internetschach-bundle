@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_internetschach',
-		'switchToEdit'                => true, 
+		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback'             => array
 		(
@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{turniere_legend},turnier,gruppe;{daten_legend},importLink,csv,aktualisieren,disqualifikation,ungewertet;{leitung_legend:hide},turnierleiter;{info_legend:hide},intern;{publish_legend},published'
+		'default'                     => '{turniere_legend},turnier,gruppe;{daten_legend},importLink,csv,disqualifikation,ungewertet;{leitung_legend:hide},turnierleiter;{info_legend:hide},intern;{publish_legend},published'
 	),
 
 	// Fields
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'],
 			'exclude'                 => true,
 			'input_field_callback'    => array('tl_internetschach_tabellen', 'getImportlink')
-		), 
+		),
 		'importRaw' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importRaw'],
@@ -256,7 +256,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'explanation'             => 'insertTags', 
+			'explanation'             => 'insertTags',
 			'sql'                     => "text NULL"
 		),
 		'published' => array
@@ -337,9 +337,9 @@ class tl_internetschach_tabellen extends Backend
 			}
 			$this->redirect($backlink.'?act=error');
 		}
-		
+
 		$this->createInitialVersion('tl_internetschach_tabellen', $intId);
-		
+
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_internetschach_tabellen']['fields']['published']['save_callback']))
 		{
@@ -349,7 +349,7 @@ class tl_internetschach_tabellen extends Backend
 				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
 			}
 		}
-		
+
 		// Update the database
 		$this->Database->prepare("UPDATE tl_internetschach_tabellen SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);
@@ -457,19 +457,19 @@ class tl_internetschach_tabellen extends Backend
 			$link = 'contao/main.php';
 		}
 		$link .= '?do=internetschach&amp;table=tl_internetschach_tabellen&amp;key=importTable&amp;id=' . $dc->activeRecord->id . '&amp;rt=' . REQUEST_TOKEN;
-		
+
 		return '
 <div class="w50 widget">
 	<a href="'.$link.'" class="button">'.$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'][0].'</a>
 	<p class="tl_help tl_tip" title="" style="margin-top:3px;">'.$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importLink'][1].'</p>
-</div>'; 
+</div>';
 
 	}
 
 	public function loadCSV($varValue, DataContainer $dc)
 	{
 		$optionen = unserialize($varValue); // Mögliche Einträge im Array: real, prices, qual
-		
+
 		if($optionen)
 		{
 			// Prüfen ob Tabelle als Array vorhanden ist
@@ -495,7 +495,7 @@ class tl_internetschach_tabellen extends Backend
 					}
 				}
 			}
-        	
+
 			// Tabelle neu schreiben
 			$csv = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::TabelleToCSV($tabelle);
 			$set = array

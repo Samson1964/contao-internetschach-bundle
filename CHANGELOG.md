@@ -1,5 +1,11 @@
 # Internetschach Changelog
 
+## Version 0.8.0 (2020-05-17)
+
+* Add Tabelle.php - Klasse zur FE-Ausgabe von Tabellen
+* tl_content erweitert um Inhaltselement Tabelle
+* Add Helper-Funktion getTurnier
+
 ## Version 0.7.0 (2020-05-16)
 
 * Übersetzungen Tabellen/Preise ergänzt

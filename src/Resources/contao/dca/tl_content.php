@@ -15,61 +15,62 @@
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_formular'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschachdetails_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
  * Fields
  */
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach'],
-	'exclude'              => true,
-	'options_callback'     => array('tl_content_internetschach', 'getTurnierserie'),
-	'inputType'            => 'select',
-	'eval'                 => array
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach'],
+	'exclude'                 => true,
+	'options_callback'        => array('tl_content_internetschach', 'getTurnierserie'),
+	'inputType'               => 'select',
+	'eval'                    => array
 	(
-		'mandatory'      => false,
-		'multiple'       => false,
-		'chosen'         => true,
-		'submitOnChange' => true,
-		'tl_class'       => 'long'
+		'mandatory'           => false,
+		'multiple'            => false,
+		'chosen'              => true,
+		'submitOnChange'      => true,
+		'tl_class'            => 'long'
 	),
-	'sql'                  => "int(10) unsigned NOT NULL default '0'"
+	'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_turniere'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_turniere'],
-	'exclude'              => true,
-	'inputType'            => 'checkboxWizard',
-	'options_callback'     => array('tl_content_internetschach', 'getTurniere'),
-	'eval'                 => array
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_turniere'],
+	'exclude'                 => true,
+	'inputType'               => 'checkboxWizard',
+	'options_callback'        => array('tl_content_internetschach', 'getTurniere'),
+	'eval'                    => array
 	(
-		'mandatory'        => false,
-		'multiple'         => true,
-		'tl_class'         => 'w50'
+		'mandatory'           => false,
+		'multiple'            => true,
+		'tl_class'            => 'w50'
 	),
-	'sql'                  => "blob NULL"
+	'sql'                     => "blob NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_gruppen'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_gruppen'],
-	'exclude'              => true,
-	'inputType'            => 'checkboxWizard',
-	'options_callback'     => array('tl_content_internetschach', 'getGruppen'),
-	'eval'                 => array
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_gruppen'],
+	'exclude'                 => true,
+	'inputType'               => 'checkboxWizard',
+	'options_callback'        => array('tl_content_internetschach', 'getGruppen'),
+	'eval'                    => array
 	(
-		'mandatory'        => false,
-		'multiple'         => true,
-		'tl_class'         => 'w50'
+		'mandatory'           => false,
+		'multiple'            => true,
+		'tl_class'            => 'w50'
 	),
-	'sql'                  => "blob NULL"
+	'sql'                     => "blob NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_viewturniere'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewturniere'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewturniere'],
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('tl_class' => 'w50 clr','isBoolean' => true),
@@ -78,11 +79,40 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_viewturniere'] = arra
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_viewgruppen'] = array
 (
-	'label'                => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewgruppen'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_viewgruppen'],
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('tl_class' => 'w50','isBoolean' => true),
 	'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_tabelle'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_tabelle'],
+	'exclude'                 => true,
+	'inputType'               => 'select',
+	'options_callback'        => array('tl_content_internetschach', 'getTabellen'),
+	'eval'                    => array
+	(
+		'multiple'            => false,
+	),
+	'sql'                     => "int(10) unsigned NOT NULL default '0'"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_spalten'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_spalten'],
+	'exclude'                 => true,
+	'inputType'               => 'checkboxWizard',
+	'options'                 => array('platz', 'cb-name', 'cb-land', 'cb-rating', 'punkte', 'wertung1', 'wertung2', 'runden', 'name', 'dwz', 'verein', 'fide-titel', 'fide-elo', 'email'),      
+	'reference'               => &$GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'],
+	'eval'                    => array
+	(
+		'mandatory'           => false,
+		'multiple'            => true,
+		'tl_class'            => 'long'
+	),
+	'sql'                     => "text NOT NULL default ''"
 );
 
 /*****************************************
@@ -143,6 +173,25 @@ class tl_content_internetschach extends \Backend
 				foreach($temp as $item)
 				{
 					$array[$item['feldname']] = $item['name'];
+				}
+			}
+		}
+		return $array;
+	}
+
+	public function getTabellen(DataContainer $dc)
+	{
+		$array = array();
+		if($dc->activeRecord->internetschach)
+		{
+			$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
+			                                       ->execute($dc->activeRecord->internetschach);
+
+			if($objTabellen->numRows)
+			{
+				while($objTabellen->next())
+				{
+				$array[$objTabellen->id] = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getTurnier($dc->activeRecord->internetschach, $objTabellen->turnier).' - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getGruppe($dc->activeRecord->internetschach, $objTabellen->gruppe);
 				}
 			}
 		}

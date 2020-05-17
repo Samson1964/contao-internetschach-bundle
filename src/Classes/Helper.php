@@ -81,6 +81,13 @@ class Helper
 		return $namen;
 	}
 
+	/**
+	 * Funktion getGruppe
+	 * Liefert zum Feldnamen einer Gruppe den richtigen Namen 
+	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $feldname         string  Feldname der Gruppe, z.B. a
+	 * @return string                   Richtiger Name, z.B. A-Gruppe
+	 */
 	static function getGruppe($turnierserie, $feldname)
 	{
 		static $gruppen;
@@ -101,6 +108,36 @@ class Helper
 		}
 
 		return $gruppen[$feldname];
+	}
+
+
+	/**
+	 * Funktion getTurnier
+	 * Liefert zum Feldnamen eines Turniers den richtigen Namen 
+	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $feldname         string  Feldname des Turniers, z.B. v1
+	 * @return string                   Richtiger Name, z.B. 1. Vorrunde
+	 */
+	static function getTurnier($turnierserie, $feldname)
+	{
+		static $turniere;
+		if(!isset($turniere))
+		{
+			// Keine Turniere vorhanden, darum DB abfragen
+			$objSerie = \Database::getInstance()->prepare("SELECT turniere FROM tl_internetschach WHERE id = ?")
+			                                    ->execute($turnierserie);
+			if($objSerie->numRows)
+			{
+				$arrTurniere = unserialize($objSerie->turniere);
+				foreach($arrTurniere as $item)
+				{
+					$turniere[$item['feldname']] = $item['name'];
+				}
+			}
+			else $turniere = array();
+		}
+
+		return $turniere[$feldname];
 	}
 
 	static function getTurniere($turnierserie, $turnierdaten)
@@ -133,17 +170,17 @@ class Helper
 	}
 
 	/**
-	 * Funktion getRealname
-	 * Liefert zu einem ChessBase-Benutzernamen für eine Turnierserie den richtigen Namen 
+	 * Funktion getAnmeldung
+	 * Liefert zu einem ChessBase-Benutzernamen die Anmeldedaten
 	 * @param $turnierserie     int     ID der Turnierserie
 	 * @param $nick             string  Benutzername bei ChessBase
-	 * @return string                   Richtiger Name
+	 * @return array                    Array mit den Anmeldedaten
 	 */
-	static function getRealname($turnierserie, $nick)
+	static function getAnmeldung($turnierserie, $nick)
 	{
 		static $anmeldungen;
 
-		if(!$turnierserie) return '';
+		if(!$turnierserie) return array();
 
 		if(!$anmeldungen)
 		{
@@ -161,11 +198,13 @@ class Helper
 						{
 							$anmeldungen[] = array
 							(
-								'chessbase' => trim($chessbase[$x]),
-								'name'      => $objSpieler->name,
-								'verein'    => $objSpieler->verein,
-								'dwz'       => $objSpieler->dwz,
-								'fideTitel' => $objSpieler->fideTitel
+								'cb-name'    => trim($chessbase[$x]),
+								'name'       => $objSpieler->name,
+								'verein'     => $objSpieler->verein,
+								'dwz'        => $objSpieler->dwz ? $objSpieler->dwz : '',
+								'fide-elo'   => $objSpieler->fideElo ? $objSpieler->fideElo : '',
+								'fide-titel' => $objSpieler->fideTitel,
+								'email'      => $objSpieler->email,
 							);
 						}
 					}
@@ -173,12 +212,12 @@ class Helper
 			}
 		}
 
-		// Benutzernamen suchen und Realnamen zurückgeben
+		// Benutzernamen suchen und Anmeldung zurückgeben
 		foreach($anmeldungen as $item)
 		{
-			if($item['chessbase'] == $nick) return $item['name'];
+			if($item['cb-name'] == $nick) return $item;
 		}
-		return '';
+		return array();
 	}
 
 	/**
@@ -219,4 +258,112 @@ class Helper
 		
 		return print_r($keys, true);
 	}
+
+	/**
+	 * Funktion TabelleToCSV
+	 * Erstellt aus einem Tabellen-Array eine HTML-Tabelle mit den gewünschten Spalten 
+	 * @param $turnierserie     int     ID der Turnierserie
+	 * @param $tabelle          array   Array mit der Tabelle, Beispiel:
+	 * [1] => Array
+	 *     (
+	 *         [platz] => 1
+	 *         [benutzer] => Weltszmerc
+	 *         [land] => POL
+	 *         [rating] => 2171
+	 *         [runde] => Array
+	 *             (
+	 *                 [0] => s 0/7
+	 *                 [1] => w 1/8
+	 *                 [2] => w 1/2
+	 *                 [3] => s 1/23
+	 *                 [4] => s 1/3
+	 *                 [5] => w 1/10
+	 *                 [6] => s ½/4
+	 *                 [7] => s 1/6
+	 *                 [8] => w 1/11
+	 *             )
+	 * 
+	 *         [punkte] => 7.5 / 9
+	 *         [wertung1] => 
+	 *         [wertung2] => 
+	 *         [realname] => Aab,Manfred
+	 *     )
+	 * @param $spalten          array   Array mit den gewünschten Spalten
+	 * @return string                   HTML-Ausgabe der Tabelle
+	 */
+	static function TabelleToHTML($turnierserie, $tabelle, $spalten)
+	{
+		$spaltendefinition = $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'];
+		
+		//$html .= print_r($tabelle, true);
+		// Tabellenkopf schreiben
+		$html = '<table>';
+		$html .= '<thead>';
+		$html .= '<tr>';
+		foreach($spalten as $spalte)
+		{
+			if($spalte == 'runden')
+			{
+				// Ergebnisse
+				for($i = 1; $i <= count($tabelle[0][$spalte]); $i++)
+				{
+					$html .= '<th>';
+					$html .= $i;
+					$html .= '</th>';
+				}
+			}
+			else 
+			{
+				// Normale Spalte
+				$html .= '<th>';
+				$html .= $spaltendefinition[$spalte];
+				$html .= '</th>';
+			}
+		}
+		$html .= '</tr>';
+		$html .= '</thead>';
+		$html .= '<tbody>';
+
+		// Tabellenkörper schreiben
+		for($zeile = 1; $zeile < count($tabelle); $zeile++)
+		{
+			$html .= '<tr>';
+			$anmeldung = self::getAnmeldung($turnierserie, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
+			foreach($spalten as $spalte)
+			{
+				if($spalte == 'runden')
+				{
+					// Ergebnisse
+					for($i = 0; $i < count($tabelle[$zeile][$spalte]); $i++)
+					{
+						$html .= '<td>';
+						$html .= $tabelle[$zeile][$spalte][$i];
+						$html .= '</td>';
+					}
+				}
+				else 
+				{
+					// Normale Spalte
+					$html .= '<td>';
+					if(isset($tabelle[$zeile][$spalte]))
+					{
+						$html .= $tabelle[$zeile][$spalte];
+					}
+					else
+					{
+						// Spalte ist nicht in der Tabelle
+						$html .= $anmeldung[$spalte];
+					}
+					$html .= '</td>';
+				}
+			}
+			$html .= '</tr>';
+		}
+		
+		// Tabellenfuß schreiben
+		$html .= '</tbody>';
+		$html .= '</table>';
+		return $html;
+	}
+
 }
