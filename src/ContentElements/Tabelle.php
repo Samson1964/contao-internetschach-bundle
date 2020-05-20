@@ -21,7 +21,7 @@ class Tabelle extends \ContentElement
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'ce_internetschach';
+	protected $strTemplate = 'ce_internetschach_tabelle';
 
 	/**
 	 * Generate the module
@@ -48,7 +48,7 @@ class Tabelle extends \ContentElement
 
 		// Template ausgeben
 		$this->Template = new \FrontendTemplate($this->strTemplate);
-		$this->Template->class = 'ce_internetschach ce_table';
+		$this->Template->class = 'ce_internetschach_tabelle';
 		$this->Template->content = $content;
 
 		return;

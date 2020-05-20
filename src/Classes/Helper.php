@@ -301,48 +301,54 @@ class Helper
 		$html = '<table>';
 		$html .= '<thead>';
 		$html .= '<tr>';
-		foreach($spalten as $spalte)
+		if($spalten)
 		{
-			if($spalte == 'runden')
+			foreach($spalten as $spalte)
 			{
-				// Ergebnisse
-				for($i = 1; $i <= count($tabelle[0][$spalte]); $i++)
+				if($spalte == 'runden')
 				{
+					// Ergebnisse
+					for($i = 1; $i <= count($tabelle[0][$spalte]); $i++)
+					{
+						$html .= '<th>';
+						$html .= $i;
+						$html .= '</th>';
+					}
+				}
+				elseif($spalte == 'titel+name')
+				{
+					// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
 					$html .= '<th>';
-					$html .= $i;
+					$html .= $spaltendefinition['name'];
 					$html .= '</th>';
 				}
-			}
-			elseif($spalte == 'titel+name')
-			{
-				// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
-				$html .= '<th>';
-				$html .= $spaltendefinition['name'];
-				$html .= '</th>';
-			}
-			elseif($spalte == 'qualification')
-			{
-				// Besondere Spalte für die Ausgabe der Qualifikation für das Finale
-				$html .= '<th>';
-				$html .= 'Qual.';
-				$html .= '</th>';
-			}
-			else 
-			{
-				// Normale Spalte
-				$html .= '<th>';
-				$html .= $spaltendefinition[$spalte];
-				$html .= '</th>';
+				elseif($spalte == 'qualification')
+				{
+					// Besondere Spalte für die Ausgabe der Qualifikation für das Finale
+					$html .= '<th>';
+					$html .= 'Qual.';
+					$html .= '</th>';
+				}
+				else 
+				{
+					// Normale Spalte
+					$html .= '<th>';
+					$html .= $spaltendefinition[$spalte];
+					$html .= '</th>';
+				}
 			}
 		}
 		$html .= '</tr>';
 		$html .= '</thead>';
 		$html .= '<tbody>';
 
-		if(in_array('qualification', $spalten))
+		if($spalten)
 		{
-			// Qualifikationen als Spalte in die Tabelle eintragen
-			$tabelle = self::getQualifikationen($turnierserie, $tabelleID, $tabelle);
+			if(in_array('qualification', $spalten))
+			{
+				// Qualifikationen als Spalte in die Tabelle eintragen
+				$tabelle = self::getQualifikationen($turnierserie, $tabelleID, $tabelle);
+			}
 		}
 
 		// Tabellenkörper schreiben
@@ -350,39 +356,42 @@ class Helper
 		{
 			$html .= '<tr>';
 			$anmeldung = self::getAnmeldung($turnierserie, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
-			foreach($spalten as $spalte)
+			if($spalten)
 			{
-				if($spalte == 'runden')
+				foreach($spalten as $spalte)
 				{
-					// Ergebnisse
-					for($i = 0; $i < count($tabelle[$zeile][$spalte]); $i++)
+					if($spalte == 'runden')
 					{
+						// Ergebnisse
+						for($i = 0; $i < count($tabelle[$zeile][$spalte]); $i++)
+						{
+							$html .= '<td class="result">';
+							$html .= $tabelle[$zeile][$spalte][$i];
+							$html .= '</td>';
+						}
+					}
+					elseif($spalte == 'titel+name')
+					{
+						// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
 						$html .= '<td>';
-						$html .= $tabelle[$zeile][$spalte][$i];
+						$html .= ($anmeldung['fide-titel'] ? $anmeldung['fide-titel'].' ' : '').\Schachbulle\ContaoHelperBundle\Classes\Helper::NameDrehen($anmeldung['name']);
 						$html .= '</td>';
 					}
-				}
-				elseif($spalte == 'titel+name')
-				{
-					// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
-					$html .= '<td>';
-					$html .= ($anmeldung['fide-titel'] ? $anmeldung['fide-titel'].' ' : '').\Schachbulle\ContaoHelperBundle\Classes\Helper::NameDrehen($anmeldung['name']);
-					$html .= '</td>';
-				}
-				else 
-				{
-					// Normale Spalte
-					$html .= '<td>';
-					if(isset($tabelle[$zeile][$spalte]))
+					else 
 					{
-						$html .= $tabelle[$zeile][$spalte];
+						// Normale Spalte
+						$html .= '<td>';
+						if(isset($tabelle[$zeile][$spalte]))
+						{
+							$html .= $tabelle[$zeile][$spalte];
+						}
+						else
+						{
+							// Spalte ist nicht in der Tabelle
+							$html .= $anmeldung[$spalte];
+						}
+						$html .= '</td>';
 					}
-					else
-					{
-						// Spalte ist nicht in der Tabelle
-						$html .= $anmeldung[$spalte];
-					}
-					$html .= '</td>';
 				}
 			}
 			$html .= '</tr>';

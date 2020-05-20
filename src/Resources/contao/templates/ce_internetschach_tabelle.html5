@@ -1,0 +1,13 @@
+<?php
+	$GLOBALS['TL_CSS'][] = 'bundles/contaointernetschach/css/fe.css';
+?> 
+
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="<?= $this->class ?>">
+<?= $this->content ?>
+</div>
+
+<?php $this->endblock(); ?>

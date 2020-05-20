@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 0.8.4 (2020-05-20)
+
+* Frontend-CSS hinzugefügt für Tabellen
+* Template für Tabellen hinzugefügt
+
 ## Version 0.8.3 (2020-05-20)
 
 * Tabelle.php: CSS-Klasse ce_table hinzugefügt
