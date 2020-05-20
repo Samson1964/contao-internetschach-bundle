@@ -164,6 +164,7 @@ class Formular extends \ContentElement
 			{
 				self::saveAnmeldung($arrData); // Daten sichern
 				// Seite neu laden
+				//$this->Template->content = $content.$javascript;
 				header('Location:'.$objPage->alias.'.html?send=1');
 			}
 			else
@@ -199,6 +200,10 @@ class Formular extends \ContentElement
 		// Spielerdaten laden, wenn ID im Feld name größer 0
 		if($arrData['name'])
 		{
+			// Daten der Turnierserie laden
+			$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+			                                   ->execute($arrData['pid']);
+
 			// Anmeldung laden, wenn playerId = name (für Prüfung Mehrfachanmeldung)
 			$objAnmeldung = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_anmeldungen WHERE playerId = ?')
 			                                        ->limit(1)
@@ -265,6 +270,58 @@ class Formular extends \ContentElement
 		if($objAnmeldung->numRows)
 		{
 			// Ältere Anmeldung liegt bereits vor
+			
+			// ===============================================
+			// Überprüfen, ob Turniere gesichert werden müssen
+			// ===============================================
+			$definierteTurniere = unserialize($objMain->turniere);
+			$bishergemeldeteTurniere = unserialize($objAnmeldung->turniere);
+
+			//echo "<pre>Definierte Turniere:\n";
+			//print_r(unserialize($objMain->turniere));
+			//echo "Bereits gemeldete Turniere:\n";
+			//print_r(unserialize($objAnmeldung->turniere));
+			//echo "Turniere aus Formular:\n";
+			//print_r($arrData['turniere']);
+
+			// Bisher gemeldete Turniere auf Meldeschluß prüfen
+			foreach($bishergemeldeteTurniere as $gemeldet)
+			{
+				foreach($definierteTurniere as $definiert)
+				{
+					if($gemeldet == $definiert['feldname'])
+					{
+						// Prüfen ob Anmeldeschluß eingehalten wird
+						if($definiert['meldeschluss'] > 0 && $definiert['meldeschluss'] < time())
+						{
+							// Turnier gefunden, für das der Meldeschluß vorbei ist
+							// Turnier in Array vom Formular hinzufügen
+							$arrData['turniere'][] = $gemeldet;
+						}
+					}
+				}
+			}
+			$arrData['turniere'] = array_unique($arrData['turniere']); // Doppelte Einträge löschen
+
+
+			//echo "Turniere aus Formular (modifiziert):\n";
+			//print_r($arrData['turniere']);
+			//echo "</pre>";
+			//$turniere = array();
+			//if($objMain->numRows)
+			//{
+			//	$temp = unserialize($objMain->turniere);
+			//	foreach($temp as $item)
+			//	{
+			//		// Prüfen ob Anmeldeschluß eingehalten wird
+			//		if(!$item['meldeschluss'] || $item['meldeschluss'] > time())
+			//		{
+			//			if(!$item['finale']) $turniere[$item['feldname']] = $item['name'];
+			//		}
+			//	}
+			//}
+
+			
 			// Versionierung aktivieren
 			$objVersion = new \Versions('tl_internetschach_anmeldungen', $objAnmeldung->id);
 			$objVersion->setUsername('Internetschach-Bundle');
@@ -299,9 +356,6 @@ class Formular extends \ContentElement
 			                                     ->execute();
 			\System::log('[Internetschach] Neue Anmeldung: '.$set['name'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
 		}
-
-		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
-		                                   ->execute($arrData['pid']);
 
 		if($objMain->numRows)
 		{

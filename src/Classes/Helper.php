@@ -198,7 +198,7 @@ class Helper
 						{
 							$anmeldungen[] = array
 							(
-								'cb-name'    => trim($chessbase[$x]),
+								'cb-name'    => strtolower(trim($chessbase[$x])),
 								'name'       => $objSpieler->name,
 								'verein'     => $objSpieler->verein,
 								'dwz'        => $objSpieler->dwz ? $objSpieler->dwz : '',
@@ -215,7 +215,7 @@ class Helper
 		// Benutzernamen suchen und Anmeldung zurückgeben
 		foreach($anmeldungen as $item)
 		{
-			if($item['cb-name'] == $nick) return $item;
+			if($item['cb-name'] == strtolower($nick)) return $item;
 		}
 		return array();
 	}

@@ -1,5 +1,13 @@
 # Internetschach Changelog
 
+## Version 0.8.3 (2020-05-20)
+
+* Tabelle.php: CSS-Klasse ce_table hinzugefügt
+* Funktion importTable: Extrahierung Landeskennzeichen gefixt
+* Fix Import der Farbverteilung in Tabellen
+* Fix Umwandlung in UTF-8 für die Ausgabe der Tabelle
+* Fix Anmeldeformular: Früher gemeldete Turniere wurden bei Update gelöscht
+
 ## Version 0.8.2 (2020-05-17)
 
 * Export.php: Feld Name aufgeteilt in zwei Felder Nachname und Vorname (Wunsch ChessBase)

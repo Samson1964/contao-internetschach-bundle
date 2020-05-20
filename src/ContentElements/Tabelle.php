@@ -48,7 +48,7 @@ class Tabelle extends \ContentElement
 
 		// Template ausgeben
 		$this->Template = new \FrontendTemplate($this->strTemplate);
-		$this->Template->class = 'ce_internetschach';
+		$this->Template->class = 'ce_internetschach ce_table';
 		$this->Template->content = $content;
 
 		return;

@@ -309,8 +309,14 @@ class Import extends \Backend
 
 	private function ImportHTML($string)
 	{
+		//$string = iconv('windows-1251', 'utf-8', $string); // Bug in paquettg/php-html-parser umgehen, https://github.com/paquettg/php-html-parser/issues/209#event-3327333893
+		// Umwandeln von ANSI westeuropäisch in UTF8
+		$string = iconv('windows-1252', 'utf-8', $string); // Bug in paquettg/php-html-parser umgehen, https://github.com/paquettg/php-html-parser/issues/209#event-3327333893
 		$string = str_replace(array('<th', '</th>'), array('<td', '</td>'), $string);
-		$string = iconv('windows-1251', 'utf-8', $string); // Bug in paquettg/php-html-parser umgehen, https://github.com/paquettg/php-html-parser/issues/209#event-3327333893
+
+		$fp = fopen('test.html', 'w');
+		fputs($fp, $string);
+		fclose($fp);
 		
 		$dom = new \PHPHtmlParser\Dom;
 		$dom->load($string);
@@ -354,9 +360,18 @@ class Import extends \Backend
 		
 					$value = str_replace('&nbsp;', '', $value);
 					$value = strip_tags($value);
+					$value = utf8_decode($value);
+					
 					// Tabellenzelle schreiben
-					if($name == 'runden') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&loz;'), array('s', 'w'), $value);
-					elseif($name == 'cb-land') $tabelle[$rowNr][$name] = str_replace(array('flags/nat16_', '.gif'), array('', ''), $land);
+					if($name == 'runden') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&#9830;', '&loz;', '&#9674;'), array('s', 's', 'w', 'w'), $value);
+					elseif($name == 'cb-land')
+					{
+						// Nation extrahieren, z.B.
+						// flags/nat16_GER.gif
+						// Internet%20Cup%20V%201%20B%202020-Dateien/nat16_GER.gif
+						// Resultat: GER
+						$tabelle[$rowNr][$name] = substr(str_replace('.gif', '', $land), -3);
+					}
 					else $tabelle[$rowNr][$name] = $value;
 					$i++;
 				}
