@@ -1,5 +1,11 @@
 # Internetschach Changelog
 
+## Version 1.1.0 (2020-05-22)
+
+* Klasse Qualifikationen fertiggestellt
+* Klasse Helper aufgeräumt
+* Tabellen: CSS-Klassen für Spaltenart "qualifiziert" ergänzt
+
 ## Version 1.0.0 (2020-05-22)
 
 * Tabellen: CSS-Klassen für Spaltenarten ergänzt

@@ -342,24 +342,15 @@ class Helper
 		$html .= '</thead>';
 		$html .= '<tbody>';
 
-		if($spalten)
-		{
-			if(in_array('qualification', $spalten))
-			{
-				// Qualifikationen als Spalte in die Tabelle eintragen
-				$tabelle = self::getQualifikationen($objTurnierserie->id, $objTabelle->id, $tabelle);
-			}
-		}
-
 		// Tabellenkörper schreiben
 		for($zeile = 1; $zeile < count($tabelle); $zeile++)
 		{
+			// CSS-Klassen für Zeile eintragen
 			$trclass = '';
 			if(in_array($zeile+1, $disqualifiziert)) $trclass .= 'disqualiziert';
 			if(in_array($zeile+1, $ungewertet)) $trclass = $trclass ? $trclass.' ungewertet' : 'ungewertet';
+			if($tabelle[$zeile]['qualification']) $trclass = $trclass ? $trclass.' qualifiziert' : 'qualifiziert';
 
-			$finale = self::Qualifiziert($objTurnierserie, $objTabelle, $zeile+1, $tabelle[$zeile]['benutzer']);
-			
 			$html .= '<tr class="'.$trclass.'">';
 			$anmeldung = self::getAnmeldung($objTurnierserie->id, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
 			if($spalten)
@@ -409,113 +400,4 @@ class Helper
 		return $html;
 	}
 
-	/**
-	 * Funktion getQualifikationen
-	 * Trägt in eine Tabelle (Array) die Qualifikationen als Feld ein
-	 * @param $turnierserie     int     ID der Turnierserie
-	 * @param $tabelleID        int     ID der aktuellen Tabelle
-	 * @param $tabelle          array   Array mit den Tabellendaten
-	 * @param $gruppe           string  Feldname der aktuellen Gruppe der Tabelle
-	 * @return array                    Modifiziertes Array mit den Tabellendaten
-	 */
-	static function getQualifikationen($turnierserie, $tabelleID, $tabelle)
-	{
-		if(!$turnierserie || !$tabelleID) return $tabelle; // Tabelle unmodifiziert zurückgeben
-
-		// Turnierserie einlesen
-		$objSerie = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach WHERE id = ?")
-		                                    ->execute($turnierserie);
-		if($objSerie->numRows)
-		{
-			// Turniere und Gruppen laden
-			$turnierplan = unserialize($objSerie->turniere);
-			$gruppenplan = unserialize($objSerie->gruppen);
-		}
-		//print_r($turnierplan);
-
-		// Alle restlichen Tabellen einlesen
-		$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
-		                                       ->execute($turnierserie);
-		$tabellenplan = array(); // Nimmt die Tabellendaten auf
-		$aktuelleGruppe = '';
-		if($objTabellen->numRows)
-		{
-			while($objTabellen->next())
-			{
-				if($objTabellen->id == $tabelleID) $aktuelleGruppe = $objTabellen->gruppe; // Gruppe der aktuellen Tabelle sichern
-				// Spieltermin und Finalstatus suchen
-				$spieltermin = 0;
-				$finale = false;
-				foreach($turnierplan as $item)
-				{
-					if($item['feldname'] == $objTabellen->turnier)
-					{
-						$spieltermin = $item['termin'];
-						$finale = $item['finale'];
-						break;
-					}
-				}
-				$tabellenplan[] = array
-				(
-					'id'               => $objTabellen->id,
-					'daten'            => $objTabellen->importArray,
-					'turnier'          => $objTabellen->turnier,
-					'gruppe'           => $objTabellen->gruppe,
-					'finale'           => $finale,
-					'ungewertet'       => $objTabellen->ungewertet,
-					'disqualifikation' => $objTabellen->disqualifikation,
-					'spieltermin'      => $spieltermin,
-				);
-			}
-		}
-
-		$benutzer = array(); // Array mit dem Benutzernamen als Index und dem Turnier, wo die Qualifikation erreicht wurde, als Wert
-		//print_r($tabellenplan);
-		
-		// Tabelle modifizieren
-		for($i = 0; $i < count($tabelle); $i++)
-		{
-			$tabelle[$i]['qualification'] = '';
-		}
-
-		return $tabelle;
-	}
-
-	/**
-	 * Funktion Qualifiziert
-	 * Stellt fest, ob ein Spieler qualifiziert ist oder nicht
-	 *
-	 * @param $objTurnierserie  object  Objekt der Turnierserie
-	 * @param $objTabelle       object  Objekt der Tabelle
-	 * @param $Platz            int     Platznummer des Spielers
-	 * @param $ChessbaseName    string  Benutzername des Spielers bei ChessBase
-	 * @return boolean                  TRUE = qualifiziert, FALSE = nicht qualifiziert
-	 */
-	function Qualifiziert($objTurnierserie, $objTabelle, $Platz, $ChessbaseName)
-	{
-		static $Tabelle; // Enthält alle Tabellen der Turnierserie als Array
-
-		// Alle Tabellen der Serie müssen noch eingelesen werden
-		if(!$Tabelle)
-		{
-			$objTemp = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
-			                                   ->execute($objTurnierserie->id);
-			if($objTemp->numRows)
-			{
-				while($objTemp->next())
-				{
-					$Tabelle[$objTemp->id] = array
-					(
-						'turnier'          => $objTemp->turnier,
-						'gruppe'           => $objTemp->gruppe,
-						'ungewertet'       => $objTemp->ungewertet,
-						'disqualifikation' => $objTemp->disqualifikation,
-						'importArray'      => unserialize($objTemp->importArray)
-					);
-				}
-			}
-		}
-
-		// Turniere chronologisch
-	}
 }

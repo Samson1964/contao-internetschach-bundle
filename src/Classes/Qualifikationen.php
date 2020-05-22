@@ -32,6 +32,14 @@ class Qualifikationen extends \Backend
 		$turniere = unserialize($objSerie->turniere);
 		$gruppen = unserialize($objSerie->gruppen);
 
+		// Benutzernamen der Turniere der jeweiligen Gruppe initialisieren
+		// Hier werden die Qualifikationen gespeichert
+		$Benutzer = array();
+		foreach($gruppen as $gruppe)
+		{
+			$Benutzer[$gruppe['feldname']] = array();
+		}
+
 		// Definierte Turniere der Reihe nach prüfen
 		foreach($turniere as $turnier)
 		{
@@ -41,39 +49,70 @@ class Qualifikationen extends \Backend
 				// Turnier wahrscheinlich schon beendet
 				foreach($gruppen as $gruppe)
 				{
-					echo "Prüfe Turnier ".$turnier['feldname']." Gruppe ".$gruppe['feldname']."<br>";
+					//echo "Prüfe Turnier ".$turnier['feldname']." Gruppe ".$gruppe['feldname']."<br>";
 					// Tabelle suchen, vorher Objekt zurücksetzen
 					$objTabellen->reset();
 					if($objTabellen->numRows)
 					{
 						while($objTabellen->next())
 						{
-							echo "... Tabelle aus Turnier ".$objTabellen->turnier." Gruppe ".$objTabellen->gruppe."<br>";
+							//echo "... Tabelle aus Turnier ".$objTabellen->turnier." Gruppe ".$objTabellen->gruppe."<br>";
 							if($objTabellen->turnier == $turnier['feldname'] && $objTabellen->gruppe == $gruppe['feldname'] && $objTabellen->importArray)
 							{
-								echo "... ... Übereinstimmung! Tabelle wird aktualisiert<br>";
+								//echo "... ... Übereinstimmung! Tabelle wird aktualisiert<br>";
 								$tabelleArr = unserialize($objTabellen->importArray); // Tabelle in Array umwandeln
+								// Disqualifizierte Spielernummern laden (Spielernummer = Platz + 1)
+								$disqualifiziert = \Schachbulle\ContaoHelperBundle\Classes\Helper::StringToArray($objTabellen->disqualifikation);
 								// Turnier/Gruppe gefunden und Tabelle wurde bereits importiert
-								//'ungewertet'       => $objTemp->ungewertet,
-								//'disqualifikation' => $objTemp->disqualifikation,
-								//'importArray'      => unserialize($objTemp->importArray)
-							}
-							else
-							{
-								echo "... ... Keine Übereinstimmung! Tabelle wird nicht aktualisiert<br>";
+								// Turnier jetzt auswerten
+								$finale = 0; // Bisher 0 Spieler qualifiziert
+								//echo "<pre>";
+								//print_r($tabelleArr);
+								//echo "</pre>";
+								for($platz = 0; $platz < count($tabelleArr); $platz++)
+								{
+									// Qualifikation zurücksetzen
+									$tabelleArr[$platz]['qualification'] = '';
+									if($platz == 0) continue; // Kopfzeile überspringen
+
+									// Nur nichtdisqualifizierte Spieler berücksichtigen
+									if(!in_array($platz + 1, $disqualifiziert))
+									{
+										// Spieler nur berücksichtigen, wenn es noch Finalplätze gibt
+										if($finale < $gruppe['qualifikationen'])
+										{
+											if($Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']])
+											{
+												// Spieler ist schon qualifiziert, Gruppe übernehmen
+												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']];
+											}
+											else
+											{
+												// Spieler ist noch nicht qualifiziert, Gruppe übernehmen
+												$tabelleArr[$platz]['qualification'] = $turnier['feldname'];
+												$Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']] = $turnier['feldname'];
+												$finale++;
+											}
+										}
+									}
+								}
+								// Tabelle aktualisieren
+								$set = array
+								(
+									'importArray' => serialize($tabelleArr)
+								);
+								$objDB = \Database::getInstance()->prepare("UPDATE tl_internetschach_tabellen %s WHERE id = ?")
+								                                 ->set($set)
+								                                 ->execute($objTabellen->id);
 							}
 						}
 					}
-		//echo "<pre>";
-		//print_r($turnier['feldname']);
-		//print_r($gruppe['feldname']);
-		//echo "</pre>";
 				}
 			}
 		}
 
 		// Zurück zur Seite
-		//\Controller::redirect(str_replace('&key=qualifikationen', '', \Environment::get('request')));
+		\Controller::redirect(str_replace('&key=qualifikationen', '', \Environment::get('request')));
 	}
 
 }
