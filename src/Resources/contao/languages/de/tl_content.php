@@ -26,6 +26,7 @@ $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'] = array
 	'name'          => 'Name',
 	'dwz'           => 'DWZ',
 	'verein'        => 'Verein',
+	'verein_kurz'   => 'Verein (gekürzt)',
 	'fide-titel'    => 'Titel',
 	'fide-elo'      => 'Elo',
 	'email'         => 'E-Mail',

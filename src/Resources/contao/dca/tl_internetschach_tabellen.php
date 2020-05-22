@@ -57,6 +57,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		),
 		'global_operations' => array
 		(
+			'qualifikationen' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen'],
+				'href'                => 'key=qualifikationen',
+				'icon'                => 'bundles/contaointernetschach/images/qualifikationen.png',
+				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],

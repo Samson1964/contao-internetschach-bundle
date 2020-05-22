@@ -262,40 +262,19 @@ class Helper
 	/**
 	 * Funktion TabelleToCSV
 	 * Erstellt aus einem Tabellen-Array eine HTML-Tabelle mit den gewünschten Spalten 
-	 * @param $turnierserie     int     ID der Turnierserie
-	 * @param $tabelleID        int     ID der Tabelle
-	 * @param $tabelle          array   Array mit der Tabelle, Beispiel:
-	 * [1] => Array
-	 *     (
-	 *         [platz] => 1
-	 *         [benutzer] => Weltszmerc
-	 *         [land] => POL
-	 *         [rating] => 2171
-	 *         [runde] => Array
-	 *             (
-	 *                 [0] => s 0/7
-	 *                 [1] => w 1/8
-	 *                 [2] => w 1/2
-	 *                 [3] => s 1/23
-	 *                 [4] => s 1/3
-	 *                 [5] => w 1/10
-	 *                 [6] => s ½/4
-	 *                 [7] => s 1/6
-	 *                 [8] => w 1/11
-	 *             )
-	 * 
-	 *         [punkte] => 7.5 / 9
-	 *         [wertung1] => 
-	 *         [wertung2] => 
-	 *         [realname] => Aab,Manfred
-	 *     )
+	 * @param $objTurnierserie  object  Objekt der Turnierserie
+	 * @param $objTabelle       object  Objekt der Tabelle
 	 * @param $spalten          array   Array mit den gewünschten Spalten
 	 * @return string                   HTML-Ausgabe der Tabelle
 	 */
-	static function TabelleToHTML($turnierserie, $tabelleID, $tabelle, $spalten)
+	static function TabelleToHTML($objTurnierserie, $objTabelle, $spalten)
 	{
+		$tabelle = unserialize($objTabelle->importArray); // Tabelle von serialisiertem String in Array umwandeln
 		$spaltendefinition = $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'];
-		
+		$class = array(); // Feld für die CSS-Klassennamen, Index ist der Spaltenname
+		$disqualifiziert = \Schachbulle\ContaoHelperBundle\Classes\Helper::StringToArray($objTabelle->disqualifikation);
+		$ungewertet = \Schachbulle\ContaoHelperBundle\Classes\Helper::StringToArray($objTabelle->ungewertet);
+
 		//$html .= print_r($tabelle, true);
 		// Tabellenkopf schreiben
 		$html = '<table>';
@@ -305,12 +284,33 @@ class Helper
 		{
 			foreach($spalten as $spalte)
 			{
+				switch($spalte)
+				{
+					case 'platz'        : $class[$spalte] = 'platz'; break;
+					case 'cb-name'      : $class[$spalte] = 'cbname'; break;
+					case 'cb-land'      : $class[$spalte] = 'land'; break;
+					case 'cb-rating'    : $class[$spalte] = 'rating'; break;
+					case 'punkte'       : $class[$spalte] = 'punkte'; break;
+					case 'wertung1'     : $class[$spalte] = 'wertung'; break;
+					case 'wertung2'     : $class[$spalte] = 'wertung'; break;
+					case 'runden'       : $class[$spalte] = 'result'; break;
+					case 'name'         : $class[$spalte] = 'name'; break;
+					case 'titel+name'   : $class[$spalte] = 'name'; break;
+					case 'dwz'          : $class[$spalte] = 'rating'; break;
+					case 'verein'       : $class[$spalte] = 'verein'; break;
+					case 'verein_kurz'  : $class[$spalte] = 'verein_kurz'; break;
+					case 'fide-titel'   : $class[$spalte] = 'ftitel'; break;
+					case 'fide-elo'     : $class[$spalte] = 'rating'; break;
+					case 'email'        : $class[$spalte] = 'email'; break;
+					case 'qualification': $class[$spalte] = 'qualifikation'; break;
+				}
+				
 				if($spalte == 'runden')
 				{
 					// Ergebnisse
 					for($i = 1; $i <= count($tabelle[0][$spalte]); $i++)
 					{
-						$html .= '<th>';
+						$html .= '<th class="'.$class[$spalte].'">';
 						$html .= $i;
 						$html .= '</th>';
 					}
@@ -318,21 +318,21 @@ class Helper
 				elseif($spalte == 'titel+name')
 				{
 					// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
-					$html .= '<th>';
+					$html .= '<th class="'.$class[$spalte].'">';
 					$html .= $spaltendefinition['name'];
 					$html .= '</th>';
 				}
 				elseif($spalte == 'qualification')
 				{
 					// Besondere Spalte für die Ausgabe der Qualifikation für das Finale
-					$html .= '<th>';
+					$html .= '<th class="'.$class[$spalte].'">';
 					$html .= 'Qual.';
 					$html .= '</th>';
 				}
 				else 
 				{
 					// Normale Spalte
-					$html .= '<th>';
+					$html .= '<th class="'.$class[$spalte].'">';
 					$html .= $spaltendefinition[$spalte];
 					$html .= '</th>';
 				}
@@ -347,15 +347,21 @@ class Helper
 			if(in_array('qualification', $spalten))
 			{
 				// Qualifikationen als Spalte in die Tabelle eintragen
-				$tabelle = self::getQualifikationen($turnierserie, $tabelleID, $tabelle);
+				$tabelle = self::getQualifikationen($objTurnierserie->id, $objTabelle->id, $tabelle);
 			}
 		}
 
 		// Tabellenkörper schreiben
 		for($zeile = 1; $zeile < count($tabelle); $zeile++)
 		{
-			$html .= '<tr>';
-			$anmeldung = self::getAnmeldung($turnierserie, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
+			$trclass = '';
+			if(in_array($zeile+1, $disqualifiziert)) $trclass .= 'disqualiziert';
+			if(in_array($zeile+1, $ungewertet)) $trclass = $trclass ? $trclass.' ungewertet' : 'ungewertet';
+
+			$finale = self::Qualifiziert($objTurnierserie, $objTabelle, $zeile+1, $tabelle[$zeile]['benutzer']);
+			
+			$html .= '<tr class="'.$trclass.'">';
+			$anmeldung = self::getAnmeldung($objTurnierserie->id, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
 			if($spalten)
 			{
 				foreach($spalten as $spalte)
@@ -365,7 +371,7 @@ class Helper
 						// Ergebnisse
 						for($i = 0; $i < count($tabelle[$zeile][$spalte]); $i++)
 						{
-							$html .= '<td class="result">';
+							$html .= '<td class="'.$class[$spalte].'">';
 							$html .= $tabelle[$zeile][$spalte][$i];
 							$html .= '</td>';
 						}
@@ -373,14 +379,14 @@ class Helper
 					elseif($spalte == 'titel+name')
 					{
 						// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
-						$html .= '<td>';
+						$html .= '<td class="'.$class[$spalte].'">';
 						$html .= ($anmeldung['fide-titel'] ? $anmeldung['fide-titel'].' ' : '').\Schachbulle\ContaoHelperBundle\Classes\Helper::NameDrehen($anmeldung['name']);
 						$html .= '</td>';
 					}
 					else 
 					{
 						// Normale Spalte
-						$html .= '<td>';
+						$html .= '<td class="'.$class[$spalte].'">';
 						if(isset($tabelle[$zeile][$spalte]))
 						{
 							$html .= $tabelle[$zeile][$spalte];
@@ -475,4 +481,41 @@ class Helper
 		return $tabelle;
 	}
 
+	/**
+	 * Funktion Qualifiziert
+	 * Stellt fest, ob ein Spieler qualifiziert ist oder nicht
+	 *
+	 * @param $objTurnierserie  object  Objekt der Turnierserie
+	 * @param $objTabelle       object  Objekt der Tabelle
+	 * @param $Platz            int     Platznummer des Spielers
+	 * @param $ChessbaseName    string  Benutzername des Spielers bei ChessBase
+	 * @return boolean                  TRUE = qualifiziert, FALSE = nicht qualifiziert
+	 */
+	function Qualifiziert($objTurnierserie, $objTabelle, $Platz, $ChessbaseName)
+	{
+		static $Tabelle; // Enthält alle Tabellen der Turnierserie als Array
+
+		// Alle Tabellen der Serie müssen noch eingelesen werden
+		if(!$Tabelle)
+		{
+			$objTemp = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
+			                                   ->execute($objTurnierserie->id);
+			if($objTemp->numRows)
+			{
+				while($objTemp->next())
+				{
+					$Tabelle[$objTemp->id] = array
+					(
+						'turnier'          => $objTemp->turnier,
+						'gruppe'           => $objTemp->gruppe,
+						'ungewertet'       => $objTemp->ungewertet,
+						'disqualifikation' => $objTemp->disqualifikation,
+						'importArray'      => unserialize($objTemp->importArray)
+					);
+				}
+			}
+		}
+
+		// Turniere chronologisch
+	}
 }

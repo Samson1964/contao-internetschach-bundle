@@ -1,5 +1,11 @@
 # Internetschach Changelog
 
+## Version 1.0.0 (2020-05-22)
+
+* Tabellen: CSS-Klassen für Spaltenarten ergänzt
+* Tabellen: CSS-Klasse für disqualifizierte und ungewertete Spieler
+* Klasse Qualifikationen hinzugefügt (noch nicht fertig!)
+
 ## Version 0.8.4 (2020-05-20)
 
 * Frontend-CSS hinzugefügt für Tabellen

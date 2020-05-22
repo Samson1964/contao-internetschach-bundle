@@ -10,6 +10,10 @@
  * Backend-Modul Übersetzungen
  */
 
+// Globale Funktionen
+$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen'] = array('Qualifikationen aktualisieren', 'Aktualisiert in allen Tabellen die Qualifikationen');
+$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen_confirm'] = 'Wollen Sie wirklich die Qualifikationen aller Tabellen aktualisieren?';
+
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['new'] = array('Neue Tabelle', 'Neue Tabelle anlegen');
 $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['edit'] = array("Tabelle %s bearbeiten", "Tabelle %s bearbeiten");

@@ -25,10 +25,11 @@
 
 $GLOBALS['BE_MOD']['content']['internetschach'] = array
 (
-	'tables'         => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen', 'tl_internetschach_tabellen', 'tl_internetschach_preise'),
-	'importCSV'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importCSV'),
-	'importTable'    => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importTable'),
-	'exportXLS'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'getExcel')
+	'tables'          => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen', 'tl_internetschach_tabellen', 'tl_internetschach_preise'),
+	'importCSV'       => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importCSV'),
+	'importTable'     => array('\Schachbulle\ContaoInternetschachBundle\Classes\Import', 'importTable'),
+	'exportXLS'       => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'getExcel'),
+	'qualifikationen' => array('\Schachbulle\ContaoInternetschachBundle\Classes\Qualifikationen', 'Aktualisieren') 
 );
 
 
