@@ -1,5 +1,13 @@
 # Internetschach Changelog
 
+## Version 1.2.0 (2020-05-23)
+
+* CSS für Qualifikation nur ausgeben, wenn Spalte qualification vorhanden ist
+* Gekürzten Vereinsnamen in Tabellen anzeigen
+* Fix: Qualifikationen wurden nicht richtig erstellt
+* Add: Für Tabellen optional Standard-CSS aktivieren
+* Templates korrigiert
+ 
 ## Version 1.1.0 (2020-05-22)
 
 * Klasse Qualifikationen fertiggestellt

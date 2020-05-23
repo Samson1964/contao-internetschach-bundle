@@ -16,7 +16,7 @@
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_formular'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten,internetschach_css;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
  * Fields
@@ -110,9 +110,23 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_spalten'] = array
 	(
 		'mandatory'           => false,
 		'multiple'            => true,
-		'tl_class'            => 'long'
+		'tl_class'            => 'w50'
 	),
 	'sql'                     => "text NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_css'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_css'],
+	'inputType'               => 'checkbox',
+	'filter'                  => true,
+	'default'                 => 1,
+	'eval'                    => array
+	(
+		'tl_class'            => 'w50',
+		'isBoolean'           => true
+	),
+	'sql'                     => "char(1) NOT NULL default ''"
 );
 
 /*****************************************

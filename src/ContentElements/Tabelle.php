@@ -48,6 +48,7 @@ class Tabelle extends \ContentElement
 		// Template ausgeben
 		$this->Template = new \FrontendTemplate($this->strTemplate);
 		$this->Template->class = 'ce_internetschach_tabelle';
+		$this->Template->default_css = true;
 		$this->Template->content = $content;
 
 		return;

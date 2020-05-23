@@ -2,8 +2,6 @@
 
 <?php $this->block('content'); ?>
 
-<div class="<?= $this->class ?>">
 <?= $this->content ?>
-</div>
 
 <?php $this->endblock(); ?>

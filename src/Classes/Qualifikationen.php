@@ -94,6 +94,15 @@ class Qualifikationen extends \Backend
 												$finale++;
 											}
 										}
+										else
+										{
+											// Es gibt keine Plätze mehr im aktuellen Turnier, aber die Altdaten müssen übertragen werden
+											if($Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']])
+											{
+												// Spieler ist schon qualifiziert, Gruppe übernehmen
+												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']];
+											}
+										}
 									}
 								}
 								// Tabelle aktualisieren

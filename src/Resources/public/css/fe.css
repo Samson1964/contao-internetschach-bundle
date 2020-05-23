@@ -6,21 +6,21 @@
 .ce_internetschach_tabelle table 
 {
 	white-space: nowrap;
-    border-spacing: 2px;
-    border-collapse: separate;	
+	border-spacing: 2px;
+	border-collapse: separate;	
 }
 
-.ce_internetschach_tabelle table tr.up 
+.ce_internetschach_tabelle table tr.qualifiziert
 {
 	background-color: #abffa9;
 }
 
-.ce_internetschach_tabelle table tr.down 
+.ce_internetschach_tabelle table tr.disqualifiziert
 {
 	background-color: #ffb7b7;
 }
 
-.ce_internetschach_tabelle table tr.high 
+.ce_internetschach_tabelle table tr.ungewertet
 {
 	background-color: #ffff00;
 }

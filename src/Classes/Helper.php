@@ -282,6 +282,7 @@ class Helper
 		$html .= '<tr>';
 		if($spalten)
 		{
+			$qualifikationsspalte = in_array('qualification', $spalten); // Status Qualifikationsspalte sichern
 			foreach($spalten as $spalte)
 			{
 				switch($spalte)
@@ -322,6 +323,13 @@ class Helper
 					$html .= $spaltendefinition['name'];
 					$html .= '</th>';
 				}
+				elseif($spalte == 'verein_kurz')
+				{
+					// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
+					$html .= '<th class="'.$class[$spalte].'">';
+					$html .= $spaltendefinition['verein'];
+					$html .= '</th>';
+				}
 				elseif($spalte == 'qualification')
 				{
 					// Besondere Spalte für die Ausgabe der Qualifikation für das Finale
@@ -347,9 +355,9 @@ class Helper
 		{
 			// CSS-Klassen für Zeile eintragen
 			$trclass = '';
-			if(in_array($zeile+1, $disqualifiziert)) $trclass .= 'disqualiziert';
+			if(in_array($zeile+1, $disqualifiziert)) $trclass .= 'disqualifiziert';
 			if(in_array($zeile+1, $ungewertet)) $trclass = $trclass ? $trclass.' ungewertet' : 'ungewertet';
-			if($tabelle[$zeile]['qualification']) $trclass = $trclass ? $trclass.' qualifiziert' : 'qualifiziert';
+			if($tabelle[$zeile]['qualification'] && $qualifikationsspalte) $trclass = $trclass ? $trclass.' qualifiziert' : 'qualifiziert';
 
 			$html .= '<tr class="'.$trclass.'">';
 			$anmeldung = self::getAnmeldung($objTurnierserie->id, $tabelle[$zeile]['cb-name']); // Anmeldedaten des Spielers laden
@@ -372,6 +380,13 @@ class Helper
 						// Besondere Spalte für Ausgabe des Namens mit FIDE-Titel
 						$html .= '<td class="'.$class[$spalte].'">';
 						$html .= ($anmeldung['fide-titel'] ? $anmeldung['fide-titel'].' ' : '').\Schachbulle\ContaoHelperBundle\Classes\Helper::NameDrehen($anmeldung['name']);
+						$html .= '</td>';
+					}
+					elseif($spalte == 'verein_kurz')
+					{
+						// Besondere Spalte für gekürzten Vereinsnamen
+						$html .= '<td class="'.$class[$spalte].'">';
+						$html .= \Schachbulle\ContaoHelperBundle\Classes\Helper::StringKuerzen($anmeldung['verein'], 20);
 						$html .= '</td>';
 					}
 					else 
