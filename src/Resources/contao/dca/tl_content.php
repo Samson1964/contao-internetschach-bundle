@@ -29,7 +29,9 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach'] = array
 	'inputType'               => 'select',
 	'eval'                    => array
 	(
-		'mandatory'           => false,
+		'mandatory'           => true,
+		'includeBlankOption'  => true,
+		'blankOptionLabel'    => $GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel'],
 		'multiple'            => false,
 		'chosen'              => true,
 		'submitOnChange'      => true,
@@ -95,6 +97,8 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_tabelle'] = array
 	'eval'                    => array
 	(
 		'multiple'            => false,
+		'includeBlankOption'  => true,
+		'blankOptionLabel'    => $GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel']
 	),
 	'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
@@ -198,7 +202,7 @@ class tl_content_internetschach extends \Backend
 		$array = array();
 		if($dc->activeRecord->internetschach)
 		{
-			$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
+			$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ? ORDER BY turnier ASC, gruppe ASC")
 			                                       ->execute($dc->activeRecord->internetschach);
 
 			if($objTabellen->numRows)

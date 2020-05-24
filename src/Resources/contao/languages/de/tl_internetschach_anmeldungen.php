@@ -10,6 +10,10 @@
  * Backend-Modul Übersetzungen
  */
 
+// Globale Funktionen
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['finalqualifikationen'] = array('Finalteilnehmer aktualisieren', 'Aktualisiert in allen Anmeldungen die Qualifikationen für das Finale');
+$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['finalqualifikationen_confirm'] = 'Wollen Sie wirklich die Finalteilnahmen anhand der Qualifikationen aus den Tabellen aktualisieren?';
+
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['new'] = array('Neue Anmeldung', 'Neue Anmeldung anlegen');
 $GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['edit'] = array("Anmeldung %s bearbeiten", "Anmeldung %s bearbeiten");

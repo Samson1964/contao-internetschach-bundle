@@ -2,6 +2,7 @@
 
 $GLOBALS['TL_LANG']['tl_content']['internetschach_legend'] = 'Turnierserie';
 $GLOBALS['TL_LANG']['tl_content']['internetschach'] = array('Turnierserie wählen', 'Turnierserie wählen');
+$GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel'] = 'Bitte wählen ...';
 
 $GLOBALS['TL_LANG']['tl_content']['internetschach_anmeldungen_legend'] = 'Turniere/Gruppen';
 $GLOBALS['TL_LANG']['tl_content']['internetschach_turniere'] = array('Turniere', 'Auszugebende Turniere wählen');

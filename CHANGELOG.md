@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 1.3.0 (2020-05-24)
+
+* Inhaltselement Anmeldungen: Blank-Eintrag bei Auswahl Turnierserie hinzugefügt
+* Inhaltselement Tabelle: Blank-Eintrag bei Auswahl Turnier/Gruppe hinzugefügt
+* Inhaltselement Tabelle: Auswahl Turnier/Gruppe alphabetisch sortiert
+* Neue Funktion: Qualifikationen für das Finale in den Anmeldungen eintragen
+
 ## Version 1.2.0 (2020-05-23)
 
 * CSS für Qualifikation nur ausgeben, wenn Spalte qualification vorhanden ist

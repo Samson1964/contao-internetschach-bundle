@@ -124,4 +124,117 @@ class Qualifikationen extends \Backend
 		\Controller::redirect(str_replace('&key=qualifikationen', '', \Environment::get('request')));
 	}
 
+	/* Funktion FinaleAktualisieren
+	 * Aktualisiert in den Anmeldungen die Chekbox für die Teilnahme am Finale
+	 */
+	public function FinaleAktualisieren()
+	{
+		if($this->Input->get('key') != 'finalqualifikationen')
+		{
+			return '';
+		}
+
+		// Turnierserie einlesen
+		$objSerie = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+		                                    ->execute(\Input::get('id'));
+
+		// Tabellen einlesen
+		$objTabellen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_tabellen WHERE pid = ?")
+		                                       ->execute($objSerie->id);
+
+		// Turniere der Serie in Array laden und Finalturnier suchen
+		$turniere = unserialize($objSerie->turniere);
+		$finale = '';
+		foreach($turniere as $turnier)
+		{
+			if($turnier['finale'])
+			{
+				$finale = $turnier['feldname'];
+				break;
+			}
+		}
+		if(!$finale) return '';
+
+		// Tabellen einlesen, qualifizierte Spieler ermitteln und in Array $benutzer übertragen
+		$benutzer = array();
+		if($objTabellen->numRows)
+		{
+			while($objTabellen->next())
+			{
+				$tabelle = unserialize($objTabellen->importArray); // Tabelle in Array umwandeln
+				//echo "<pre>";
+				//print_r($tabelle);
+				//echo "</pre>";
+				// Tabelle auslesen und Qualifikation sichern
+				for($i = 1; $i < count($tabelle); $i++)
+				{
+					if($tabelle[$i]['qualification'])
+					{
+						$benutzer[] = $tabelle[$i]['cb-name'];
+					}
+				}
+			}
+		}
+		$benutzer = array_unique($benutzer);
+
+		// Anmeldungen einlesen
+		$objAnmeldungen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_anmeldungen WHERE pid = ? AND published = ?")
+		                                          ->execute($objSerie->id, 1);
+		// Anmeldungen aktualisieren
+		if($objAnmeldungen->numRows)
+		{
+			while($objAnmeldungen->next())
+			{
+				$turniere = (array)unserialize($objAnmeldungen->turniere);
+				//echo "<pre>";
+				//print_r($turniere);
+				//echo "</pre>";
+				$alterFinalstatus = in_array($finale, $turniere); // Gespeichert: TRUE = Finale, FALSE = nicht qualifiziert
+				$neuerFinalstatus = in_array($objAnmeldungen->chessbase, $benutzer); // Neu: TRUE = Finale, FALSE = nicht qualifiziert
+				if($alterFinalstatus != $neuerFinalstatus)
+				{
+					// Finalstatus muß aktualisiert werden
+					if($neuerFinalstatus)
+					{
+						$turniere[] = $finale;
+						$turniere = array_unique($turniere);
+					}
+					else
+					{
+						foreach($turniere as $key => $value)
+						{
+							if($value == $finale) unset($turniere[$key]);
+						}
+					}
+					// Versionierung aktivieren
+					$objVersion = new \Versions('tl_internetschach_anmeldungen', $objAnmeldungen->id);
+					$objVersion->setUsername('Internetschach-Bundle');
+					$objVersion->setUserId(0);
+					$objVersion->initialize();
+					// set-Array setzen
+					$set = array
+					(
+						'tstamp'       => time(),
+						'turniere'     => serialize($turniere)
+					);
+					//echo "<pre>mod.:";
+					//print_r($set['turniere']);
+					//echo "</pre>";
+					// Datensatz updaten
+					$objRecord = \Database::getInstance()->prepare('UPDATE tl_internetschach_anmeldungen %s WHERE id = ?')
+					                                     ->set($set)
+					                                     ->execute($objAnmeldungen->id);
+					$objVersion->create();
+					\System::log('A new version of record "tl_internetschach_anmeldungen.id='.$objAnmeldungen->id.'" has been created'.$this->getParentEntries('tl_internetschach_anmeldungen', $objAnmeldungen->id), __METHOD__, TL_GENERAL);
+					\System::log('[Internetschach] Geänderte Anmeldung: '.$objAnmeldungen->name, __CLASS__.'::'.__FUNCTION__, TL_CRON);
+				}
+			}
+		}
+
+		//echo "<pre>";
+		//print_r($benutzer);
+		//echo "</pre>";
+		// Zurück zur Seite
+		\Controller::redirect(str_replace('&key=finalqualifikationen', '', \Environment::get('request')));
+	}
 }
