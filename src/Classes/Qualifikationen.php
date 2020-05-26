@@ -170,7 +170,7 @@ class Qualifikationen extends \Backend
 				{
 					if($tabelle[$i]['qualification'])
 					{
-						$benutzer[] = $tabelle[$i]['cb-name'];
+						$benutzer[] = strtolower($tabelle[$i]['cb-name']);
 					}
 				}
 			}
@@ -190,7 +190,7 @@ class Qualifikationen extends \Backend
 				//print_r($turniere);
 				//echo "</pre>";
 				$alterFinalstatus = in_array($finale, $turniere); // Gespeichert: TRUE = Finale, FALSE = nicht qualifiziert
-				$neuerFinalstatus = in_array($objAnmeldungen->chessbase, $benutzer); // Neu: TRUE = Finale, FALSE = nicht qualifiziert
+				$neuerFinalstatus = in_array(strtolower($objAnmeldungen->chessbase), $benutzer); // Neu: TRUE = Finale, FALSE = nicht qualifiziert
 				if($alterFinalstatus != $neuerFinalstatus)
 				{
 					// Finalstatus muß aktualisiert werden

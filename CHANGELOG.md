@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 1.3.1 (2020-05-26)
+
+* Neue Funktion: Preise in den Tabellen eintragen (Hauptpreise, DWZ-Preise, Mehrfachpreise möglich) -> Alphaversion
+* Fix: Finalteilnehmer aktualisieren hatte Problem mit Unterscheidung Groß- und Kleinschreibung
+
 ## Version 1.3.0 (2020-05-24)
 
 * Inhaltselement Anmeldungen: Blank-Eintrag bei Auswahl Turnierserie hinzugefügt
