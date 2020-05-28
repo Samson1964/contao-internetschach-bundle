@@ -189,8 +189,15 @@ class Qualifikationen extends \Backend
 				//echo "<pre>";
 				//print_r($turniere);
 				//echo "</pre>";
+				// ChessBase-Benutzernamen auflösen
+				$benutzernamen = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getBenutzernamen($objAnmeldungen->chessbase);
 				$alterFinalstatus = in_array($finale, $turniere); // Gespeichert: TRUE = Finale, FALSE = nicht qualifiziert
-				$neuerFinalstatus = in_array(strtolower($objAnmeldungen->chessbase), $benutzer); // Neu: TRUE = Finale, FALSE = nicht qualifiziert
+				$neuerFinalstatus = false;
+				foreach($benutzernamen as $benutzername)
+				{
+					$neuerFinalstatus = in_array(strtolower($benutzername), $benutzer); // Neu: TRUE = Finale, FALSE = nicht qualifiziert
+					if($neuerFinalstatus) break;
+				}
 				if($alterFinalstatus != $neuerFinalstatus)
 				{
 					// Finalstatus muß aktualisiert werden

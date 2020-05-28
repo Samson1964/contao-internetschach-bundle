@@ -415,4 +415,20 @@ class Helper
 		return $html;
 	}
 
+	/**
+	 * Funktion getBenutzernamen
+	 * Erstellt aus dem String mit den Benutzernamen ein Array
+	 * @param $namen            string  z.B. "Jonas Eilenberg, JonasEilenberg"
+	 * @return array                    array('Jonas Eilenberg', 'JonasEilenberg')
+	 */
+	static function getBenutzernamen($namen)
+	{
+		$neu = explode(',', $namen);
+		$array = array();
+		foreach($neu as $item)
+		{
+			$array[] = trim($item);
+		}
+		return $array;
+	}
 }

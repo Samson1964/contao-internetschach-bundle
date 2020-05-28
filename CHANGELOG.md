@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.3.2 (2020-05-28)
+
+* Fix: Finalteilnehmer aktualisieren hatte Problem mit mehreren Benutzernamen
+
 ## Version 1.3.1 (2020-05-26)
 
 * Neue Funktion: Preise in den Tabellen eintragen (Hauptpreise, DWZ-Preise, Mehrfachpreise möglich) -> Alphaversion
