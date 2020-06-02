@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 1.3.3 (2020-06-02)
+
+* Fix: Benutzernamen mit unterschiedlicher Groß- und Kleinschreibung werden bei Qualifikationszuordnung nicht erkannt
+* Add: URL zur Fortschrittstabelle des jeweiligen Turniers in den Einstellungen
+
 ## Version 1.3.2 (2020-05-28)
 
 * Fix: Finalteilnehmer aktualisieren hatte Problem mit mehreren Benutzernamen

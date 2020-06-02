@@ -265,7 +265,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'inputType'   => 'text',
 						'eval'        => array
 						(
-							'style'   => 'width:250px',
+							'style'   => 'width:150px',
 						),
 					),
 					'feldname'        => array
@@ -277,6 +277,16 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						(
 							'style'   => 'width:50px',
 							'maxlength' => 5
+						),
+					),
+					'url'            => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_url'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'   => 'width:200px',
 						),
 					),
 					'dwz_von'         => array
@@ -343,7 +353,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 						'inputType'   => 'text',
 						'eval'        => array
 						(
-							'style'   => 'width:250px',
+							'style'   => 'width:150px',
 						),
 					),
 					'feldname'        => array

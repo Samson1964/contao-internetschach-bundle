@@ -6,7 +6,7 @@ if (!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 
 /**
- * Class dsb_trainerlizenzExport
+ * Class Qualifikationen
   */
 class Qualifikationen extends \Backend
 {
@@ -78,29 +78,30 @@ class Qualifikationen extends \Backend
 									// Nur nichtdisqualifizierte Spieler berücksichtigen
 									if(!in_array($platz + 1, $disqualifiziert))
 									{
+										$chessbaseName = strtolower($tabelleArr[$platz]['cb-name']); // Benutzername in Kleinschreibung
 										// Spieler nur berücksichtigen, wenn es noch Finalplätze gibt
 										if($finale < $gruppe['qualifikationen'])
 										{
-											if($Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']])
+											if($Benutzer[$gruppe['feldname']][$chessbaseName])
 											{
 												// Spieler ist schon qualifiziert, Gruppe übernehmen
-												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']];
+												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$chessbaseName];
 											}
 											else
 											{
 												// Spieler ist noch nicht qualifiziert, Gruppe übernehmen
 												$tabelleArr[$platz]['qualification'] = $turnier['feldname'];
-												$Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']] = $turnier['feldname'];
+												$Benutzer[$gruppe['feldname']][$chessbaseName] = $turnier['feldname'];
 												$finale++;
 											}
 										}
 										else
 										{
 											// Es gibt keine Plätze mehr im aktuellen Turnier, aber die Altdaten müssen übertragen werden
-											if($Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']])
+											if($Benutzer[$gruppe['feldname']][$chessbaseName])
 											{
 												// Spieler ist schon qualifiziert, Gruppe übernehmen
-												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$tabelleArr[$platz]['cb-name']];
+												$tabelleArr[$platz]['qualification'] = $Benutzer[$gruppe['feldname']][$chessbaseName];
 											}
 										}
 									}

@@ -45,6 +45,7 @@ $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_legend'] = 'DWZ-Gruppen';
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen'] = array('Gruppen', 'Liste der Gruppen');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_name'] = array('Name', 'Kurzzeichen der Gruppe, z.B. A');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'] = array('Feldname', 'Interner Name der Gruppe, z.B. a');
+$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_url'] = array('URL', 'Während der Turnierserie gültige URL zur Fortschrittstabelle der Gruppe');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_von'] = array('von DWZ', '');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_bis'] = array('bis DWZ', '');
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_kategoriegrenze'] = array('DWZ-Kategorie', 'Separate DWZ-Kategorie festlegen');
