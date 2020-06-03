@@ -121,7 +121,7 @@ class Topspieler extends \ContentElement
 				}
 			}
 			$content .= '</tr>';
-			if($platz == $this->internetschach_punktplaetze) break;
+			if($platz == $this->internetschach_topanzahl) break;
 		}
 		$content .= '</table>';
 

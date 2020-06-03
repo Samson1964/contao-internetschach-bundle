@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.4.1 (2020-06-03)
+
+* Fix: Anzahl der Topspieler im Inhaltselement Topspieler
+
 ## Version 1.4.0 (2020-06-03)
 
 * Add: Inhaltselement Topspieler
