@@ -43,6 +43,7 @@ $GLOBALS['BE_MOD']['content']['internetschach'] = array
 $GLOBALS['TL_CTE']['includes']['internetschach_formular'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Formular';
 $GLOBALS['TL_CTE']['includes']['internetschach_anmeldungen'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Anmeldungen';
 $GLOBALS['TL_CTE']['includes']['internetschach_tabelle'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Tabelle';
+$GLOBALS['TL_CTE']['includes']['internetschach_topspieler'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Topspieler';
 
 if(TL_MODE == 'BE')
 {

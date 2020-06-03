@@ -15,6 +15,10 @@ $GLOBALS['TL_LANG']['tl_content']['internetschach_tabelle'] = array('Anzuzeigend
 $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten'] = array('Anzuzeigende Spalten', 'Spalten, die im Frontend angezeigt werden sollen. Sie werden in der unten angezeigten Reihenfolge ausgegeben.');
 $GLOBALS['TL_LANG']['tl_content']['internetschach_css'] = array('Standard-CSS laden', 'Standard-CSS für diese Tabelle laden');
 
+$GLOBALS['TL_LANG']['tl_content']['internetschach_topspieler_legend'] = 'Einstellungen';
+$GLOBALS['TL_LANG']['tl_content']['internetschach_topanzahl'] = array('Top-?', 'Wieviele Plätze sollen in der Topliste angezeigt werden?');
+$GLOBALS['TL_LANG']['tl_content']['internetschach_punktplaetze'] = array('Gewertete Plätze', 'Für wieviele Plätze sollen Punkte vergeben werden?');
+
 $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'] = array
 (
 	'platz'         => 'Pl.',

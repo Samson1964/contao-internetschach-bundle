@@ -17,6 +17,7 @@
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_formular'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten,internetschach_css;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_topspieler'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen;{internetschach_topspieler_legend},internetschach_topanzahl,internetschach_punktplaetze;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
  * Fields
@@ -131,6 +132,40 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_css'] = array
 		'isBoolean'           => true
 	),
 	'sql'                     => "char(1) NOT NULL default ''"
+);
+
+// Anzahl der Topplätze
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_topanzahl'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_topanzahl'],
+	'exclude'                 => true,
+	'inputType'               => 'text',
+	'default'                 => 10,
+	'eval'                    => array
+	(
+		'tl_class'            => 'w50',
+		'mandatory'           => false,
+		'maxlength'           => 4,
+		'rgxp'                => 'numeric'
+	),
+	'sql'                     => "int(4) unsigned NOT NULL default '10'"
+);
+
+// Anzahl der bewerteten Plätze
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_punktplaetze'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_punktplaetze'],
+	'exclude'                 => true,
+	'inputType'               => 'text',
+	'default'                 => 50,
+	'eval'                    => array
+	(
+		'tl_class'            => 'w50',
+		'mandatory'           => false,
+		'maxlength'           => 4,
+		'rgxp'                => 'numeric'
+	),
+	'sql'                     => "int(4) unsigned NOT NULL default '50'"
 );
 
 /*****************************************

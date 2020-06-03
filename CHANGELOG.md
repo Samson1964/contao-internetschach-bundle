@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.4.0 (2020-06-03)
+
+* Add: Inhaltselement Topspieler
+
 ## Version 1.3.3 (2020-06-02)
 
 * Fix: Benutzernamen mit unterschiedlicher Groß- und Kleinschreibung werden bei Qualifikationszuordnung nicht erkannt
