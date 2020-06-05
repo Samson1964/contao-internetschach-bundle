@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.5.1 (2020-06-05)
+
+* Fix: Topspieler.php im templates-Verzeichnis entfernt
+
 ## Version 1.5.0 (2020-06-05)
 
 * Add: Checkbox Doppelpreise ja/nein
