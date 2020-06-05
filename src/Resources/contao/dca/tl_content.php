@@ -16,7 +16,7 @@
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_formular'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_anmeldungen'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen,internetschach_viewturniere,internetschach_viewgruppen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten,internetschach_css;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_tabelle'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_tabelle_legend},internetschach_tabelle,internetschach_spalten,internetschach_plaetze,internetschach_css;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['internetschach_topspieler'] = '{type_legend},type,headline;{internetschach_legend},internetschach;{internetschach_anmeldungen_legend},internetschach_turniere,internetschach_gruppen;{internetschach_topspieler_legend},internetschach_topanzahl,internetschach_punktplaetze;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
@@ -167,6 +167,22 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_punktplaetze'] = arra
 	),
 	'sql'                     => "int(4) unsigned NOT NULL default '50'"
 );
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_plaetze'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_plaetze'],
+	'exclude'                 => true,
+	'inputType'               => 'text',
+	'eval'                    => array
+	(
+		'tl_class'            => 'w50',
+		'mandatory'           => false,
+		'maxlength'           => 4,
+		'rgxp'                => 'numeric'
+	),
+	'sql'                     => "smallint(4) unsigned NOT NULL default '0'"
+);
+
 
 /*****************************************
  * Klasse tl_content_internetschach

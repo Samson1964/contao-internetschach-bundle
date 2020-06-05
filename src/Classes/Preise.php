@@ -93,11 +93,27 @@ class Preise extends \Backend
 											//echo $objPreis->id."<br>";
 										if($objPreis->numRows)
 										{
+											// DWZ-Kategoriepreise (hier muß die Doppelvergabe von Preisen geprüft werden!)
 											if($objAnmeldung['dwz'] < $objPreis->dwz_grenze)
 											{
-												//echo "$zeile: Platz $platz_dwz, Turnier ".$objTabellen->turnier.", Gruppe ".$objTabellen->gruppe.", Preis: ".$objPreis->name."<br>";
-												$tabelleArr[$zeile]['prices'][] = $objPreis->id;
-												$platz_dwz++;
+												// Spieler ist aus der preisfähigen Kategorie
+												if($objSerie->doppelpreise)
+												{
+													// Doppelpreise erlaubt
+													$tabelleArr[$zeile]['prices'][] = $objPreis->id;
+													$platz_dwz++;
+												}
+												else
+												{
+													// Doppelpreise nicht erlaubt
+													if(!$tabelleArr[$zeile]['prices'])
+													{
+														//echo "$zeile: Platz $platz_dwz, Turnier ".$objTabellen->turnier.", Gruppe ".$objTabellen->gruppe.", Preis: ".$objPreis->name."<br>";
+														// Bekommt nur den Preis, wenn noch kein Hauptpreis registriert ist
+														$tabelleArr[$zeile]['prices'][] = $objPreis->id;
+														$platz_dwz++;
+													}
+												}
 											}
 										}
 									}
@@ -121,7 +137,7 @@ class Preise extends \Backend
 		}
 
 		// Zurück zur Seite
-		//\Controller::redirect(str_replace('&key=preise', '', \Environment::get('request')));
+		\Controller::redirect(str_replace('&key=preise', '', \Environment::get('request')));
 	}
 
 }

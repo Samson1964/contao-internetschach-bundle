@@ -40,6 +40,7 @@ $GLOBALS['TL_LANG']['tl_internetschach']['email_sender'] = array('E-Mail-Adresse
 $GLOBALS['TL_LANG']['tl_internetschach']['email_replyto'] = array('E-Mail-Adresse Antwort an (Reply-to)', 'E-Mail-Adresse für Reply-to-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
 $GLOBALS['TL_LANG']['tl_internetschach']['email_to'] = array('E-Mail-Adresse Empfänger (To)', 'E-Mail-Adresse für To-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
 $GLOBALS['TL_LANG']['tl_internetschach']['email_export'] = array('E-Mail-Adressen für Exporte', 'E-Mail-Adressen für Exporte der Anmeldungen. Je Zeile eine Adresse. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
+$GLOBALS['TL_LANG']['tl_internetschach']['email_preise'] = array('E-Mail-Adressen für Preise-Exporte', 'E-Mail-Adressen für Exporte der Preise und Gewinner. Je Zeile eine Adresse. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_legend'] = 'DWZ-Gruppen';
 $GLOBALS['TL_LANG']['tl_internetschach']['gruppen'] = array('Gruppen', 'Liste der Gruppen');
@@ -58,6 +59,9 @@ $GLOBALS['TL_LANG']['tl_internetschach']['turniere_feldname'] = array('Feldname'
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_termin'] = array('Spieltermin', 'Spieltermin des Turniers im Format TT.MM.JJJJ HH:MM');
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_meldeschluss'] = array('Meldeschluß', 'Anmeldeschluß des Turniers im Format TT.MM.JJJJ HH:MM');
 $GLOBALS['TL_LANG']['tl_internetschach']['turniere_finale'] = array('Finale', 'Das ist das Finalturnier');
+
+$GLOBALS['TL_LANG']['tl_internetschach']['options_legend'] = 'Weitere Einstellungen';
+$GLOBALS['TL_LANG']['tl_internetschach']['doppelpreise'] = array('Doppelpreise', 'Doppelpreise erlauben');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_internetschach']['published'] = array('Veröffentlichen', 'Turnierserie veröffentlichen');

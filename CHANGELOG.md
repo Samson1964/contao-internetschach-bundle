@@ -1,5 +1,13 @@
 # Internetschach Changelog
 
+## Version 1.5.0 (2020-06-05)
+
+* Add: Checkbox Doppelpreise ja/nein
+* Change: Preis-Modul an Doppelpreismöglichkeit angepaßt
+* Add: Modul Preis-Export
+* Fix: Turniername in E-Mail, Problem mit Sonderzeichen
+* Add: Tabellen auf Top-x beschränken
+
 ## Version 1.4.1 (2020-06-03)
 
 * Fix: Anzahl der Topspieler im Inhaltselement Topspieler

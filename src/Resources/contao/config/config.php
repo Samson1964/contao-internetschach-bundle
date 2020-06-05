@@ -31,7 +31,8 @@ $GLOBALS['BE_MOD']['content']['internetschach'] = array
 	'exportXLS'            => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'getExcel'),
 	'qualifikationen'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Qualifikationen', 'Aktualisieren'),
 	'finalqualifikationen' => array('\Schachbulle\ContaoInternetschachBundle\Classes\Qualifikationen', 'FinaleAktualisieren'),
-	'preise'               => array('\Schachbulle\ContaoInternetschachBundle\Classes\Preise', 'Aktualisieren')
+	'preise'               => array('\Schachbulle\ContaoInternetschachBundle\Classes\Preise', 'Aktualisieren'),
+	'exportPreiseXLS'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\ExportPreise', 'getExcel')
 );
 
 

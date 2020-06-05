@@ -174,7 +174,7 @@ class Export extends \Backend
 
 		$objMail = new \Email();
 		$objMail->subject = 'Anmeldungen '.$objSerie->titel; // ergibt $this->strSubject
-		$objMail->text = 'Die aktuelle Liste der Anmeldungen für '.$objSerie->titel.' findest Du im Anhang!'; // ergibt $this->strHtml
+		$objMail->text = 'Die aktuelle Liste der Anmeldungen für '.html_entity_decode($objSerie->titel).' findest Du im Anhang!'; // ergibt $this->strHtml
 
 		// Absender "Name <email>" in ein Array $arrFrom aufteilen
 		preg_match('~(?:([^<]*?)\s*)?<(.*)>~', html_entity_decode($objSerie->email_sender), $arrFrom);

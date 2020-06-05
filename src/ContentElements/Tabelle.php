@@ -42,7 +42,7 @@ class Tabelle extends \ContentElement
 		{
 			$spalten = unserialize($this->internetschach_spalten); // Gewünschte Spalten von serialisiertem String in Array umwandeln
 			// Tabelle in HTML umwandeln und dabei Spalten ergänzen/entfernen
-			$content = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::TabelleToHTML($objMain, $objTabelle, $spalten);
+			$content = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::TabelleToHTML($objMain, $objTabelle, $spalten, $this->internetschach_plaetze);
 		}
 
 		// Template ausgeben

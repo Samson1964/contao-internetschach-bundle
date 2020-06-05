@@ -58,6 +58,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		),
 		'global_operations' => array
 		(
+			'exportPreiseXLS' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS'],
+				'href'                => 'key=exportPreiseXLS',
+				'icon'                => 'bundles/contaointernetschach/images/export.png',
+				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],

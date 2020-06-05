@@ -265,9 +265,10 @@ class Helper
 	 * @param $objTurnierserie  object  Objekt der Turnierserie
 	 * @param $objTabelle       object  Objekt der Tabelle
 	 * @param $spalten          array   Array mit den gewünschten Spalten
+	 * @param $anzahl           int     Anzahl der auszugebenden Plätze
 	 * @return string                   HTML-Ausgabe der Tabelle
 	 */
-	static function TabelleToHTML($objTurnierserie, $objTabelle, $spalten)
+	static function TabelleToHTML($objTurnierserie, $objTabelle, $spalten, $anzahl)
 	{
 		$tabelle = unserialize($objTabelle->importArray); // Tabelle von serialisiertem String in Array umwandeln
 		$spaltendefinition = $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'];
@@ -407,6 +408,8 @@ class Helper
 				}
 			}
 			$html .= '</tr>';
+			// Wenn max. Anzahl der Plätze erreicht ist, dann abbrechen
+			if($anzahl && $anzahl == $zeile) break;
 		}
 		
 		// Tabellenfuß schreiben
