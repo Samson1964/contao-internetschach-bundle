@@ -14,6 +14,7 @@
         "contao/core-bundle": "^4",
         "codefog/contao-haste": ">=4",
         "schachbulle/contao-helper-bundle": ">=0",
+        "phpoffice/phpspreadsheet": ">=1.11",
         "paquettg/php-html-parser": ">=2.2"
     },
     "conflict": {

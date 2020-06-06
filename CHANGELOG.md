@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.5.2 (2020-06-06)
+
+* Fix: Abhängigkeit phpoffice/phpspreadsheet hat gefehlt nach Deinstallation contao-disam-bundle
+
 ## Version 1.5.1 (2020-06-05)
 
 * Fix: Topspieler.php im templates-Verzeichnis entfernt
