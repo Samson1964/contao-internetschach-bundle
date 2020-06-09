@@ -135,7 +135,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		'tstamp' => array
 		(
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 6,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		// Name des Preises
@@ -144,6 +144,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['name'],
 			'exclude'                 => true,
 			'search'                  => true,
+			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
@@ -160,8 +161,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['platz'],
 			'exclude'                 => true,
-			'search'                  => true,
+			'search'                  => false,
 			'sorting'                 => true,
+			'filter'                  => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
@@ -178,8 +180,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['dwz_grenze'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'search'                  => false,
+			'filter'                  => true,
+			'sorting'                 => false,
 			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
@@ -196,8 +199,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['wert'],
 			'exclude'                 => true,
 			'search'                  => true,
+			'filter'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => 12,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -211,6 +215,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['turnier'],
 			'exclude'                 => true,
+			'search'                  => true,
 			'options_callback'        => array('tl_internetschach_preise', 'getTurniere'),
 			'inputType'               => 'radio',
 			'flag'                    => 11,
@@ -227,6 +232,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['gruppe'],
 			'exclude'                 => true,
+			'search'                  => true,
 			'options_callback'        => array('tl_internetschach_preise', 'getGruppen'),
 			'inputType'               => 'radio',
 			'flag'                    => 11,

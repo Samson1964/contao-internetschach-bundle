@@ -1,5 +1,13 @@
 # Internetschach Changelog
 
+## Version 1.7.0 (2020-06-09)
+
+* Neue Funktion: Spielerdaten kopieren zu den Anmeldungen
+* Sortierungen tl_internetschach_anmeldungen verbessert
+* Sortierungen/Übersetzungen tl_internetschach_spieler korrigiert
+* Sortierungen/Übersetzungen tl_internetschach_preise korrigiert
+* Sortierungen/Übersetzungen tl_internetschach_tabellen korrigiert
+
 ## Version 1.6.0 (2020-06-09)
 
 * Add: Checkbox für höherwertige Preise in tl_internetschach

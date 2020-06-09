@@ -141,13 +141,14 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		'tstamp' => array
 		(
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 6,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'turnier' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['turnier'],
 			'exclude'                 => true,
+			'sorting'                 => true,
 			'options_callback'        => array('tl_internetschach_tabellen', 'getTurniere'),
 			'inputType'               => 'radio',
 			'flag'                    => 11,
@@ -163,6 +164,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['gruppe'],
 			'exclude'                 => true,
+			'sorting'                 => true,
 			'options_callback'        => array('tl_internetschach_tabellen', 'getGruppen'),
 			'inputType'               => 'radio',
 			'flag'                    => 11,
@@ -189,6 +191,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		'importArray' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importArray'],
+			'search'                  => true,
 			'sql'                     => "blob NULL",
 		),
 		'csv' => array
@@ -256,6 +259,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		'turnierleiter' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['turnierleiter'],
+			'filter'                  => true,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(

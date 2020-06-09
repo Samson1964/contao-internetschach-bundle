@@ -39,9 +39,10 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => 4,
 			'fields'                  => array('name'),
 			'flag'                    => 3,
+			'headerFields'            => array('titel'),
 			'panelLayout'             => 'filter;sort;search,limit'
 		),
 		'label' => array
@@ -95,6 +96,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
+			),
+			'copyToAnmeldung' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung'],
+				'href'                => 'key=copyToAnmeldung',
+				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'icon'                => 'bundles/contaointernetschach/images/copy.png'
 			)
 		)
 	),
@@ -129,8 +137,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['zps'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'filter'                  => true,
+			'search'                  => false,
+			'sorting'                 => false,
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array
@@ -145,9 +154,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['mglnr'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
-			'flag'                    => 8,
+			'search'                  => false,
+			'sorting'                 => false,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -162,6 +171,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['verein'],
 			'exclude'                 => true,
 			'search'                  => true,
+			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
@@ -177,8 +187,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['status'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'filter'                  => true,
+			'search'                  => false,
+			'sorting'                 => false,
 			'flag'                    => 1,
 			'default'                 => 'A',
 			'inputType'               => 'select',
@@ -216,8 +227,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['geschlecht'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'search'                  => false,
+			'filter'                  => true,
+			'sorting'                 => false,
 			'flag'                    => 1,
 			'inputType'               => 'select',
 			'options'                 => array
@@ -238,8 +250,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['spielberechtigung'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'search'                  => false,
+			'filter'                  => true,
+			'sorting'                 => false,
 			'flag'                    => 1,
 			'default'                 => 'D',
 			'inputType'               => 'select',
@@ -263,9 +276,10 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['geburtsjahr'],
 			'exclude'                 => true,
-			'search'                  => true,
+			'search'                  => false,
+			'filter'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -279,9 +293,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['dwz'],
 			'exclude'                 => true,
-			'search'                  => true,
+			'search'                  => false,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -295,9 +309,9 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['fideElo'],
 			'exclude'                 => true,
-			'search'                  => true,
+			'search'                  => false,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -312,7 +326,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['fideTitel'],
 			'exclude'                 => true,
 			'search'                  => false,
-			'sorting'                 => true,
+			'filter'                  => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'eval'                    => array
@@ -341,6 +355,8 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['fideNation'],
 			'exclude'                 => true,
+			'filter'                  => true,
+			'sorting'                 => true,
 			'search'                  => false,
 			'inputType'               => 'text',
 			'eval'                    => array

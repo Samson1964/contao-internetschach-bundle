@@ -130,14 +130,14 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		'tstamp' => array
 		(
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 6,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		// Registrierungsdatum
 		'registerDate' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['registerDate'],
-			'flag'                    => 8,
+			'flag'                    => 6,
 			'sorting'                 => true,
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
@@ -151,9 +151,10 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['verein'],
 			'exclude'                 => true,
+			'filter'                  => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -183,8 +184,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['geschlecht'],
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'filter'                  => true,
 			'flag'                    => 1,
 			'inputType'               => 'select',
 			'options'                 => array
@@ -205,7 +205,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['geburtsjahr'],
 			'exclude'                 => true,
-			'search'                  => true,
+			'filter'                  => true,
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
@@ -243,14 +243,6 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 				'multiple'            => false,
 				'tl_class'            => 'w50'
 			),
-			//'load_callback'           => array
-			//(
-			//	array('tl_interschach_anmeldungen', 'getGruppe')
-			//),
-			//'save_callback'           => array
-			//(
-			//	array('tl_interschach_anmeldungen', 'setGruppe')
-			//),
 			'sql'                     => "blob NULL"
 		),
 		'chessbase' => array
@@ -259,7 +251,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 3,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -275,7 +267,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -289,9 +281,8 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['dwz'],
 			'exclude'                 => true,
-			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => 12,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
@@ -305,9 +296,8 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_anmeldungen']['fideElo'],
 			'exclude'                 => true,
-			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => 12,
 			'inputType'               => 'text',
 			'eval'                    => array
 			(

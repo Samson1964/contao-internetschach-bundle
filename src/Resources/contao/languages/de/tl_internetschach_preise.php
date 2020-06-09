@@ -16,11 +16,11 @@ $GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS_confirm'] = 'Wo
 
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['new'] = array('Neuer Preis', 'Neuen Preis anlegen');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['edit'] = array('Preis %s bearbeiten', 'Preis %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['copy'] = array('Preis %s kopieren', 'Preis %s kopieren');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['delete'] = array('Preis %s löschen', 'Preis %s löschen');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['toggle'] = array('Preis %s aktivieren/deaktivieren', 'Preis %s aktivieren/deaktivieren');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['show'] = array('Details zum Preis %s anzeigen', 'Details zum Preis %s anzeigen');
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['edit'] = array("Preis %s bearbeiten", "Preis %s bearbeiten");
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['copy'] = array("Preis %s kopieren", "Preis %s kopieren");
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['delete'] = array("Preis %s löschen", "Preis %s löschen");
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['toggle'] = array("Preis %s aktivieren/deaktivieren", "Preis %s aktivieren/deaktivieren");
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['show'] = array("Details zum Preis %s anzeigen", "Details zum Preis %s anzeigen");
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['name_legend'] = 'Titel';

@@ -204,4 +204,47 @@ class Export extends \Backend
 		$writer->save('php://output');
 	}
 
+	public function copyToAnmeldung()
+	{
+		if($this->Input->get('key') != 'copyToAnmeldung')
+		{
+			return '';
+		}
+
+		// Spielerdaten einlesen
+		$objSpieler = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_spieler WHERE id = ?')
+		                                      ->execute(\Input::get('id'));
+
+		if($objSpieler->numRows)
+		{
+			$zeit = time();
+			// Anmeldung vorbereiten
+			$set = array
+			(
+				'tstamp'       => $zeit,
+				'pid'          => $objSpieler->pid,
+				'playerId'     => $objSpieler->id,
+				'verein'       => $objSpieler->verein,
+				'name'         => $objSpieler->name,
+				'geschlecht'   => $objSpieler->geschlecht,
+				'geburtsjahr'  => $objSpieler->geburtsjahr,
+				'dwz'          => $objSpieler->dwz,
+				'fideElo'      => $objSpieler->fideElo,
+				'fideTitel'    => $objSpieler->fideTitel,
+				'registerDate' => $zeit,
+				'intern'       => 'Manueller Import aus tl_internetschach_spieler am '.date('d.m.Y H:i', $zeit)
+			);
+
+			// Anmeldung anlegen
+			$objInsert = \Database::getInstance()->prepare('INSERT INTO tl_internetschach_anmeldungen %s')
+			                                     ->set($set)
+			                                     ->execute();
+
+		}
+
+		// Zurück zur Seite
+		$search = array('&key=copyToAnmeldung', '&id='.$this->Input->get('id'));
+		$replace = array('', '&id='.$objSpieler->pid);
+		\Controller::redirect(str_replace($search, $replace, \Environment::get('request')));
+	}
 }
