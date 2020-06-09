@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.5.3 (2020-06-09)
+
+* Add: Feld für Wert der Preise in tl_internetschach_preise hinzugefügt
+
 ## Version 1.5.2 (2020-06-06)
 
 * Fix: Abhängigkeit phpoffice/phpspreadsheet hat gefehlt nach Deinstallation contao-disam-bundle

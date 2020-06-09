@@ -29,6 +29,7 @@ $GLOBALS['TL_LANG']['tl_internetschach_preise']['name'] = array('Titel', 'Titel/
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['preis_legend'] = 'Bedingungen';
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['platz'] = array('Platz', 'Platz, für den der Preis gilt');
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['dwz_grenze'] = array('DWZ unter ...', 'Preis gilt für DWZ unter einem bestimmten Wert');
+$GLOBALS['TL_LANG']['tl_internetschach_preise']['wert'] = array('Wert in €', 'Wert des Preises in Euro');
 
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['turniere_legend'] = 'Turnier/Gruppe';
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['turnier'] = array('Turnier', 'Turnier wählen, für das der Preis gilt');

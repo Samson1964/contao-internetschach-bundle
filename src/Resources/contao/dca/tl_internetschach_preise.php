@@ -115,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{name_legend},name;{preis_legend},platz,dwz_grenze;{turniere_legend},turnier,gruppe;{info_legend:hide},intern;{publish_legend},published'
+		'default'                     => '{name_legend},name;{preis_legend},platz,dwz_grenze,wert;{turniere_legend},turnier,gruppe;{info_legend:hide},intern;{publish_legend},published'
 	),
 
 	// Fields
@@ -189,6 +189,22 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 				'rgxp'                => 'alnum'
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
+		),
+		// Wert des Preises in Euro
+		'wert' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['wert'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 11,
+			'inputType'               => 'text',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+				'rgxp'                => 'digit'
+			),
+			'sql'                     => "decimal(10,2) NOT NULL default '0.00'"
 		),
 		// Turnier, für den der Preis gilt
 		'turnier' => array
@@ -342,6 +358,7 @@ class tl_internetschach_preise extends Backend
 		$temp .= ', '.($arrRow['dwz_grenze'] ? ' DWZ < '.$arrRow['dwz_grenze'] : 'alle Spieler');
 		$temp .= ' | <i>'.$arrRow['platz'].'. Platz</i>';
 		$temp .= ' | <b>'.$arrRow['name'].'</b>';
+		$temp .= ' | Wert: '.$arrRow['wert'].' €';
 		return $temp;
 	}
 
