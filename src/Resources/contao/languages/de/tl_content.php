@@ -38,5 +38,6 @@ $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'] = array
 	'fide-elo'      => 'Elo',
 	'email'         => 'E-Mail',
 	'titel+name'    => '(FIDE-Titel und Name)',
-	'qualification' => '(Qualifikation Finale)'
+	'qualification' => '(Qualifikation Finale)',
+	'prices'        => 'Preis'
 );

@@ -221,6 +221,39 @@ class Helper
 	}
 
 	/**
+	 * Funktion getPreis
+	 * Liefert zu einem Array von Preis-ID die Namen der Preise
+	 * @param $preiseArr        array   ID's der gewonnenen Preise
+	 * @return string                   Namen der Preise, getrennt von <br>
+	 */
+	static function getPreis($preiseArr)
+	{
+		static $Preise;
+
+		if(!$Preise)
+		{
+			// Preise einlesen
+			$objPreise = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE published = ?")
+			                                      ->execute(1);
+			if($objPreise->numRows)
+			{
+				while($objPreise->next())
+				{
+					$Preise[$objPreise->id] = $objPreise->name;
+				}
+			}
+		}
+
+		// Namen der Preise ermitteln
+		$tempArr = array();
+		foreach($preiseArr as $id)
+		{
+			$tempArr[] = $Preise[$id];
+		}
+		return implode('<br>', $tempArr);
+	}
+
+	/**
 	 * Funktion TabelleToCSV
 	 * Erstellt aus einem Tabellen-Array einen CSV-String 
 	 * @param $tabelle          array   Array mit der Tabelle, Beispiel:
@@ -305,6 +338,7 @@ class Helper
 					case 'fide-elo'     : $class[$spalte] = 'rating'; break;
 					case 'email'        : $class[$spalte] = 'email'; break;
 					case 'qualification': $class[$spalte] = 'qualifikation'; break;
+					case 'prices'       : $class[$spalte] = 'prices'; break;
 				}
 				
 				if($spalte == 'runden')
@@ -351,6 +385,9 @@ class Helper
 		$html .= '</thead>';
 		$html .= '<tbody>';
 
+		//echo "<pre>";
+		//print_r($tabelle);
+		//echo "</pre>";
 		// Tabellenkörper schreiben
 		for($zeile = 1; $zeile < count($tabelle); $zeile++)
 		{
@@ -388,6 +425,13 @@ class Helper
 						// Besondere Spalte für gekürzten Vereinsnamen
 						$html .= '<td class="'.$class[$spalte].'">';
 						$html .= \Schachbulle\ContaoHelperBundle\Classes\Helper::StringKuerzen($anmeldung['verein'], 20);
+						$html .= '</td>';
+					}
+					elseif($spalte == 'prices')
+					{
+						// Besondere Spalte für den Preis
+						$html .= '<td class="'.$class[$spalte].'">';
+						$html .= \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getPreis($tabelle[$zeile][$spalte]);
 						$html .= '</td>';
 					}
 					else 

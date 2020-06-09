@@ -62,6 +62,7 @@ $GLOBALS['TL_LANG']['tl_internetschach']['turniere_finale'] = array('Finale', 'D
 
 $GLOBALS['TL_LANG']['tl_internetschach']['options_legend'] = 'Weitere Einstellungen';
 $GLOBALS['TL_LANG']['tl_internetschach']['doppelpreise'] = array('Doppelpreise', 'Doppelpreise erlauben');
+$GLOBALS['TL_LANG']['tl_internetschach']['hoeherepreise'] = array('Höherwertige Preise', 'Höherwertige Preise vergeben');
 
 $GLOBALS['TL_LANG']['tl_internetschach']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_internetschach']['published'] = array('Veröffentlichen', 'Turnierserie veröffentlichen');

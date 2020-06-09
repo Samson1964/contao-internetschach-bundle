@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 1.6.0 (2020-06-09)
+
+* Add: Checkbox für höherwertige Preise in tl_internetschach
+* Add: Preis-Spalte in Tabellen
+* Add: DWZ-Spalte im Preise-Export
+* Preis-Modul überarbeitet
+
 ## Version 1.5.3 (2020-06-09)
 
 * Add: Feld für Wert der Preise in tl_internetschach_preise hinzugefügt

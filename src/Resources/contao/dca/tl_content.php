@@ -109,7 +109,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_spalten'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_spalten'],
 	'exclude'                 => true,
 	'inputType'               => 'checkboxWizard',
-	'options'                 => array('platz', 'cb-name', 'cb-land', 'cb-rating', 'punkte', 'wertung1', 'wertung2', 'runden', 'name', 'dwz', 'verein', 'verein_kurz', 'fide-titel', 'fide-elo', 'email', 'titel+name', 'qualification'),
+	'options'                 => array('platz', 'cb-name', 'cb-land', 'cb-rating', 'punkte', 'wertung1', 'wertung2', 'runden', 'name', 'dwz', 'verein', 'verein_kurz', 'fide-titel', 'fide-elo', 'email', 'titel+name', 'qualification', 'prices'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'],
 	'eval'                    => array
 	(

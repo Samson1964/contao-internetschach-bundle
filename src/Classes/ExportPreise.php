@@ -95,10 +95,11 @@ class ExportPreise extends \Backend
 							if($preiseArr[$x]['id'] == $preis_id)
 							{
 								$preiseArr[$x]['benutzer'] = $tabelle['tabelle'][$i]['cb-name'];
-								$anmeldung =  \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getAnmeldung(\Input::get('id'), $tabelle['tabelle'][$i]['cb-name']);
-								$preiseArr[$x]['klarname'] = $anmeldung['name'];
+								$Anmeldung =  \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getAnmeldung(\Input::get('id'), $tabelle['tabelle'][$i]['cb-name']);
+								$preiseArr[$x]['klarname'] = $Anmeldung['name'];
+								$preiseArr[$x]['dwz'] = $Anmeldung['dwz'];
 								$preiseArr[$x]['turnierplatz'] = $tabelle['tabelle'][$i]['platz'];
-								$preiseArr[$x]['email'] = $anmeldung['email'];
+								$preiseArr[$x]['email'] = $Anmeldung['email'];
 								break;
 							}
 						}
@@ -146,8 +147,8 @@ class ExportPreise extends \Backend
 		{
 			$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 		}
-		$spreadsheet->getActiveSheet()->getStyle('A1:I1')->applyFromArray($styleArray);
-		$spreadsheet->getActiveSheet()->getStyle('A2:I1000')->applyFromArray($styleArray2);
+		$spreadsheet->getActiveSheet()->getStyle('A1:J1')->applyFromArray($styleArray);
+		$spreadsheet->getActiveSheet()->getStyle('A2:J1000')->applyFromArray($styleArray2);
 		$spreadsheet->getActiveSheet()->setTitle('Preise')
 		            ->setCellValue('A1', 'Gruppe')
 		            ->setCellValue('B1', 'Turnier')
@@ -156,8 +157,9 @@ class ExportPreise extends \Backend
 		            ->setCellValue('E1', 'Preis')
 		            ->setCellValue('F1', 'Gewinner')
 		            ->setCellValue('G1', 'Klarname')
-		            ->setCellValue('H1', 'Platz')
-		            ->setCellValue('I1', 'E-Mail');
+		            ->setCellValue('H1', 'DWZ')
+		            ->setCellValue('I1', 'Platz')
+		            ->setCellValue('J1', 'E-Mail');
 
 		if($preiseArr)
 		{
@@ -172,8 +174,9 @@ class ExportPreise extends \Backend
 				            ->setCellValue('E'.$zeile, html_entity_decode($item['name']))
 				            ->setCellValue('F'.$zeile, $item['benutzer'])
 				            ->setCellValue('G'.$zeile, $item['klarname'])
-				            ->setCellValue('H'.$zeile, $item['turnierplatz'])
-				            ->setCellValue('I'.$zeile, $item['email']);
+				            ->setCellValue('H'.$zeile, $item['dwz'])
+				            ->setCellValue('I'.$zeile, $item['turnierplatz'])
+				            ->setCellValue('J'.$zeile, $item['email']);
 				$zeile++;
 			}
 		}

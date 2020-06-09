@@ -133,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array(),
-		'default'                     => '{internetschach_legend},titel,jahr;{config_legend},email_sender,email_replyto,email_to,email_export,email_preise;{gruppen_legend},gruppen;{turniere_legend},turniere;{options_legend},doppelpreise;{publish_legend},published'
+		'default'                     => '{internetschach_legend},titel,jahr;{config_legend},email_sender,email_replyto,email_to,email_export,email_preise;{gruppen_legend},gruppen;{turniere_legend},turniere;{options_legend},doppelpreise,hoeherepreise;{publish_legend},published'
 	),
 
 	// Subpalettes
@@ -420,6 +420,20 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 		'doppelpreise' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['doppelpreise'],
+			'inputType'               => 'checkbox',
+			'default'                 => false,
+			'filter'                  => true,
+			'exclude'                 => true,
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+				'isBoolean'           => true
+			),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'hoeherepreise' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['hoeherepreise'],
 			'inputType'               => 'checkbox',
 			'default'                 => false,
 			'filter'                  => true,

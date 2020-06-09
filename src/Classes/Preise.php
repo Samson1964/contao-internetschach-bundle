@@ -61,8 +61,11 @@ class Preise extends \Backend
 								$tabelleArr = unserialize($objTabellen->importArray); // Tabelle in Array umwandeln
 								// Disqualifizierte Spielernummern laden (Spielernummer = Platz + 1)
 								$disqualifiziert = \Schachbulle\ContaoHelperBundle\Classes\Helper::StringToArray($objTabellen->disqualifikation);
+
+								// Platz-Index der Preise initialisieren, bei 1 anfangen
 								$platz = 1;
 								$platz_dwz = 1;
+
 								// Turnier jetzt auswerten
 								for($zeile = 0; $zeile < count($tabelleArr); $zeile++)
 								{
@@ -73,51 +76,63 @@ class Preise extends \Backend
 									// Nur nichtdisqualifizierte Spieler berücksichtigen
 									if(!in_array($zeile + 1, $disqualifiziert))
 									{
-										// Anmeldedaten des Spielers laden
-										$objAnmeldung = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getAnmeldung($objSerie->id, $tabelleArr[$zeile]['cb-name']);
-										//print_r($objAnmeldung['dwz']);
-										// Preis suchen (Hauptpreise, ohne DWZ-Grenze)
-										$objPreis = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE pid = ? AND turnier = ? AND gruppe = ? AND platz = ? AND dwz_grenze = ? AND published = ?")
-										                                    ->execute($objSerie->id, $objTabellen->turnier, $objTabellen->gruppe, $platz, 0, 1);
-										if($objPreis->numRows)
+										// Anmeldedaten des Spielers laden, es werden nur angemeldete Spieler berücksichtigt
+										$Anmeldung = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getAnmeldung($objSerie->id, $tabelleArr[$zeile]['cb-name']);
+										if($Anmeldung)
 										{
-											//echo "$zeile: Platz $platz, Turnier ".$objTabellen->turnier.", Gruppe ".$objTabellen->gruppe.", Preis: ".$objPreis->name."<br>";
-											$tabelleArr[$zeile]['prices'][] = $objPreis->id;
-											$platz++;
-										}
-										// Preis suchen (DWZ-Preise)
-										$objPreis = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE pid = ? AND turnier = ? AND gruppe = ? AND platz = ? AND dwz_grenze = ? AND published = ?")
-										                                    ->execute($objSerie->id, $objTabellen->turnier, $objTabellen->gruppe, $platz_dwz, $gruppe['dwz_kategoriegrenze'], 1);
-											//echo $gruppe['dwz_kategoriegrenze']." - ";
-											//echo $objAnmeldung['dwz']." - ";
-											//echo $objPreis->id."<br>";
-										if($objPreis->numRows)
-										{
-											// DWZ-Kategoriepreise (hier muß die Doppelvergabe von Preisen geprüft werden!)
-											if($objAnmeldung['dwz'] < $objPreis->dwz_grenze)
+											// Nächsten Hauptpreis ermitteln
+											$objHauptpreis = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE pid = ? AND turnier = ? AND gruppe = ? AND platz = ? AND dwz_grenze = ? AND published = ?")
+											                                         ->limit(1)
+											                                         ->execute($objSerie->id, $objTabellen->turnier, $objTabellen->gruppe, $platz, 0, 1);
+											// Nächsten Nebenpreis ermitteln
+											$objNebenpreis = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE pid = ? AND turnier = ? AND gruppe = ? AND platz = ? AND dwz_grenze = ? AND published = ?")
+											                                         ->limit(1)
+											                                         ->execute($objSerie->id, $objTabellen->turnier, $objTabellen->gruppe, $platz_dwz, $gruppe['dwz_kategoriegrenze'], 1);
+											
+											if($objHauptpreis->numRows && $objNebenpreis->numRows && $Anmeldung['dwz'] < $objNebenpreis->dwz_grenze)
 											{
-												// Spieler ist aus der preisfähigen Kategorie
+												// Hauptpreis vorhanden, Nebenpreis vorhanden, Anmelde-DWZ unterhalb DWZ-Grenze
 												if($objSerie->doppelpreise)
 												{
-													// Doppelpreise erlaubt
-													$tabelleArr[$zeile]['prices'][] = $objPreis->id;
+													// Doppelpreise erlaubt, Spieler bekommt beide Preise
+													$tabelleArr[$zeile]['prices'][] = $objHauptpreis->id;
+													$platz++;
+													$tabelleArr[$zeile]['prices'][] = $objNebenpreis->id;
 													$platz_dwz++;
 												}
-												else
+												elseif($objSerie->hoeherepreise)
 												{
-													// Doppelpreise nicht erlaubt
-													if(!$tabelleArr[$zeile]['prices'])
+													// Nur ein Preis möglich, nämlich der höhere
+													if($objHauptpreis->wert < $objNebenpreis->wert)
 													{
-														//echo "$zeile: Platz $platz_dwz, Turnier ".$objTabellen->turnier.", Gruppe ".$objTabellen->gruppe.", Preis: ".$objPreis->name."<br>";
-														// Bekommt nur den Preis, wenn noch kein Hauptpreis registriert ist
-														$tabelleArr[$zeile]['prices'][] = $objPreis->id;
+														// Nebenpreis ist höherwertiger als der Hauptpreis
+														$tabelleArr[$zeile]['prices'][] = $objNebenpreis->id;
 														$platz_dwz++;
 													}
+													else
+													{
+														// Hauptpreis nehmen, da Nebenpreis nicht höherwertiger
+														$tabelleArr[$zeile]['prices'][] = $objHauptpreis->id;
+														$platz++;
+													}
 												}
+											}
+											elseif(!$objHauptpreis->numRows && $objNebenpreis->numRows && $Anmeldung['dwz'] < $objNebenpreis->dwz_grenze)
+											{
+												// Hauptpreis nicht vorhanden, Nebenpreis vorhanden, Anmelde-DWZ unterhalb DWZ-Grenze
+												$tabelleArr[$zeile]['prices'][] = $objNebenpreis->id;
+												$platz_dwz++;
+											}
+											elseif($objHauptpreis->numRows)
+											{
+												// Hauptpreis vorhanden, Nebenpreis zu vernachlässigen
+												$tabelleArr[$zeile]['prices'][] = $objHauptpreis->id;
+												$platz++;
 											}
 										}
 									}
 								}
+
 								//echo "<pre>";
 								//print_r($tabelleArr);
 								//echo "</pre>";
