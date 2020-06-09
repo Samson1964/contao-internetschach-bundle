@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.7.1 (2020-06-09)
+
+* Fix tl_internetschach_spieler: child_record_callback mit label_callback verwechselt
+
 ## Version 1.7.0 (2020-06-09)
 
 * Neue Funktion: Spielerdaten kopieren zu den Anmeldungen

@@ -43,13 +43,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 			'fields'                  => array('name'),
 			'flag'                    => 3,
 			'headerFields'            => array('titel'),
-			'panelLayout'             => 'filter;sort;search,limit'
+			'panelLayout'             => 'filter;sort;search,limit',
+			'child_record_callback'   => array('tl_internetschach_spieler', 'listSpieler')
 		),
 		'label' => array
 		(
 			'fields'                  => array('name'),
-			'format'                  => '%s',
-			'label_callback'          => array('tl_internetschach_spieler', 'listSpieler')
+			'format'                  => '%s'
 		),
 		'global_operations' => array
 		(
