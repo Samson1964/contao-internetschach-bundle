@@ -80,6 +80,9 @@ class Preise extends \Backend
 										$Anmeldung = \Schachbulle\ContaoInternetschachBundle\Classes\Helper::getAnmeldung($objSerie->id, $tabelleArr[$zeile]['cb-name']);
 										if($Anmeldung)
 										{
+											//echo "<pre>";
+											//print_r($Anmeldung);
+											//echo "</pre>";
 											// Nächsten Hauptpreis ermitteln
 											$objHauptpreis = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE pid = ? AND turnier = ? AND gruppe = ? AND platz = ? AND dwz_grenze = ? AND published = ?")
 											                                         ->limit(1)
@@ -89,6 +92,15 @@ class Preise extends \Backend
 											                                         ->limit(1)
 											                                         ->execute($objSerie->id, $objTabellen->turnier, $objTabellen->gruppe, $platz_dwz, $gruppe['dwz_kategoriegrenze'], 1);
 											
+											//echo "<pre>";
+											//echo 'Hauptpreis: ';
+											//print_r($objHauptpreis->numRows); echo ' / Nebenpreis: ';
+											//print_r($objNebenpreis->numRows); echo ' / DWZ: ';
+											//print_r($Anmeldung['dwz']); echo ' / Grenze: ';
+											//print_r($objNebenpreis->dwz_grenze); echo ' / Doppelpreise: ';
+											//print_r($objSerie->doppelpreise); echo ' / Höhere Preise: ';
+											//print_r($objSerie->hoeherepreise);
+											//echo "</pre>";
 											if($objHauptpreis->numRows && $objNebenpreis->numRows && $Anmeldung['dwz'] < $objNebenpreis->dwz_grenze)
 											{
 												// Hauptpreis vorhanden, Nebenpreis vorhanden, Anmelde-DWZ unterhalb DWZ-Grenze
@@ -115,6 +127,12 @@ class Preise extends \Backend
 														$tabelleArr[$zeile]['prices'][] = $objHauptpreis->id;
 														$platz++;
 													}
+												}
+												else
+												{
+													// Hauptpreis nehmen
+													$tabelleArr[$zeile]['prices'][] = $objHauptpreis->id;
+													$platz++;
 												}
 											}
 											elseif(!$objHauptpreis->numRows && $objNebenpreis->numRows && $Anmeldung['dwz'] < $objNebenpreis->dwz_grenze)

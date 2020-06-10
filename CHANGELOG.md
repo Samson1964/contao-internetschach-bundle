@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.7.2 (2020-06-10)
+
+* Fix: Fehler Preise.php, Wertungspreisträger wurden bei Hauptpreisen nicht berücksichtigt
+
 ## Version 1.7.1 (2020-06-09)
 
 * Fix tl_internetschach_spieler: child_record_callback mit label_callback verwechselt
