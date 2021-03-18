@@ -31,18 +31,29 @@ class Helper
 		}
 
 		// Gruppenzugehörigkeit prüfen
-		foreach($gruppen as $gruppe)
+		if(!empty($gruppen[0]['name']))
 		{
-			if($dwz >= $gruppe['dwz_von'] && $dwz <= $gruppe['dwz_bis'])
+			// Es ist mind. eine Gruppe definiert
+			foreach($gruppen as $gruppe)
 			{
-				// Gruppe gefunden
-				if($feldname) $return = $gruppe['feldname'];
-				else $return =  $gruppe['name'];
-				return $return;
+				if($dwz >= $gruppe['dwz_von'] && $dwz <= $gruppe['dwz_bis'])
+				{
+					// Gruppe gefunden
+					if($feldname) $return = $gruppe['feldname'];
+					else $return =  $gruppe['name'];
+					return $return;
+				}
 			}
 		}
+		else
+		{
+			// Es sind keine Gruppen definiert
+			return '';
+		}
+
 		if($feldname) $return =  '';
 		else $return =  'nicht spielberechtigt';
+
 		return $return;
 	}
 

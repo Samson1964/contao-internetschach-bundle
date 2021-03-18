@@ -35,6 +35,9 @@ $GLOBALS['TL_LANG']['tl_internetschach']['internetschach_legend'] = 'Titel und J
 $GLOBALS['TL_LANG']['tl_internetschach']['titel'] = array('Titel', 'Titel der Turnierserie');
 $GLOBALS['TL_LANG']['tl_internetschach']['jahr'] = array('Jahr', 'Jahr der Turnierserie');
 
+$GLOBALS['TL_LANG']['tl_internetschach']['jumpto_legend'] = 'Formular-Weiterleitung';
+$GLOBALS['TL_LANG']['tl_internetschach']['jumpTo'] = array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher nach dem Abschicken des Meldeformulars weitergeleitet werden. Leerlassen, wenn die Seite mit dem Formular verwendet werden soll.');
+
 $GLOBALS['TL_LANG']['tl_internetschach']['config_legend'] = 'Administration';
 $GLOBALS['TL_LANG']['tl_internetschach']['email_sender'] = array('E-Mail-Adresse Absender (From)', 'E-Mail-Adresse für From-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');
 $GLOBALS['TL_LANG']['tl_internetschach']['email_replyto'] = array('E-Mail-Adresse Antwort an (Reply-to)', 'E-Mail-Adresse für Reply-to-Eintrag. Angaben mit Namen in der Form "Name &lt;Adresse&gt;" möglich.');

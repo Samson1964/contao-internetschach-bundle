@@ -31,6 +31,8 @@ class Spielerliste
 
 	public function run()
 	{
+		$startzeit = microtime(true); // Startzeit
+
 		$turnierserie = \Input::get('pid');
 		$search = str_replace(', ', ',', \Input::get('q')); // Leerzeichen nach Komma entfernen
 
@@ -38,12 +40,20 @@ class Spielerliste
 		$objSerie = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach WHERE id = ?")
 		                                    ->execute($turnierserie);
 
-		// Höchste zulässige DWZ suchen
-		$daten = unserialize($objSerie->gruppen);
-		$dwz = 0;
-		foreach($daten as $item)
+		// HÃ¶chste zulÃ¤ssige DWZ suchen, wenn es DWZ-Gruppen gibt
+		$gruppen = unserialize($objSerie->gruppen);
+		$dwz_max = 0;
+		if(!empty($gruppen[0]['name']))
 		{
-			if($item['dwz_bis'] > $dwz) $dwz = $item['dwz_bis'];
+			// Es gibt DWZ-Gruppen
+			foreach($gruppen as $item)
+			{
+				if($item['dwz_bis'] > $dwz_max) $dwz_max = $item['dwz_bis'];
+			}
+		}
+		else
+		{
+			$dwz_max = 4000; // Maximum-DWZ hochsetzen, da keine Gruppen definiert sind
 		}
 
 		$ausgabeArr = array();
@@ -54,7 +64,7 @@ class Spielerliste
 
 				// Cache initialisieren
 				$cache = new \Schachbulle\ContaoHelperBundle\Classes\Cache('Internetschach');
-				$cache->eraseExpired(); // Cache aufräumen, abgelaufene Schlüssel löschen
+				$cache->eraseExpired(); // Cache aufrÃ¤umen, abgelaufene SchlÃ¼ssel lÃ¶schen
 				$cachekey = strtolower($search);
 
 				if($cache->isCached($cachekey))
@@ -65,8 +75,8 @@ class Spielerliste
 				else
 				{
 					$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? AND dwz <= ? ORDER BY name ASC")
-					                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz);
-					// Suchbegriff als Erstes zurückgeben
+					                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz_max);
+					// Suchbegriff als Erstes zurÃ¼ckgeben
 					$ausgabeArr[] = array
 					(
 						'id'   => 0,
@@ -84,6 +94,7 @@ class Spielerliste
 						}
 						// Daten im Cache speichern
 						$cachetime = 3600 * 48; // 48 Stunden
+						//$cachetime = 0 * 48; // 48 Stunden
 						$cache->store($cachekey, $ausgabeArr, $cachetime);
 					}
 				}
@@ -99,7 +110,13 @@ class Spielerliste
 			}
 		}
 
+		$stopzeit = microtime(true); // Stopzeit
+		// Auswertung
+		$laufzeit = ($stopzeit-$startzeit); // Berechnung
+		$laufzeit = substr($laufzeit, 0, 7); // Auf 5 Stellen begrenzen
+		//echo "Scriptlaufzeit: ".$laufzeit." Sekunden<br>"; // Ausgabe
 		echo json_encode($ausgabeArr);
+
 	}
 }
 

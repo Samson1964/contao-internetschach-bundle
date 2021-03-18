@@ -33,32 +33,45 @@ class Formular extends \ContentElement
 		// Javascript generieren
 		$javascript ='
 <script type="text/javascript">
-  $("select.select-box").chosen();
-  $(\'.chosen-search input\').autocomplete({
-    delay: 500,
-    minLength: 2,
-    autoFocus: false,
-    position: { my : "right top", at: "right bottom" },
-    source: function(request, response) {
-      $.ajax({
-        url: "bundles/contaointernetschach/Spielerliste.php?pid='.$this->internetschach.'&q="+request.term,
-        dataType: "json",
-        success: function(data) {
-          $(\'select.select-box\').empty();
-          response($.map(data, function(item) {
-            $(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
-          }));
-          $("select.select-box").trigger("chosen:updated");
-          $(".chosen-search input").val(request.term);
-        }
-      });
-    }
-  });
+$(document).ready(function()
+{
+	$("select.select-box").chosen();
+	$(\'.chosen-search input\').autocomplete({
+		delay: 500,
+		minLength: 2,
+		autoFocus: false,
+		position: { my : "right top", at: "right bottom" },
+		source: function(request, response) {
+			$.ajax({
+				url: "bundles/contaointernetschach/Spielerliste.php?pid='.$this->internetschach.'&q="+request.term,
+				dataType: "json",
+				success: function(data) {
+					$(\'select.select-box\').empty();
+					response($.map(data, function(item) {
+						$(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
+					}));
+					$("select.select-box").trigger("chosen:updated");
+					$(".chosen-search input").val(request.term);
+				}
+			});
+		}
+	});
+
+	$("input#chessbase").change(function()
+	{
+		$.ajax({
+			url: "bundles/contaointernetschach/Check.php?cbname="+$("#chessbase").val()+"&playerid="+$("#playerid option:selected").val(),
+			success: function(data) {
+				$("#chessbase_check").html(data);
+			}
+		});
+	});
+});
 </script>
 ';
 		// Turnierserie einlesen
 		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
-			                               ->execute($this->internetschach);
+		                                   ->execute($this->internetschach);
 
 		$content = '';
 		$form = new \Schachbulle\ContaoHelperBundle\Classes\Form();
@@ -88,7 +101,7 @@ class Formular extends \ContentElement
 		$form->addField(array
 		(
 			'typ'       => 'select',
-			'name'      => 'name',
+			'name'      => 'playerid',
 			'label'     => 'Spieler suchen und wählen',
 			'class'     => 'select-box',
 			'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen bis die Autovervollständigung aktiv wird'),
@@ -113,11 +126,18 @@ class Formular extends \ContentElement
 			'label'     => 'ChessBase-Benutzername',
 			'mandatory' => true
 		));
+		// Zeigt Hinweise von der Prüfung des ChessBase-Namens an
 		$form->addField(array
 		(
 			'typ'       => 'explanation',
-			'label'     => 'Sie können mehrere Benutzernamen mit Komma trennen.'
+			'name'      => 'chessbase_check',
+			'label'     => ''
 		));
+		//$form->addField(array
+		//(
+		//	'typ'       => 'explanation',
+		//	'label'     => 'Sie können mehrere Benutzernamen mit Komma trennen.'
+		//));
 		$turniere = array();
 		if($objMain->numRows)
 		{
@@ -160,12 +180,22 @@ class Formular extends \ContentElement
 		if($form->validate())
 		{
 			$arrData = $form->fetchAll();
-			if($arrData['name'])
+			if($arrData['playerid'])
 			{
 				self::saveAnmeldung($arrData); // Daten sichern
-				// Seite neu laden
-				//$this->Template->content = $content.$javascript;
-				header('Location:'.$objPage->alias.'.html?send=1');
+				
+				// Seite neu laden mit Meldebestätigung
+				if($objMain->jumpTo)
+				{
+					// Spezielle Weiterleitungsseite wurde festgelegt
+					$zielseite = \Controller::generateFrontendUrl(\PageModel::findByPK($objMain->jumpTo)->row());
+					\Controller::redirect($zielseite);
+				}
+				else
+				{
+					// Formularseite mit Fertigmeldung neu laden
+					\Controller::redirect($objPage->alias.'.html?send=1');
+				}
 			}
 			else
 			{
@@ -198,7 +228,7 @@ class Formular extends \ContentElement
 		//print_r($arrData);
 
 		// Spielerdaten laden, wenn ID im Feld name größer 0
-		if($arrData['name'])
+		if($arrData['playerid'])
 		{
 			// Daten der Turnierserie laden
 			$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
@@ -207,11 +237,11 @@ class Formular extends \ContentElement
 			// Anmeldung laden, wenn playerId = name (für Prüfung Mehrfachanmeldung)
 			$objAnmeldung = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_anmeldungen WHERE playerId = ?')
 			                                        ->limit(1)
-			                                        ->execute($arrData['name']);
+			                                        ->execute($arrData['playerid']);
 
 			// Spielerdaten suchen
 			$objPlayer = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_spieler WHERE id = ?')
-			                                     ->execute($arrData['name']);
+			                                     ->execute($arrData['playerid']);
 			if($objPlayer->numRows)
 			{
 				$spieler = array
@@ -251,7 +281,7 @@ class Formular extends \ContentElement
 			'email'        => $arrData['email'],
 			'chessbase'    => $arrData['chessbase'],
 			'bemerkungen'  => $arrData['bemerkungen'],
-			'playerId'     => $arrData['name'],
+			'playerId'     => $arrData['playerid'],
 			'verein'       => $spieler['verein'],
 			'name'         => $spieler['name'],
 			'geschlecht'   => $spieler['geschlecht'],
@@ -386,7 +416,7 @@ class Formular extends \ContentElement
 						$text .= 'E-Mail: '.$value."\n";
 						break;
 					case 'chessbase':
-						$text .= 'ChessBase-Benutzername(n): '.$value."\n";
+						$text .= 'ChessBase-Benutzername: '.$value."\n";
 						break;
 					case 'bemerkungen':
 						$text .= 'Bemerkungen: '.$bemerkungen."\n";
@@ -412,7 +442,12 @@ class Formular extends \ContentElement
 						$text .= 'Gemeldete Turniere: '.implode(', ', $turniere)."\n";
 						break;
 					case 'gruppe':
-						$text .= 'Sie sind spielberechtigt für: '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'])."\n";
+						// Nur wenn Gruppen vorhanden sind eintragen
+						$gruppen = unserialize($objMain->gruppen);
+						if($gruppen[0]['name'])
+						{
+							$text .= 'Sie sind spielberechtigt für: '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'])."\n";
+						}
 						break;
 					default:
 				}

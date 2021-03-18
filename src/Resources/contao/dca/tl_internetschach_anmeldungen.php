@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_internetschach',
-		'switchToEdit'                => true, 
+		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'sql' => array
 		(
@@ -42,14 +42,16 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'mode'                    => 4,
 			'fields'                  => array('name'),
 			'flag'                    => 3,
+			'disableGrouping'         => false,
 			'headerFields'            => array('titel'),
 			'panelLayout'             => 'filter;sort;search,limit',
 			'child_record_callback'   => array('tl_internetschach_anmeldungen', 'listSpieler')
 		),
 		'label' => array
 		(
-			'fields'                  => array('name'),
-			'format'                  => '%s',
+			'fields'                  => array('name', 'geburtsjahr', 'dwz', 'chessbase', 'gruppe', 'turniere', 'bemerkungen'),
+			//'label_callback'          => array('tl_internetschach_anmeldungen', 'myLabelCallback'),
+			'showColumns'             => true
 		),
 		'global_operations' => array
 		(
@@ -194,8 +196,8 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			),
 			'eval'                    => array
 			(
-				'mandatory'           => false, 
-				'maxlength'           => 1, 
+				'mandatory'           => false,
+				'maxlength'           => 1,
 				'tl_class'            => 'w50',
 				'includeBlankOption'  => true,
 			),
@@ -317,8 +319,8 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
-				'mandatory'           => false, 
-				'maxlength'           => 3, 
+				'mandatory'           => false,
+				'maxlength'           => 3,
 				'tl_class'            => 'w50',
 			),
 			'sql'                     => "varchar(3) NOT NULL default ''"
@@ -329,7 +331,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'explanation'             => 'insertTags', 
+			'explanation'             => 'insertTags',
 			'sql'                     => "text NULL"
 		),
 		'intern' => array
@@ -338,7 +340,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_anmeldungen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'textarea',
-			'explanation'             => 'insertTags', 
+			'explanation'             => 'insertTags',
 			'sql'                     => "text NULL"
 		),
 		'checked' => array
@@ -424,9 +426,9 @@ class tl_internetschach_anmeldungen extends \Backend
 			}
 			$this->redirect($backlink.'?act=error');
 		}
-		
+
 		$this->createInitialVersion('tl_internetschach_anmeldungen', $intId);
-		
+
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_internetschach_anmeldungen']['fields']['published']['save_callback']))
 		{
@@ -436,7 +438,7 @@ class tl_internetschach_anmeldungen extends \Backend
 				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
 			}
 		}
-		
+
 		// Update the database
 		$this->Database->prepare("UPDATE tl_internetschach_anmeldungen SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);
@@ -450,15 +452,16 @@ class tl_internetschach_anmeldungen extends \Backend
 	 */
 	public function listSpieler($arrRow)
 	{
-		if($arrRow['checked']) $container = '<span style="color:#00791F">';
-		else $container = '<span style="color:#970000">';
+
+		if($arrRow['checked']) $container = '<div class="tl_content_left" style="display:flex; color:#00791F">';
+		else $container = '<div class="tl_content_left" style="display:flex; color:#970000">';
 
 		$temp = $container;
-		$temp .= $arrRow['name'] ? $arrRow['name'] : '- ohne Name -';
-		if($arrRow['geburtsjahr']) $temp .= ' (*'.$arrRow['geburtsjahr'].')';
-		if($arrRow['dwz']) $temp .= ' DWZ '.$arrRow['dwz'];
-		if($arrRow['verein']) $temp .= ' | '.$arrRow['verein'];
-		return $temp.'</span>';
+		$temp .= '<div style="width:200px;">'.($arrRow['name'] ? $arrRow['name'] : '- ohne Name -').'</div>'; // Name
+		$temp .= '<div style="width:80px;">'.($arrRow['geburtsjahr'] ? '*'.$arrRow['geburtsjahr'] : '').'</div>'; // Geburtsjahr
+		$temp .= '<div style="width:120px;">'.($arrRow['dwz'] ? 'DWZ '.$arrRow['dwz'] : '').'</div>'; // DWZ
+		$temp .= '<div style="width:300px;">'.($arrRow['verein'] ? $arrRow['verein'] : '').'</div>'; // Verein
+		return $temp.'</div>';
 	}
 
 	public function getTurniere(DataContainer $dc)

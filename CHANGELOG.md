@@ -1,5 +1,13 @@
 # Internetschach Changelog
 
+## Version 1.8.0 (2021-03-18)
+
+* Change: BE-Liste Anmeldungen mit Spaltenlayout
+* Fix: Meldeformular nur ein ChessBase-Name möglich
+* Fix: public/Spielerliste.php - wenn keine Wertungsgruppen definiert sind, dann in Abfrage nicht berücksichtigen
+* Add: Prüfung ChessBase-Name im Meldeformular ContentElements/Formular.php
+* Add: Weiterleitungsseite für das Absenden des Meldeformulars (in tl_internetschach)
+
 ## Version 1.7.2 (2020-06-10)
 
 * Fix: Fehler Preise.php, Wertungspreisträger wurden bei Hauptpreisen nicht berücksichtigt
