@@ -77,11 +77,11 @@ class Spielerliste
 					$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE published = ? AND pid = ? AND status = ? AND name LIKE ? AND dwz <= ? ORDER BY name ASC")
 					                                  ->execute(1, $turnierserie, 'A', "%$search%", $dwz_max);
 					// Suchbegriff als Erstes zurückgeben
-					$ausgabeArr[] = array
-					(
-						'id'   => 0,
-						'name' => $search
-					);
+					//$ausgabeArr[] = array
+					//(
+					//	'id'   => 0,
+					//	'text' => $search
+					//);
 					if($player->numRows)
 					{
 						while($player->next())
@@ -89,7 +89,7 @@ class Spielerliste
 							$ausgabeArr[] = array
 							(
 								'id'   => $player->id,
-								'name' => $player->name.' ('.($player->dwz ? 'DWZ '.$player->dwz : 'ohne DWZ').', '.$player->verein.') - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($turnierserie, $player->dwz)
+								'text' => $player->name.' ('.($player->dwz ? 'DWZ '.$player->dwz : 'ohne DWZ').', '.$player->verein.') - '.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($turnierserie, $player->dwz)
 							);
 						}
 						// Daten im Cache speichern
@@ -102,11 +102,11 @@ class Spielerliste
 			else
 			{
 				// Suchstring zu kurz
-				$ausgabeArr[] = array
-				(
-					'id'   => 0,
-					'name' => $search
-				);
+				//$ausgabeArr[] = array
+				//(
+				//	'id'   => 0,
+				//	'text' => $search
+				//);
 			}
 		}
 
@@ -115,7 +115,7 @@ class Spielerliste
 		$laufzeit = ($stopzeit-$startzeit); // Berechnung
 		$laufzeit = substr($laufzeit, 0, 7); // Auf 5 Stellen begrenzen
 		//echo "Scriptlaufzeit: ".$laufzeit." Sekunden<br>"; // Ausgabe
-		echo json_encode($ausgabeArr);
+		echo json_encode(array('results' => $ausgabeArr));
 
 	}
 }

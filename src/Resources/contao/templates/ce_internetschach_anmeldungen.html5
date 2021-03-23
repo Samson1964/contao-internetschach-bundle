@@ -3,5 +3,6 @@
 <?php $this->block('content'); ?>
 
 <?= $this->content ?>
+<?= $this->pagination ?>
 
 <?php $this->endblock(); ?>

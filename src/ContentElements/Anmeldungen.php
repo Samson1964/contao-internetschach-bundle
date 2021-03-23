@@ -71,6 +71,27 @@ class Anmeldungen extends \ContentElement
 			$content .= '</table>';
 		}
 
+		// Paginate the result of not randomly sorted (see #8033)
+		if($this->perPage > 0)
+		{
+			// Get the current page
+			$id = 'page_g' . $this->id;
+			$page = \Input::get($id) ? 1 : 3;
+        //
+		//	// Do not index or cache the page if the page number is outside the range
+		//	if ($page < 1 || $page > max(ceil($total/$this->perPage), 1))
+		//	{
+		//		throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
+		//	}
+        //
+		//	// Set limit and offset
+		//	$offset = ($page - 1) * $this->perPage;
+		//	$limit = min($this->perPage + $offset, $total);
+        //
+		//	$objPagination = new Pagination($total, $this->perPage, Config::get('maxPaginationLinks'), $id);
+		//	$this->Template->pagination = $objPagination->generate("\n  ");
+		}
+
 		// Template ausgeben
 		$this->Template = new \FrontendTemplate($this->strTemplate);
 		$this->Template->class = 'ce_internetschach';
@@ -96,13 +117,20 @@ class Anmeldungen extends \ContentElement
 
 		// Gemeldete Gruppe in anzuzeigende Gruppen suchen
 		$foundGruppe = false;
-		foreach($this->view_gruppen as $gruppe)
+		if($this->view_gruppen)
 		{
-			if($gruppe == $gemeldete_gruppe)
+			foreach($this->view_gruppen as $gruppe)
 			{
-				$foundGruppe = true;
-				break;
+				if($gruppe == $gemeldete_gruppe)
+				{
+					$foundGruppe = true;
+					break;
+				}
 			}
+		}
+		else
+		{
+			$foundGruppe = true;
 		}
 
 		if($foundTurnier && $foundGruppe) return true;

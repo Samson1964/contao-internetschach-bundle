@@ -6,6 +6,7 @@ class Helper
 {
 
 	var $anmeldungenArray = array();
+	var $gruppen = array(); // Enthält die Gruppen einer Turnierserie
 
 	/**
 	 * Funktion Gruppenzuordnung
@@ -245,7 +246,7 @@ class Helper
 		{
 			// Preise einlesen
 			$objPreise = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_preise WHERE published = ?")
-			                                      ->execute(1);
+			                                     ->execute(1);
 			if($objPreise->numRows)
 			{
 				while($objPreise->next())
@@ -489,4 +490,121 @@ class Helper
 		}
 		return $array;
 	}
+
+	/**
+	 * Funktion ChessbaseCheck
+	 * Fragt die ChessBase-API nach dem Status des Benutzernamens ab
+	 * @param $benutzername    string   Benutzername
+	 * @param $spielerId       integer  ID des Spielers in tl_internetschach_spieler
+	 * @param $code            string   siehe return
+	 * @return                 array    Wenn $code = Nummer, dann keine Auswertung der ersten 2 Parameter
+	 *                                  array
+	 *                                  (
+	 *                                    'code'  => $code,
+	 *                                    'text'  => 'Hinweistext',
+	 *                                    'error' => true/false
+	 *                                  )
+	 * @return                 array    Wenn $code = false (Standard), dann Auswertung der ersten 2 Parameter
+	 *                                  array
+	 *                                  (
+	 *                                    'code'  => 1/2/3/4/5,
+	 *                                    'text'  => 'Hinweistext',
+	 *                                    'error' => true/false
+	 *                                  )
+	 *
+	 * {
+	 *  "account":"Samson2",
+	 *  "last":"Hoppe",
+	 *  "first":"Frank",
+	 *  "pic":"https://users.chessbase.com:8081/Pics/Default/S/Samson2.jpg",
+	 *  "success":true,
+	 *  "online":false
+	 * }
+	 */
+	static function ChessbaseCheck($benutzername, $spielerId, $code = false)
+	{
+		if($code == false && $benutzername)
+		{
+			// Benutzername prüfen, wenn vorhanden
+			$response = file_get_contents('https://play.chessbase.com/de/info?account='.rawurlencode($benutzername));
+			$chessbase = json_decode($response);
+
+			if($chessbase->success)
+			{
+				// Benutzername vorhanden, realen Namen laden
+				if($spielerId)
+				{
+					// Spieler laden
+					$player = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_spieler WHERE id = ?")
+					                                  ->execute($spielerId);
+					if($player->numRows)
+					{
+						$cbkontoname = $chessbase->last.','.$chessbase->first;
+						if($player->name == $cbkontoname)
+						{
+							$code = 3;
+						}
+						else
+						{
+							$code = 4;
+						}
+					}
+					else
+					{
+						$code = 5;
+					}
+				}
+				else
+				{
+					// Es wurde noch kein Spieler ausgewählt
+					$code = 2;
+				}
+			}
+			else
+			{
+				// Benutzername nicht vorhanden
+				$code = 1;
+			}
+		}
+
+		if($code)
+		{
+			// Code wurde übergeben, Array zusammenbauen
+			switch($code)
+			{
+				case 1:
+					$text = 'ChessBase-Benutzername nicht gefunden!';
+					$error = true;
+					break;
+				case 2:
+					$text = 'Kein Spieler im Formular ausgewählt!';
+					$error = true;
+					break;
+				case 3:
+					$text = 'ChessBase-Benutzername gefunden! Realer Name im ChessBase-Konto okay.';
+					$error = false;
+					break;
+				case 4:
+					$text = 'ChessBase-Benutzername gefunden! Realer Name im ChessBase-Konto weicht ab: '.$cbkontoname;
+					$text = 'ChessBase-Benutzername gefunden! Realer Name im ChessBase-Konto weicht ab.';
+					$error = true;
+					break;
+				case 5:
+					$text = 'Spieler im Formular konnte nicht gefunden werden!';
+					$error = true;
+					break;
+				default:
+			}
+		}
+
+		// Ergebnis zurückgeben
+		return array
+		(
+			'code'  => $code,
+			'text'  => $text,
+			'error' => $error
+		);
+
+	}
+
 }

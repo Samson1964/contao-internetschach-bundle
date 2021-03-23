@@ -30,32 +30,67 @@ class Formular extends \ContentElement
 	{
 		global $objPage;
 
+		// Headerdateien einbinden
+		$GLOBALS['TL_CSS'][] = 'bundles/contaointernetschach/select2/select2.min.css';
+		$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/contaointernetschach/select2/select2.min.js';
+
 		// Javascript generieren
 		$javascript ='
 <script type="text/javascript">
 $(document).ready(function()
 {
-	$("select.select-box").chosen();
-	$(\'.chosen-search input\').autocomplete({
-		delay: 500,
-		minLength: 2,
-		autoFocus: false,
-		position: { my : "right top", at: "right bottom" },
-		source: function(request, response) {
-			$.ajax({
-				url: "bundles/contaointernetschach/Spielerliste.php?pid='.$this->internetschach.'&q="+request.term,
-				dataType: "json",
-				success: function(data) {
-					$(\'select.select-box\').empty();
-					response($.map(data, function(item) {
-						$(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
-					}));
-					$("select.select-box").trigger("chosen:updated");
-					$(".chosen-search input").val(request.term);
+	$("select.select-box").select2({
+		minimumInputLength: 2,
+		placeholder: "Wählen Sie einen Spieler ...",
+		language: {
+			errorLoading: function () {
+				return "Die Ergebnisse konnten nicht geladen werden.";
+			},
+			inputTooShort: function (args) {
+				var remainingChars = args.minimum - args.input.length;
+				return "Bitte " + remainingChars + " Zeichen mehr eingeben";
+			},
+			noResults: function () {
+				return "Keine Übereinstimmungen gefunden";
+			}
+		},
+		//delay: 250,
+		ajax: {
+			url: "bundles/contaointernetschach/Spielerliste.php",
+			dataType: "json",
+			data: function (params) {
+				var query = {
+					q: params.term,
+					pid: "'.$this->internetschach.'"
 				}
-			});
+				
+				// Query parameters will be ?search=[term]&type=public
+				return query;
+			}
 		}
 	});
+
+	//$("select.select-box").chosen();
+	//$(\'.chosen-search input\').autocomplete({
+	//	delay: 500,
+	//	minLength: 2,
+	//	autoFocus: false,
+	//	position: { my : "right top", at: "right bottom" },
+	//	source: function(request, response) {
+	//		$.ajax({
+	//			url: "bundles/contaointernetschach/Spielerliste.php?pid='.$this->internetschach.'&q="+request.term,
+	//			dataType: "json",
+	//			success: function(data) {
+	//				$(\'select.select-box\').empty();
+	//				response($.map(data, function(item) {
+	//					$(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
+	//				}));
+	//				$("select.select-box").trigger("chosen:updated");
+	//				$(".chosen-search input").val(request.term);
+	//			}
+	//		});
+	//	}
+	//});
 
 	$("input#chessbase").change(function()
 	{
@@ -102,9 +137,9 @@ $(document).ready(function()
 		(
 			'typ'       => 'select',
 			'name'      => 'playerid',
-			'label'     => 'Spieler suchen und wählen',
+			'label'     => 'Spieler',
 			'class'     => 'select-box',
-			'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen bis die Autovervollständigung aktiv wird'),
+			//'options'   => array('0' => 'Name,Vorname oder Teil davon eintippen (mindestens 2 Zeichen) bis die Autovervollständigung aktiv wird'),
 			'mandatory' => true
 		));
 		$form->addField(array
@@ -183,7 +218,7 @@ $(document).ready(function()
 			if($arrData['playerid'])
 			{
 				self::saveAnmeldung($arrData); // Daten sichern
-				
+
 				// Seite neu laden mit Meldebestätigung
 				if($objMain->jumpTo)
 				{
@@ -295,12 +330,12 @@ $(document).ready(function()
 		);
 
 		$bemerkungen = $set['bemerkungen']; // Wegen der hinzugefügten Uhrzeit Bemerkungen separat sichern für E-Mail
-		
+
 		// Anmeldung speichern
 		if($objAnmeldung->numRows)
 		{
 			// Ältere Anmeldung liegt bereits vor
-			
+
 			// ===============================================
 			// Überprüfen, ob Turniere gesichert werden müssen
 			// ===============================================
@@ -351,7 +386,7 @@ $(document).ready(function()
 			//	}
 			//}
 
-			
+
 			// Versionierung aktivieren
 			$objVersion = new \Versions('tl_internetschach_anmeldungen', $objAnmeldung->id);
 			$objVersion->setUsername('Internetschach-Bundle');

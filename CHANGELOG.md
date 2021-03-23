@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 1.9.0 (2021-03-23)
+
+* Fix: Anmeldungen.php - wenn keine Gruppen definiert waren, wurden keine Anmeldungen angezeigt
+* Fix: Spielerauswahl im Frontend - Smartphone funktioniert nicht. Vorhandenes JS ersetzt durch JS von https://select2.org
+* Add: Helper-Funktion ChessbaseCheck zur Überprüfung Benutzername mit Realname
+* Change: Palette tl_content space entfernt, bei Anmeldungen perPage hinzugefügt
+
 ## Version 1.8.0 (2021-03-18)
 
 * Change: BE-Liste Anmeldungen mit Spaltenlayout
