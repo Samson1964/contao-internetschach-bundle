@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 1.9.1 (2021-03-26)
+
+* Fix: ChessBase-Realnamenprüfung, wegen Datenschutz nicht den Namen aus dem ChessBase-Konto anzeigen
+* Change: Anzeige options_callback tl_content.getTurnierserie verbessert
+* Add: Pagination in ContentElements/Anmeldungen.php
+* Add: Bei Update der Anmeldung wird eine Änderung der E-Mail-Adresse mitgeloggt und eine Kopie der Anmeldung geht an die alte Adresse
+
 ## Version 1.9.0 (2021-03-23)
 
 * Fix: Anmeldungen.php - wenn keine Gruppen definiert waren, wurden keine Anmeldungen angezeigt

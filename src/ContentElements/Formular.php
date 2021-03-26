@@ -24,6 +24,34 @@ class Formular extends \ContentElement
 	protected $strTemplate = 'ce_internetschach';
 
 	/**
+	 * Übernommen aus https://github.com/contao/core-bundle/blob/4.x/src/Resources/contao/forms/Form.php
+	 * Remove name attributes in the back end so the form is not validated
+	 *
+	 * @return string
+	 */
+	public function generate()
+	{
+		if(TL_MODE == 'BE')
+		{
+			// Formular nicht im Backend anzeigen, wegen Problemen mit den Feldern
+			$objTemplate = new \BackendTemplate('be_wildcard');
+
+			// Turnierserie einlesen
+			$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+			                                   ->execute($this->internetschach);
+
+			$objTemplate->wildcard = '### ' . strtoupper($GLOBALS['TL_LANG']['CTE']['internetschach_formular'][0]) . ' ###';
+			$objTemplate->id = $this->internetschach;
+			$objTemplate->link = $objMain->titel;
+			$objTemplate->href = 'contao/main.php?do=internetschach&amp;act=edit&amp;id=' . $this->internetschach;
+
+			return $objTemplate->parse();
+		}
+
+		return parent::generate();
+	}
+
+	/**
 	 * Generate the module
 	 */
 	protected function compile()
@@ -63,34 +91,12 @@ $(document).ready(function()
 					q: params.term,
 					pid: "'.$this->internetschach.'"
 				}
-				
+
 				// Query parameters will be ?search=[term]&type=public
 				return query;
 			}
 		}
 	});
-
-	//$("select.select-box").chosen();
-	//$(\'.chosen-search input\').autocomplete({
-	//	delay: 500,
-	//	minLength: 2,
-	//	autoFocus: false,
-	//	position: { my : "right top", at: "right bottom" },
-	//	source: function(request, response) {
-	//		$.ajax({
-	//			url: "bundles/contaointernetschach/Spielerliste.php?pid='.$this->internetschach.'&q="+request.term,
-	//			dataType: "json",
-	//			success: function(data) {
-	//				$(\'select.select-box\').empty();
-	//				response($.map(data, function(item) {
-	//					$(\'select.select-box\').append(\'<option value="\'+item.id+\'">\' + item.name + \'</option>\');
-	//				}));
-	//				$("select.select-box").trigger("chosen:updated");
-	//				$(".chosen-search input").val(request.term);
-	//			}
-	//		});
-	//	}
-	//});
 
 	$("input#chessbase").change(function()
 	{
@@ -430,6 +436,16 @@ $(document).ready(function()
 			$from = html_entity_decode($objMain->email_sender);
 			$replyto = html_entity_decode($objMain->email_replyto);
 			$to = html_entity_decode($objMain->email_to);
+			
+			// E-Mail geändert? Dann alte E-Mail in CC nehmen
+			if($objAnmeldung->numRows)
+			{
+				if($objAnmeldung->email != $set['email'])
+				{
+					\System::log('[Internetschach] Geänderte E-Mail-Adresse: '.$objAnmeldung->email.' &#10132; '.$set['email'], __CLASS__.'::'.__FUNCTION__, TL_CRON);
+					$cc = html_entity_decode($objAnmeldung->email);
+				}
+			}
 
 			// Absender "Name <email>" in ein Array $arrFrom aufteilen
 			preg_match('~(?:([^<]*?)\s*)?<(.*)>~', $from, $arrFrom);
@@ -490,6 +506,7 @@ $(document).ready(function()
 			$text .= "\nVielen Dank für Ihre Anmeldung!\nSie stehen unter Vorbehalt der Prüfung bereits auf der Meldeliste.\n\nIhr Deutscher Schachbund";
 			$objEmail->text = $text;
 
+			if($cc) $objEmail->sendCc($cc);
 			$objEmail->sendBcc($to);
 			$objEmail->replyTo($replyto);
 			$objEmail->sendTo($set['email']);

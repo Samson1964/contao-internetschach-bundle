@@ -33,69 +33,84 @@ class Anmeldungen extends \ContentElement
 		// Anzuzeigende Gruppen/Turniere in Array packen
 		$this->view_turniere = unserialize($this->internetschach_turniere);
 		$this->view_gruppen = unserialize($this->internetschach_gruppen);
-		
+
 		// Anmeldungen entsprechend Filter laden
-		$anmeldung = array();
+		$anmeldungen = array();
 		$objMeldungen = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach_anmeldungen WHERE pid = ? AND published = ? ORDER BY dwz DESC')
 		                                        ->execute($this->internetschach, 1);
+
 		if($objMeldungen->numRows)
 		{
-			$content = '<table width="100%">';
-			$content .= '<tr>';
-			$content .= '<th>Nr.</th>';
-			$content .= '<th>Name</th>';
-			$content .= '<th>Titel</th>';
-			$content .= '<th>DWZ</th>';
-			$content .= '<th>Verein</th>';
-			if($this->internetschach_viewturniere) $content .= '<th>Turniere</th>';
-			if($this->internetschach_viewgruppen)$content .= '<th>Gruppe</th>';
-			$content .= '</tr>';
 			$nr = 0;
 			while($objMeldungen->next())
 			{
 				if(self::Verifizierung($objMeldungen->turniere, $objMeldungen->gruppe))
 				{
+					$anmeldungen[$nr] = $objMeldungen->row();
+					$anmeldungen[$nr]['nr'] = $nr+1;
 					$nr++;
-					if($objMeldungen->checked) $content .= '<tr class="checked">';
-					else $content .= '<tr class="unchecked">';
-					$content .= '<td>'.$nr.'</td>';
-					$content .= '<td>'.$objMeldungen->name.'</td>';
-					$content .= '<td>'.$objMeldungen->fideTitel.'</td>';
-					$content .= '<td>'.($objMeldungen->dwz ? $objMeldungen->dwz : '-').'</td>';
-					$content .= '<td>'.$objMeldungen->verein.'</td>';
-					if($this->internetschach_viewturniere) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getTurniere($this->internetschach, $objMeldungen->turniere).'</td>';
-					if($this->internetschach_viewgruppen) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getGruppe($this->internetschach, $objMeldungen->gruppe).'</td>';
-					$content .= '</tr>';
 				}
 			}
-			$content .= '</table>';
 		}
 
-		// Paginate the result of not randomly sorted (see #8033)
+
+		//echo "<pre>";
+		//print_r($anmeldungen);
+		//echo "</pre>";
+		$total = count($anmeldungen);
+		$limit = $total;
+		$offset = 0;
+
+		// Paginierung bauen
 		if($this->perPage > 0)
 		{
 			// Get the current page
-			$id = 'page_g' . $this->id;
-			$page = \Input::get($id) ? 1 : 3;
-        //
-		//	// Do not index or cache the page if the page number is outside the range
-		//	if ($page < 1 || $page > max(ceil($total/$this->perPage), 1))
-		//	{
-		//		throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
-		//	}
-        //
-		//	// Set limit and offset
-		//	$offset = ($page - 1) * $this->perPage;
-		//	$limit = min($this->perPage + $offset, $total);
-        //
-		//	$objPagination = new Pagination($total, $this->perPage, Config::get('maxPaginationLinks'), $id);
-		//	$this->Template->pagination = $objPagination->generate("\n  ");
+			$id = 'page_is' . $this->id;
+			$page = (\Input::get($id) !== null) ? \Input::get($id) : 1;
+
+			// Do not index or cache the page if the page number is outside the range
+			if($page < 1 || $page > max(ceil($total/$this->perPage), 1))
+			{
+				throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
+			}
+
+			// Set limit and offset
+			$offset = ($page - 1) * $this->perPage;
+			$limit = min($this->perPage + $offset, $total);
+
+			$objPagination = new \Pagination($total, $this->perPage, \Config::get('maxPaginationLinks'), $id);
+			$this->Template->pagination = $objPagination->generate("\n ");
 		}
 
+		$content = '<table class="ce_table" width="100%">';
+		$content .= '<tr>';
+		$content .= '<th>Nr.</th>';
+		$content .= '<th>Name</th>';
+		$content .= '<th>Titel</th>';
+		$content .= '<th>DWZ</th>';
+		$content .= '<th>Verein</th>';
+		if($this->internetschach_viewturniere) $content .= '<th>Turniere</th>';
+		if($this->internetschach_viewgruppen)$content .= '<th>Gruppe</th>';
+		$content .= '</tr>';
+		// Datensätze entsprechend Paginierung ausgeben
+		for($i = $offset; $i < $limit; $i++)
+		{
+			if($anmeldungen[$i]['checked']) $content .= '<tr class="checked">';
+			else $content .= '<tr class="unchecked">';
+			$content .= '<td>'.$anmeldungen[$i]['nr'].'</td>';
+			$content .= '<td>'.$anmeldungen[$i]['name'].'</td>';
+			$content .= '<td>'.$anmeldungen[$i]['fideTitel'].'</td>';
+			$content .= '<td>'.($anmeldungen[$i]['dwz'] ? $anmeldungen[$i]['dwz'] : '-').'</td>';
+			$content .= '<td>'.$anmeldungen[$i]['verein'].'</td>';
+			if($this->internetschach_viewturniere) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getTurniere($this->internetschach, $anmeldungen[$i]['turniere']).'</td>';
+			if($this->internetschach_viewgruppen) $content .= '<td>'.\Schachbulle\ContaoInternetschachBundle\Classes\Helper::getGruppe($this->internetschach, $anmeldungen[$i]['gruppe']).'</td>';
+			$content .= '</tr>';
+		}
+		$content .= '</table>';
+
 		// Template ausgeben
-		$this->Template = new \FrontendTemplate($this->strTemplate);
 		$this->Template->class = 'ce_internetschach';
-		$this->Template->content = $content;
+		$this->Template->content = ($total < 1 ? '<p>Keine Anmeldungen gefunden</p>' : $content);
 
 	}
 

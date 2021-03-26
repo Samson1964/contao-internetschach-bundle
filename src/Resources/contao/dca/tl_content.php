@@ -32,7 +32,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach'] = array
 	(
 		'mandatory'           => true,
 		'includeBlankOption'  => true,
-		'blankOptionLabel'    => $GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel'],
 		'multiple'            => false,
 		'chosen'              => true,
 		'submitOnChange'      => true,
@@ -134,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_css'] = array
 	'sql'                     => "char(1) NOT NULL default ''"
 );
 
-// Anzahl der Topplätze
+// Anzahl der TopplÃ¤tze
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_topanzahl'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_topanzahl'],
@@ -151,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_topanzahl'] = array
 	'sql'                     => "int(4) unsigned NOT NULL default '10'"
 );
 
-// Anzahl der bewerteten Plätze
+// Anzahl der bewerteten PlÃ¤tze
 $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_punktplaetze'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach_punktplaetze'],
@@ -203,10 +202,10 @@ class tl_content_internetschach extends \Backend
 	public function getTurnierserie(DataContainer $dc)
 	{
 		$array = array();
-		$objTurnier = $this->Database->prepare("SELECT * FROM tl_internetschach ORDER BY titel ASC")->execute();
+		$objTurnier = $this->Database->prepare("SELECT * FROM tl_internetschach ORDER BY jahr DESC, titel ASC")->execute();
 		while($objTurnier->next())
 		{
-			$array[$objTurnier->id] = $objTurnier->titel;
+			$array[$objTurnier->id] = '('.$objTurnier->jahr.') '.$objTurnier->titel;
 		}
 		return $array;
 	}
