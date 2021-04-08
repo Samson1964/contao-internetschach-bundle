@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.9.2 (2021-04-08)
+
+* Fix: Bei Update einer Anmeldung tl_internetschach_anmeldungen.checked auf false stellen
+
 ## Version 1.9.1 (2021-03-26)
 
 * Fix: ChessBase-Realnamenprüfung, wegen Datenschutz nicht den Namen aus dem ChessBase-Konto anzeigen

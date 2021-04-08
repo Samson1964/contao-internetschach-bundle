@@ -407,6 +407,7 @@ $(document).ready(function()
 				'bemerkungen'  => $objAnmeldung->bemerkungen.($set['bemerkungen'] ? "\n".date('d.m.Y H:i').' Uhr: '.$set['bemerkungen']: ''), // Neue Bemerkungen hinzufügen
 				'turniere'     => serialize($arrData['turniere']), // Neu aus Formular übernehmen
 				'gruppe'       => \Schachbulle\ContaoInternetschachBundle\Classes\Helper::Gruppenzuordnung($arrData['pid'], $spieler['dwz'], true), // Neu aus Formular übernehmen
+				'checked'      => '', // Auf ungeprüft zurücksetzen
 			);
 			// Datensatz updaten
 			//print_r($updateSet);
