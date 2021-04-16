@@ -539,8 +539,8 @@ class Helper
 					                                  ->execute($spielerId);
 					if($player->numRows)
 					{
-						$cbkontoname = $chessbase->last.','.$chessbase->first;
-						if($player->name == $cbkontoname)
+						$spieler = explode(',', $player->name); // Mustermann,Hans,Prof.Dr. trennen
+						if($spieler[0] == $chessbase->last && $spieler[1] == $chessbase->first)
 						{
 							$code = 3;
 						}
