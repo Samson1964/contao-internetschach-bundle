@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.10.0 (2021-04-20)
+
+* Add: public/Anmeldungen.php um die Anmeldungen für ein Turnier einer Turnierserie als JSON auszugeben
+
 ## Version 1.9.3 (2021-04-16)
 
 * Fix: Helper::ChessbaseCheck - Bei Prüfung von Name+Vorname mit dem ChessBase-Account wurden Namensbestandteile wie Prof. und Dr. berücksichtigt
