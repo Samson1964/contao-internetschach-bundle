@@ -33,6 +33,7 @@ class Anmeldungen
 	{
 		$turnierserie = \Input::get('id'); // ID der Turnierserie = tl_internetschach_anmeldungen.pid
 		$turnier = \Input::get('turnier'); // Kurzzeichen des Turniers = tl_internetschach_anmeldungen.turniere
+		$format = \Input::get('format'); // Format der Ausgabe: json (default), excel
 
 		// Veröffentlichte Anmeldungen der Turnierserie laden
 		$objAnmeldungen = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach_anmeldungen WHERE pid = ? AND published = ?")
@@ -46,13 +47,26 @@ class Anmeldungen
 				$arrTurniere = unserialize($objAnmeldungen->turniere);
 				if($arrTurniere)
 				{
-					if(in_array($turnier, $arrTurniere))
+					$export = false;
+					if($turnier)
+					{
+						if(in_array($turnier, $arrTurniere))
+						{
+							$export = true;
+						}
+					}
+					else
+					{
+						$export = true;
+					}
+
+					if($export)
 					{
 						//print_r($arrTurniere);
 						$ausgabe[] = array
 						(
-							'gruppe'    => '',
-							'turniere'  => implode(',', $arrTurniere),
+							'gruppe'    => $objAnmeldungen->gruppe,
+							'turniere'  => $arrTurniere,
 							'name'      => $objAnmeldungen->name,
 							'verein'    => $objAnmeldungen->verein,
 							'dwz'       => $objAnmeldungen->dwz,
@@ -68,9 +82,17 @@ class Anmeldungen
 		//echo "<pre>";
 		//print_r($ausgabe);
 		//echo "</pre>";
-		header('Content-Type: application/json');
-		echo json_encode($ausgabe);
-
+		if($format == 'excel')
+		{
+			// Format excel
+			\Schachbulle\ContaoInternetschachBundle\Classes\Helper::exportAnmeldungenToExcel($turnierserie, $ausgabe, $turnier);
+		}
+		else
+		{
+			// Format json
+			header('Content-Type: application/json');
+			echo json_encode($ausgabe);
+		}
 	}
 }
 

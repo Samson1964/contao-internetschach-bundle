@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.10.1 (2021-04-21)
+
+* Add: Funktion exportAnmeldungenToExcel in Classes/Helper
+
 ## Version 1.10.0 (2021-04-20)
 
 * Add: public/Anmeldungen.php um die Anmeldungen für ein Turnier einer Turnierserie als JSON auszugeben

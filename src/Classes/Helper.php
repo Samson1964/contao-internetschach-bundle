@@ -607,4 +607,236 @@ class Helper
 
 	}
 
+	/**
+	 * Funktion exportAnmeldungenToExcel
+	 * Exportiert Anmeldungen in eine Exceldatei und bietet diese zum Download an
+	 * @param $turnierserie           integer ID der Turnierserie
+	 * @param $anmeldungen            array   Anmeldungen
+	 * @param $turnier                string  Kurzzeichen des Turniers (optional)
+	 * @return -
+	 */
+	static function exportAnmeldungenToExcel($turnierserie, $anmeldungen, $turnier = false)
+	{
+		// Turnierserie einlesen
+		$objSerie = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
+		                                    ->execute($turnierserie);
+
+		// Tabellennamen erstellen
+		$turniere = unserialize($objSerie->turniere);
+		$gruppen = unserialize($objSerie->gruppen);
+		$sheets = array(); // Namen der zukünftigen Tabellen
+		if($turnier)
+		{
+			// Turnier-Parameter wurde festgelegt
+			if($gruppen)
+			{
+				// Gruppen vorhanden
+				foreach($gruppen as $item)
+				{
+					if($item['feldname']) $sheets[] = strtoupper($turnier.'_'.$item['feldname']);
+					else $sheets[] = strtoupper($turnier);
+				}
+			}
+			else
+			{
+				// Keine Gruppen vorhanden
+				$sheets[] = strtoupper($turnier);
+			}
+		}
+		else
+		{
+			// Kein Turnier-Parameter festgelegt, alle Turniere ausgeben
+			$sheets[] = 'ALLE';
+			foreach($turniere as $titem)
+			{
+				foreach($gruppen as $gitem)
+				{
+					if($gitem['feldname']) $sheets[] = strtoupper($titem['feldname'].'_'.$gitem['feldname']);
+					else $sheets[] = strtoupper($titem['feldname']);
+				}
+			}
+		}
+
+		//echo "<pre>";
+		//print_r($turniere);
+		//print_r($gruppen);
+		//print_r($sheets);
+		//echo "</pre>";
+		//exit;
+		
+		// Neues Excel-Objekt erstellen
+		$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+		
+		// Dokument-Eigenschaften setzen
+		$spreadsheet->getProperties()->setCreator('ContaoInternetschachBundle')
+		            ->setLastModifiedBy('ContaoInternetschachBundle')
+		            ->setTitle('Anmeldungen '.$objSerie->titel)
+		            ->setSubject('Anmeldungen '.$objSerie->titel)
+		            ->setDescription('Liste der Anmeldungen '.$objSerie->titel)
+		            ->setKeywords('schach anmeldungen internet')
+		            ->setCategory('Export Anmeldungen '.$objSerie->titel);
+
+		// Bereits vorhandene Tabellenblätter löschen (funktioniert nicht)
+		//$anzahl = $spreadsheet->getSheetCount();
+		//for($x = $anzahl; $x < $anzahl; $x++)
+		//{
+		//	$spreadsheet->removeSheetByIndex($x);
+		//}
+
+		// Tabellenblätter anlegen, zuvor doppelte Einträge aus sheets-Array entfernen
+		$sheets = array_unique($sheets);
+		$styleArray = [
+		    'font' => [
+		        'bold' => true,
+		    ],
+		    'alignment' => [
+		        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		    ],
+		    'borders' => [
+		        'bottom' => [
+		            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+		        ],
+		    ],
+		    'fill' => [
+		        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+		        'rotation' => 90,
+		        'startColor' => [
+		            'argb' => 'FFA0A0A0',
+		        ],
+		        'endColor' => [
+		            'argb' => 'FFFFFFFF',
+		        ],
+		    ],
+		];
+		$styleArray2 = [
+		    'alignment' => [
+		        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+		    ],
+		];
+
+		// Tabellen-Array initialisieren
+		$daten = array();
+		foreach($sheets as $sheet)
+		{
+			$daten[$sheet] = array();
+		}
+
+		// Anmeldungen in das Tabellen-Array schreiben
+		foreach($anmeldungen as $anmeldung)
+		{
+			if($anmeldung['turniere'])
+			{
+				foreach($anmeldung['turniere'] as $turnier)
+				{
+					// Tabellenname festlegen und Anmeldung in Array speichern
+					if($anmeldung['gruppe']) $tabellenname = strtoupper($turnier.'_'.$anmeldung['gruppe']);
+					else $tabellenname = strtoupper($turnier);
+
+					if(isset($daten[$tabellenname]))
+					{
+						$daten[$tabellenname][] = array
+						(
+							'gruppe'   => $anmeldung['gruppe'],
+							'turniere' => '',
+							'name'     => $anmeldung['name'],
+							'verein'   => $anmeldung['verein'],
+							'account'  => $anmeldung['chessbase'],
+							'dwz'      => $anmeldung['dwz'],
+							'titel'    => $anmeldung['titel']
+						);
+					}
+				}
+				if($turnier && isset($daten['ALLE']))
+				{
+					$daten['ALLE'][] = array
+					(
+						'gruppe'   => $anmeldung['gruppe'],
+						'turniere' => implode(',', $anmeldung['turniere']),
+						'name'     => $anmeldung['name'],
+						'verein'   => $anmeldung['verein'],
+						'account'  => $anmeldung['chessbase'],
+						'dwz'      => $anmeldung['dwz'],
+						'titel'    => $anmeldung['titel']
+					);
+				}
+			}
+			
+		}
+		//echo "<pre>";
+		//print_r($daten);
+		//echo "</pre>";
+		//exit;
+
+		// Exceldatei schreiben
+		$i = 0;
+		foreach($sheets as $sheet)
+		{
+			$spreadsheet->createSheet();
+			// Blatt aktivieren und Kopfzeile setzen
+			$spreadsheet->setActiveSheetIndex($i);
+			foreach(range('A','H') as $columnID)
+			{
+				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			}
+			$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:H1000')->applyFromArray($styleArray2);
+			$spreadsheet->getActiveSheet()->setTitle($sheet)
+			            ->setCellValue('A1', 'Gruppe')
+			            ->setCellValue('B1', 'Turniere')
+			            ->setCellValue('C1', 'Nachname')
+			            ->setCellValue('D1', 'Vorname')
+			            ->setCellValue('E1', 'Verein')
+			            ->setCellValue('F1', 'DWZ')
+			            ->setCellValue('G1', 'Titel')
+			            ->setCellValue('H1', 'ChessBase');
+			$zeile = 2;
+			if($daten[$sheet])
+			{
+				foreach($daten[$sheet] as $item)
+				{
+					$name = explode(',', $item['name']); // Name aufteilen
+					$spreadsheet->getActiveSheet()
+					            ->setCellValue('A'.$zeile, $item['gruppe'])
+					            ->setCellValue('B'.$zeile, $item['turniere'])
+					            ->setCellValue('C'.$zeile, $name[0])
+					            ->setCellValue('D'.$zeile, $name[1])
+					            ->setCellValue('E'.$zeile, $item['verein'])
+					            ->setCellValue('F'.$zeile, $item['dwz'])
+					            ->setCellValue('G'.$zeile, $item['titel'])
+					            ->setCellValue('H'.$zeile, $item['account']);
+					$zeile++;
+				}
+			}
+			$i++;
+		}
+		
+		// Rename worksheet
+		//$spreadsheet->getActiveSheet()->setTitle('Simple');
+		
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		$downloadname = str_replace(array('.', ' '), array('', '_'), $objSerie->titel).'-Anmeldungen_'.date('Ymd-Hi').'.xls';
+		$dateiname = str_replace(array('.', ' '), array('', '_'), $objSerie->titel).'-Anmeldungen.xls';
+
+		$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+		//$writer->save('bundles/contaointernetschach/'.$dateiname);
+
+		// Redirect output to a client’s web browser (Xls)
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$downloadname.'"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+		
+		// If you're serving to IE over SSL, then the following may be needed
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header('Pragma: public'); // HTTP/1.0
+		
+		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
+		$writer->save('php://output');
+	}
+
 }
