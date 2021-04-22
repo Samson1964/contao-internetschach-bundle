@@ -23,6 +23,11 @@
  * file to see how back end modules are configured.
  */
 
+/**
+ * -------------------------------------------------------------------------
+ * BACKEND-MODULE
+ * -------------------------------------------------------------------------
+ */
 $GLOBALS['BE_MOD']['content']['internetschach'] = array
 (
 	'tables'               => array('tl_internetschach', 'tl_internetschach_spieler', 'tl_internetschach_anmeldungen', 'tl_internetschach_tabellen', 'tl_internetschach_preise'),
@@ -36,10 +41,17 @@ $GLOBALS['BE_MOD']['content']['internetschach'] = array
 	'copyToAnmeldung'      => array('\Schachbulle\ContaoInternetschachBundle\Classes\Export', 'copyToAnmeldung')
 );
 
+/**
+ * -------------------------------------------------------------------------
+ * FRONTEND-MODULE
+ * -------------------------------------------------------------------------
+ */
+$GLOBALS['FE_MOD']['schach']['internetschach_pgnreplacer'] = 'Schachbulle\ContaoInternetschachBundle\Modules\PgnReplacer';
+
 
 /**
  * -------------------------------------------------------------------------
- * CONTENT ELEMENTS
+ * CONTENT-ELEMENTE
  * -------------------------------------------------------------------------
  */
 $GLOBALS['TL_CTE']['includes']['internetschach_formular'] = 'Schachbulle\ContaoInternetschachBundle\ContentElements\Formular';

@@ -1,5 +1,12 @@
 # Internetschach Changelog
 
+## Version 1.11.0 (2021-04-22)
+
+* Add: Formularklasse Modules/PgnReplacer für die Überarbeitung von PGN-Dateien
+* Add: Funktion getTurnierserien in Classes/Helper
+* Change: Auswahl der Turnierserie in tl_content auf Classes/Helper::getTurnierserien geändert
+* Add: Abhängigkeit amyboyd/pgn-parser
+
 ## Version 1.10.1 (2021-04-21)
 
 * Add: Funktion exportAnmeldungenToExcel in Classes/Helper

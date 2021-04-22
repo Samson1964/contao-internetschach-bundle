@@ -152,6 +152,23 @@ class Helper
 		return $turniere[$feldname];
 	}
 
+	/**
+	 * Funktion getTurnierserien
+	 * Gibt ein Array mit den Turnierserien für eine SELECT-Feld zurück
+	 */
+	static function getTurnierserien()
+	{
+		$array = array();
+		$objTurnier = \Database::getInstance()->prepare("SELECT * FROM tl_internetschach WHERE published = ? ORDER BY jahr DESC, titel ASC")
+		                                      ->execute(1);
+
+		while($objTurnier->next())
+		{
+			$array[$objTurnier->id] = '('.$objTurnier->jahr.') '.$objTurnier->titel;
+		}
+		return $array;
+	}
+	
 	static function getTurniere($turnierserie, $turnierdaten)
 	{
 		static $turniere;

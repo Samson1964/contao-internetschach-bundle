@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['internetschach'],
 	'exclude'                 => true,
-	'options_callback'        => array('tl_content_internetschach', 'getTurnierserie'),
+	'options_callback'        => array('\Schachbulle\ContaoInternetschachBundle\Classes\Helper', 'getTurnierserien'),
 	'inputType'               => 'select',
 	'eval'                    => array
 	(
@@ -197,17 +197,6 @@ class tl_content_internetschach extends \Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
-	}
-
-	public function getTurnierserie(DataContainer $dc)
-	{
-		$array = array();
-		$objTurnier = $this->Database->prepare("SELECT * FROM tl_internetschach ORDER BY jahr DESC, titel ASC")->execute();
-		while($objTurnier->next())
-		{
-			$array[$objTurnier->id] = '('.$objTurnier->jahr.') '.$objTurnier->titel;
-		}
-		return $array;
 	}
 
 	public function getTurniere(DataContainer $dc)

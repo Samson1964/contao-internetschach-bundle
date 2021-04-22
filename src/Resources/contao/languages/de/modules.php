@@ -21,3 +21,5 @@ $GLOBALS['TL_LANG']['MOD']['internetschach_importTable_submit'] = array('Import 
 /**
  * Frontendmodule
  */
+
+$GLOBALS['TL_LANG']['FMD']['internetschach_pgnreplacer'] = array('ChessBase-Namen in PGN-Datei ersetzen', 'ChessBase-Benutzernamen in einer PGN-Datei durch Klarnamen ersetzen');
