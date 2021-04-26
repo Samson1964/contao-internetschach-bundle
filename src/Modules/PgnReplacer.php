@@ -116,30 +116,45 @@ class PgnReplacer extends \Module
 		// )
 		$pgnfile = $_SESSION['FILES']['pgnfile'];
 
-		$fp = fopen($pgnfile['tmp_name'], 'r');
+		//$fp = fopen($pgnfile['tmp_name'], 'r');
 
-		while(!feof($fp))
-		{
-			$line = fgets($fp);
-			if(substr($line, 0, 7) == '[White ')
-			{
-				$pgn_white = true;
-			}
-			if(substr($line, 0, 7) == '[Black ')
-			{
-				$pgn_black = true;
-			}
-			if(substr($line, 0, 10) == '[WhiteElo ')
-			{
-				$pgn_welo = true;
-			}
-			if(substr($line, 0, 10) == '[BlackElo ')
-			{
-				$pgn_belo = true;
-			}
-			echo $line."<br>";
-		}
-		fclose($fp);
+		$pgn = new \Schachbulle\ContaoInternetschachBundle\Classes\PGN\PgnParser($pgnfile['tmp_name']);
+
+		//$pgn = new \AmyBoyd\PgnParser\PgnParser($pgnfile['tmp_name']);
+		//$game = new \AmyBoyd\PgnParser\Game();
+		//
+		//echo $pgn->countGames();
+		//$game = $pgn->getGame(0);
+		//$weiss = $game->getWhite();
+		//$game->setWhite('Hoppe, Frank');
+		////$weiss = $game->getWhite();
+		//$partie = $game->toJSON();
+		//echo "<pre>";
+		//print_r(json_decode($partie));
+		//echo "</pre>";
+        //
+		//while(!feof($fp))
+		//{
+		//	$line = fgets($fp);
+		//	if(substr($line, 0, 7) == '[White ')
+		//	{
+		//		$pgn_white = true;
+		//	}
+		//	if(substr($line, 0, 7) == '[Black ')
+		//	{
+		//		$pgn_black = true;
+		//	}
+		//	if(substr($line, 0, 10) == '[WhiteElo ')
+		//	{
+		//		$pgn_welo = true;
+		//	}
+		//	if(substr($line, 0, 10) == '[BlackElo ')
+		//	{
+		//		$pgn_belo = true;
+		//	}
+		//	//echo $line."<br>";
+		//}
+		//fclose($fp);
 
 
 		\System::log('[Linkscollection] New Link submitted: '.$data['title'].' ('.$data['url'].')', __CLASS__.'::'.__FUNCTION__, TL_CRON);

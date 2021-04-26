@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 1.11.1 (2021-04-26)
+
+* Add: PGN-Parser-Klasse in Classes\PGN (Vorlage: https://github.com/amyboyd/pgn-parser)
+* Fix: tl_internetschach_preise.gruppe kein Pflichtfeld
+
 ## Version 1.11.0 (2021-04-22)
 
 * Add: Formularklasse Modules/PgnReplacer für die Überarbeitung von PGN-Dateien

@@ -238,7 +238,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 			'flag'                    => 11,
 			'eval'                    => array
 			(
-				'mandatory'           => true,
+				'mandatory'           => false,
 				'multiple'            => false,
 				'tl_class'            => 'w50'
 			),
