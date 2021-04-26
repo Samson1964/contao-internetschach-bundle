@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.5 (2021-04-26)
+
+* Fix: Classes/Helper.php Warning: Invalid argument supplied for foreach()
+
 ## Version 1.11.4 (2021-04-26)
 
 * Fix: Problem mit tl_internetschach_tabellen.importRaw/importArray/csv -> blob speichert nur 64 kB, geändert auf mediumblob

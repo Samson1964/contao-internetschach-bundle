@@ -275,9 +275,12 @@ class Helper
 
 		// Namen der Preise ermitteln
 		$tempArr = array();
-		foreach($preiseArr as $id)
+		if(is_array($preiseArr))
 		{
-			$tempArr[] = $Preise[$id];
+			foreach($preiseArr as $id)
+			{
+				$tempArr[] = $Preise[$id];
+			}
 		}
 		return implode('<br>', $tempArr);
 	}
