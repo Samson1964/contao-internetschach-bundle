@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.3 (2021-04-26)
+
+* Fix: Import von Kreuztabellen -> Benutzername nicht erkannt, Daten nicht importiert
+
 ## Version 1.11.2 (2021-04-26)
 
 * Fix: tl_internetschach_tabellen.gruppe kein Pflichtfeld

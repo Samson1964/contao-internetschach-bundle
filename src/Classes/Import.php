@@ -314,9 +314,9 @@ class Import extends \Backend
 		$string = iconv('windows-1252', 'utf-8', $string); // Bug in paquettg/php-html-parser umgehen, https://github.com/paquettg/php-html-parser/issues/209#event-3327333893
 		$string = str_replace(array('<th', '</th>'), array('<td', '</td>'), $string);
 
-		$fp = fopen('test.html', 'w');
-		fputs($fp, $string);
-		fclose($fp);
+		//$fp = fopen('test.html', 'w');
+		//fputs($fp, $string);
+		//fclose($fp);
 		
 		$dom = new \PHPHtmlParser\Dom;
 		$dom->load($string);
@@ -341,10 +341,10 @@ class Import extends \Backend
 		
 				for($x = 0; $x < $colspan; $x++)
 				{
-					if($i == 0)	$name = 'platz';
-					elseif($i == 1)	$name = 'cb-name';
-					elseif($i == 2)	$name = 'cb-land';
-					elseif($i == 3)	$name = 'cb-rating';
+					if($i == 0) $name = 'platz';
+					elseif($i == 1) $name = 'cb-name';
+					elseif($i == 2) $name = 'cb-land';
+					elseif($i == 3) $name = 'cb-rating';
 					elseif($i == $runden + 4) $name = 'punkte';
 					elseif($i == $runden + 5) $name = 'wertung1';
 					elseif($i == $runden + 6) $name = 'wertung2';
@@ -354,16 +354,40 @@ class Import extends \Backend
 						$rundeIndex = $i - 4;
 					}
 		
-					$array = array();
-					preg_match('/src="([^"]*)"/i', $value, $array);
-					$land = $array[1];
-		
+					//if($name = 'cb-land')
+					//{
+						// Land extrahieren
+						$array = array();
+						preg_match('/src="([^"]*)"/i', $value, $array);
+						$land = $array[1];
+					//}
+					
 					$value = str_replace('&nbsp;', '', $value);
 					$value = strip_tags($value);
 					$value = utf8_decode($value);
 					
 					// Tabellenzelle schreiben
 					if($name == 'runden') $tabelle[$rowNr][$name][$rundeIndex] = str_replace(array('&diams;', '&#9830;', '&loz;', '&#9674;'), array('s', 's', 'w', 'w'), $value);
+					elseif($name == 'cb-name')
+					{
+						// Benutzername extrahieren, z.B.
+						// Svane; Rasmus,(sumsar42)
+						// Resultat: sumsar42
+						if(strpos($value, '(') !== false)
+						{
+							// Öffnende Klammer ist im Wert, dann steht in (...) der Benutzername
+							// Benutzername extrahieren
+							$array = array();
+							preg_match('/\((.*?)\)/', $value, $array);
+							$cbname = $array[1];
+							$tabelle[$rowNr][$name] = $cbname;
+						}
+						else
+						{
+							// Benutzername steht direkt im Wert
+							$tabelle[$rowNr][$name] = $value;
+						}
+					}
 					elseif($name == 'cb-land')
 					{
 						// Nation extrahieren, z.B.
@@ -379,6 +403,9 @@ class Import extends \Backend
 			}
 			$rowNr++;
 		}
+		//echo "<pre>";
+		//print_r($tabelle);
+		//echo "</pre>";
 		return $tabelle;
 	}
 
@@ -454,7 +481,7 @@ class Import extends \Backend
 				}
 				$csv = substr($csv, 0, -1)."\n";
 			}
-		}
+		} 
 		return $csv;
 	}
 }
