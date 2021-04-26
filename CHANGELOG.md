@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.4 (2021-04-26)
+
+* Fix: Problem mit tl_internetschach_tabellen.importRaw/importArray/csv -> blob speichert nur 64 kB, geändert auf mediumblob
+
 ## Version 1.11.3 (2021-04-26)
 
 * Fix: Import von Kreuztabellen -> Benutzername nicht erkannt, Daten nicht importiert

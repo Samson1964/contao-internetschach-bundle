@@ -186,13 +186,13 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 		'importRaw' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importRaw'],
-			'sql'                     => "blob NULL",
+			'sql'                     => "mediumblob NULL",
 		),
 		'importArray' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['importArray'],
 			'search'                  => true,
-			'sql'                     => "blob NULL",
+			'sql'                     => "mediumblob NULL",
 		),
 		'csv' => array
 		(
@@ -212,7 +212,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 				'helpwizard'          => true
 			),
 			'explanation'             => 'csv',
-			'sql'                     => "blob NULL",
+			'sql'                     => "mediumblob NULL",
 		),
 		'aktualisieren' => array
 		(

@@ -332,7 +332,11 @@ class Helper
 	 */
 	static function TabelleToHTML($objTurnierserie, $objTabelle, $spalten, $anzahl)
 	{
+		//print_r($objTabelle->importArray);
 		$tabelle = unserialize($objTabelle->importArray); // Tabelle von serialisiertem String in Array umwandeln
+		//echo "<pre>";
+		//print_r($tabelle);
+		//echo "</pre>";
 		$spaltendefinition = $GLOBALS['TL_LANG']['tl_content']['internetschach_spalten_reference'];
 		$class = array(); // Feld für die CSS-Klassennamen, Index ist der Spaltenname
 		$disqualifiziert = \Schachbulle\ContaoHelperBundle\Classes\Helper::StringToArray($objTabelle->disqualifikation);
