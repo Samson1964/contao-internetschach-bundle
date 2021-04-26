@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.2 (2021-04-26)
+
+* Fix: tl_internetschach_tabellen.gruppe kein Pflichtfeld
+
 ## Version 1.11.1 (2021-04-26)
 
 * Add: PGN-Parser-Klasse in Classes\PGN (Vorlage: https://github.com/amyboyd/pgn-parser)
