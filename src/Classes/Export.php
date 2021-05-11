@@ -67,6 +67,7 @@ class Export extends \Backend
 								'gruppe'   => $records->gruppe,
 								'turniere' => '',
 								'name'     => $records->name,
+								'email'    => $records->email,
 								'verein'   => $records->verein,
 								'account'  => $account,
 								'dwz'      => $records->dwz,
@@ -79,6 +80,7 @@ class Export extends \Backend
 						'gruppe'   => $records->gruppe,
 						'turniere' => implode(',', $turniere),
 						'name'     => $records->name,
+						'email'    => $records->email,
 						'verein'   => $records->verein,
 						'account'  => $account,
 						'dwz'      => $records->dwz,
@@ -128,17 +130,18 @@ class Export extends \Backend
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
-			$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
-			$spreadsheet->getActiveSheet()->getStyle('A2:H1000')->applyFromArray($styleArray2);
+			$spreadsheet->getActiveSheet()->getStyle('A1:I1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:I1000')->applyFromArray($styleArray2);
 			$spreadsheet->getActiveSheet()->setTitle($sheet)
 			            ->setCellValue('A1', 'Gruppe')
 			            ->setCellValue('B1', 'Turniere')
 			            ->setCellValue('C1', 'Nachname')
 			            ->setCellValue('D1', 'Vorname')
-			            ->setCellValue('E1', 'Verein')
-			            ->setCellValue('F1', 'DWZ')
-			            ->setCellValue('G1', 'Titel')
-			            ->setCellValue('H1', 'ChessBase');
+			            ->setCellValue('E1', 'E-Mail')
+			            ->setCellValue('F1', 'Verein')
+			            ->setCellValue('G1', 'DWZ')
+			            ->setCellValue('H1', 'Titel')
+			            ->setCellValue('I1', 'ChessBase');
 			$zeile = 2;
 			if($daten[$sheet])
 			{
@@ -150,10 +153,11 @@ class Export extends \Backend
 					            ->setCellValue('B'.$zeile, $item['turniere'])
 					            ->setCellValue('C'.$zeile, $name[0])
 					            ->setCellValue('D'.$zeile, $name[1])
-					            ->setCellValue('E'.$zeile, $item['verein'])
-					            ->setCellValue('F'.$zeile, $item['dwz'])
-					            ->setCellValue('G'.$zeile, $item['titel'])
-					            ->setCellValue('H'.$zeile, $item['account']);
+					            ->setCellValue('E'.$zeile, $item['email'])
+					            ->setCellValue('F'.$zeile, $item['verein'])
+					            ->setCellValue('G'.$zeile, $item['dwz'])
+					            ->setCellValue('H'.$zeile, $item['titel'])
+					            ->setCellValue('I'.$zeile, $item['account']);
 					$zeile++;
 				}
 			}

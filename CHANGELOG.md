@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.6 (2021-05-11)
+
+* Add: Ausgabe der E-Mail-Adressen im Excel-Export der Anmeldungen
+
 ## Version 1.11.5 (2021-04-26)
 
 * Fix: Classes/Helper.php Warning: Invalid argument supplied for foreach()

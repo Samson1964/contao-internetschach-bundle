@@ -79,9 +79,15 @@ class ExportPreise extends \Backend
 			}
 		}
 
+		//echo "<pre>";
+		//print_r($preiseArr);
+		//print_r($tabellenArr);
+		//echo "</pre>";
+		//exit;
 		// Gewinner den Preisen zuordnen
 		foreach($tabellenArr as $tabelle)
 		{
+			// Beginnen bei Index 1 (= Platz 1)
 			for($i = 1; $i < count($tabelle['tabelle']); $i++)
 			{
 				if($tabelle['tabelle'][$i]['prices'])
