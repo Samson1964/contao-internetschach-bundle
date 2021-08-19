@@ -30,6 +30,8 @@ class Tabelle extends \ContentElement
 	{
 		global $objPage;
 
+		\System::loadLanguageFile('tl_content'); // Sprachdateien laden
+
 		// Turnierserie einlesen
 		$objMain = \Database::getInstance()->prepare('SELECT * FROM tl_internetschach WHERE id = ?')
 		                                   ->execute($this->internetschach);

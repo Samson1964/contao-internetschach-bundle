@@ -30,6 +30,8 @@ class Anmeldungen extends \ContentElement
 	 */
 	protected function compile()
 	{
+		\System::loadLanguageFile('tl_content'); // Sprachdateien laden
+
 		// Anzuzeigende Gruppen/Turniere in Array packen
 		$this->view_turniere = unserialize($this->internetschach_turniere);
 		$this->view_gruppen = unserialize($this->internetschach_gruppen);

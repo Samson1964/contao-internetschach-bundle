@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.7 (2021-08-19)
+
+* Add: Sprachdateien für Frontend eingebunden (Tabelle.php, Topspieler.php, Anmeldungen.php)
+
 ## Version 1.11.6 (2021-05-11)
 
 * Add: Ausgabe der E-Mail-Adressen im Excel-Export der Anmeldungen

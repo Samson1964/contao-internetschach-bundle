@@ -28,6 +28,8 @@ class Topspieler extends \ContentElement
 	 */
 	protected function compile()
 	{
+		\System::loadLanguageFile('tl_content'); // Sprachdateien laden
+
 		// Anzuzeigende Gruppen/Turniere in Array packen
 		$view_turniere = unserialize($this->internetschach_turniere);
 		$view_gruppen = unserialize($this->internetschach_gruppen);
