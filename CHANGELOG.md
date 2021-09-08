@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.11.8 (2021-09-08)
+
+* Fix: 1364 Field 'internetschach_spalten' doesn't have a default value" 
+
 ## Version 1.11.7 (2021-08-19)
 
 * Add: Sprachdateien für Frontend eingebunden (Tabelle.php, Topspieler.php, Anmeldungen.php)
