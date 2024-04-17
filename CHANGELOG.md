@@ -1,5 +1,10 @@
 # Internetschach Changelog
 
+## Version 1.12.0 (2024-04-17)
+
+* Add: PHP-8-Unterstützung
+* Add: Haste-Toggler
+
 ## Version 1.11.8 (2021-09-08)
 
 * Fix: 1364 Field 'internetschach_spalten' doesn't have a default value" 
