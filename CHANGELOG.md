@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.12.3 (2025-09-10)
+
+* Fix: Warning: Undefined array key "gruppen" in src/Resources/contao/dca/tl_internetschach.php (line 286) 
+
 ## Version 1.12.2 (2025-09-10)
 
 * Fix: Warning: Undefined array key "copyToAnmeldung_confirm" in src/Resources/contao/dca/tl_internetschach_spieler.php (line 111) 

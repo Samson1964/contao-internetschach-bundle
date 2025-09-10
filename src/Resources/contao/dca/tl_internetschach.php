@@ -283,7 +283,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 		),
 		'gruppen' => array
 		(
-			'label'                   => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen'],
 			'exclude'                 => true,
 			'inputType'               => 'multiColumnWizard',
 			'eval'                    => array
@@ -292,7 +292,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				(
 					'name'            => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_name'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_name'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -302,7 +302,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'feldname'        => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_feldname'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -313,7 +313,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'url'            => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_url'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_url'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -323,7 +323,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'dwz_von'         => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_von'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_von'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -334,7 +334,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'dwz_bis'         => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_bis'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_bis'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -345,7 +345,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'dwz_kategoriegrenze'         => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_kategoriegrenze'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_dwz_kategoriegrenze'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -356,7 +356,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'qualifikationen'         => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['gruppen_qualifikationen'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['gruppen_qualifikationen'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -371,7 +371,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 		),
 		'turniere' => array
 		(
-			'label'                   => $GLOBALS['TL_LANG']['tl_internetschach']['turniere'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere'],
 			'exclude'                 => true,
 			'inputType'               => 'multiColumnWizard',
 			'eval'                    => array
@@ -380,7 +380,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 				(
 					'name'            => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_name'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere_name'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -390,7 +390,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'feldname'        => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_feldname'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere_feldname'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -401,7 +401,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'termin'          => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_termin'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere_termin'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -413,7 +413,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'meldeschluss'          => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_meldeschluss'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere_meldeschluss'],
 						'exclude'     => true,
 						'inputType'   => 'text',
 						'eval'        => array
@@ -425,7 +425,7 @@ $GLOBALS['TL_DCA']['tl_internetschach'] = array
 					),
 					'finale'          => array
 					(
-						'label'       => $GLOBALS['TL_LANG']['tl_internetschach']['turniere_finale'],
+						'label'       => &$GLOBALS['TL_LANG']['tl_internetschach']['turniere_finale'],
 						'exclude'     => true,
 						'inputType'   => 'checkbox',
 					),
