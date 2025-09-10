@@ -12,7 +12,6 @@
 
 // Globale Funktionen
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS'] = array('Preise und Preisträger exportieren', 'Exportiert alle Preise und Preisträger in eine Excel-Datei und per E-Mail');
-$GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS_confirm'] = 'Wollen Sie wirklich die Preise und Preisträger nach Excel exportieren und per E-Mail versenden?';
 
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_preise']['new'] = array('Neuer Preis', 'Neuen Preis anlegen');

@@ -12,9 +12,7 @@
 
 // Globale Funktionen
 $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen'] = array('Qualifikationen aktualisieren', 'Aktualisiert in allen Tabellen die Qualifikationen');
-$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen_confirm'] = 'Wollen Sie wirklich die Qualifikationen aller Tabellen aktualisieren?';
 $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['preise'] = array('Preise aktualisieren', 'Aktualisiert in allen Tabellen die Preise');
-$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['preise_confirm'] = 'Wollen Sie wirklich die Preise aller Tabellen aktualisieren?';
 
 // Standardfunktionen
 $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['new'] = array('Neue Tabelle', 'Neue Tabelle anlegen');

@@ -1,5 +1,16 @@
 # Internetschach Changelog
 
+## Version 1.12.2 (2025-09-10)
+
+* Fix: Warning: Undefined array key "copyToAnmeldung_confirm" in src/Resources/contao/dca/tl_internetschach_spieler.php (line 111) 
+* Fix: Warning: Undefined array key "finalqualifikationen_confirm" in src/Resources/contao/dca/tl_internetschach_anmeldungen.php (line 63) 
+* Fix: Warning: Undefined array key "qualifikationen_confirm" in src/Resources/contao/dca/tl_internetschach_tabellen.php (line 65) 
+und weitere Warnungen dieser Art -> Sprachvariablen nach default.php verschoben
+
+## Version 1.12.1 (2025-09-09)
+
+* Fix: Warning: Undefined array key "internetschach_blanklabel" ["exception" => ErrorException { …}]
+
 ## Version 1.12.0 (2024-04-17)
 
 * Add: PHP-8-Unterstützung

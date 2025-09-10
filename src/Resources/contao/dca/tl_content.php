@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -98,7 +98,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['internetschach_tabelle'] = array
 	(
 		'multiple'            => false,
 		'includeBlankOption'  => true,
-		'blankOptionLabel'    => $GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel']
+		'blankOptionLabel'    => &$GLOBALS['TL_LANG']['tl_content']['internetschach_blanklabel']
 	),
 	'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );

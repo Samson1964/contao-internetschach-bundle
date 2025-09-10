@@ -26,9 +26,7 @@ $GLOBALS['TL_LANG']['tl_internetschach']['prices'] = array("Preise der Turnierse
 $GLOBALS['TL_LANG']['tl_internetschach']['tables'] = array("Tabellen der Turnierserie %s bearbeiten", "Tabellen der Turnierserie %s bearbeiten");
 $GLOBALS['TL_LANG']['tl_internetschach']['players'] = array("Spielerdaten der Turnierserie %s bearbeiten", "Spielerdaten der Turnierserie %s bearbeiten");
 $GLOBALS['TL_LANG']['tl_internetschach']['import'] = array("Spielerdaten in die Turnierserie %s importieren", "Spielerdaten in die Turnierserie %s importieren");
-$GLOBALS['TL_LANG']['tl_internetschach']['importConfirm'] = "Spielerdaten in die Turnierserie %s importieren? Bereits vorhandene Spielerdaten werden gelöscht!";
 $GLOBALS['TL_LANG']['tl_internetschach']['export'] = array("Anmeldungen der Turnierserie %s exportieren", "Anmeldungen der Turnierserie %s exportieren");
-$GLOBALS['TL_LANG']['tl_internetschach']['exportConfirm'] = "Anmeldungen der Turnierserie %s an die konfigurierten E-Mail-Adressen versenden?";
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach']['internetschach_legend'] = 'Titel und Jahr';

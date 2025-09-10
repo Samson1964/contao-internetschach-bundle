@@ -18,7 +18,6 @@ $GLOBALS['TL_LANG']['tl_internetschach_spieler']['delete'] = array("Spieler %s l
 $GLOBALS['TL_LANG']['tl_internetschach_spieler']['toggle'] = array("Spieler %s aktivieren/deaktivieren", "Spieler %s aktivieren/deaktivieren");
 $GLOBALS['TL_LANG']['tl_internetschach_spieler']['show'] = array("Details zum Spieler %s anzeigen", "Details zum Spieler %s anzeigen");
 $GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung'] = array("Spieler %s zu den Anmeldungen kopieren", "Spieler %s zu den Anmeldungen kopieren");
-$GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung_confirm'] = "Wollen Sie wirklich den Spieler %s zu den Anmeldungen kopieren?";
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_internetschach_spieler']['name_legend'] = 'Name';
