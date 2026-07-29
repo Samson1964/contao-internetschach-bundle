@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 				//'button_callback'     => array('tl_internetschach_spieler', 'deleteArchive')
 			),
 			'toggle' => array
@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_spieler'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung'],
 				'href'                => 'key=copyToAnmeldung',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['tl_internetschach_spieler']['copyToAnmeldung_confirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 				'icon'                => 'bundles/contaointernetschach/images/copy.png'
 			)
 		)

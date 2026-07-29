@@ -1,5 +1,9 @@
 # Internetschach Changelog
 
+## Version 1.12.4 (2026-07-29)
+
+* Fix: Warning: Undefined array key "copyToAnmeldung_confirm", "deleteConfirm", "exportConfirm", "exportPreiseXLS_confirm" u. a. bei contao:migrate -> Lesezugriffe auf $GLOBALS['TL_LANG'] in den DCA-Dateien mit `?? null` bzw. `?? array()` abgesichert, da der DcaLoader die Sprachdateien noch nicht geladen hat
+
 ## Version 1.12.3 (2025-09-10)
 
 * Fix: Warning: Undefined array key "gruppen" in src/Resources/contao/dca/tl_internetschach.php (line 286) 

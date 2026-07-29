@@ -62,14 +62,14 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen'],
 				'href'                => 'key=qualifikationen',
 				'icon'                => 'bundles/contaointernetschach/images/qualifikationen.png',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['tl_internetschach_tabellen']['qualifikationen_confirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 			),
 			'preise' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['preise'],
 				'href'                => 'key=preise',
 				'icon'                => 'bundles/contaointernetschach/images/preise.png',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_tabellen']['preise_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['tl_internetschach_tabellen']['preise_confirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 			),
 			'all' => array
 			(
@@ -99,7 +99,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_tabellen'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_tabellen']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 				//'button_callback'     => array('tl_internetschach_tabellen', 'deleteArchive')
 			),
 			'toggle' => array

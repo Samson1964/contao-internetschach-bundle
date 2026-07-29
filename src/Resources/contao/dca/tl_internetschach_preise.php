@@ -63,7 +63,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS'],
 				'href'                => 'key=exportPreiseXLS',
 				'icon'                => 'bundles/contaointernetschach/images/export.png',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS_confirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['tl_internetschach_preise']['exportPreiseXLS_confirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 			),
 			'all' => array
 			(
@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_internetschach_preise'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_internetschach_preise']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 				//'button_callback'     => array('tl_internetschach_preise', 'deleteArchive')
 			),
 			'toggle' => array
