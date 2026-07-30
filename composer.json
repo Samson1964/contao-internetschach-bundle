@@ -1,7 +1,15 @@
 {
     "name": "schachbulle/contao-internetschach-bundle",
     "type": "contao-bundle",
-    "description": "Internetschach-Registrierung für Contao 4",
+    "description": "Nimmt Registrierungen für den Internetschachbetrieb des Deutschen Schachbundes auf.",
+    "keywords": [
+        "contao",
+        "schach",
+        "internetschach",
+        "registrierung",
+        "dsb"
+    ],
+    "homepage": "https://github.com/Samson1964/contao-internetschach-bundle",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {

@@ -7,6 +7,7 @@
 ## Version 1.12.3 (2025-09-10)
 
 * Fix: Warning: Undefined array key "gruppen" in src/Resources/contao/dca/tl_internetschach.php (line 286) 
+* Change: Beschreibung, Keywords und Homepage in der composer.json ergänzt, damit Packagist das Paket verständlich darstellt und über die Suche auffindbar macht
 
 ## Version 1.12.2 (2025-09-10)
 
